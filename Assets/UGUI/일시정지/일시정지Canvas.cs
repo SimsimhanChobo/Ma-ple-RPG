@@ -27,7 +27,7 @@ public class 일시정지Canvas : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && GameManager.PlayerHP > 0.0001f && !ChattingManager.ChattingActive)
+        if (Input.GetKeyDown(KeyCode.Escape) && GameManager.PlayerHP > 0.0001f && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
             PauseToggle();
 
         if (GameManager.GUISize > Screen.width / 1280f)

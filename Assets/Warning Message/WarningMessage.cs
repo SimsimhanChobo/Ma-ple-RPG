@@ -20,7 +20,7 @@ public class WarningMessage : MonoBehaviour
     {
         if (!GameManager.일시정지)
         {
-            if (Input.GetKeyDown(KeyCode.M) && !ChattingManager.ChattingActive)
+            if (Input.GetKeyDown(KeyCode.M) && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
             {
                 if (Player.rigid.velocity.x > 0.0025f || Player.rigid.velocity.x < -0.0025f || Player.rigid.velocity.y > 0.0025f && Player.rigid.velocity.y < -0.0025f)
                 {
@@ -31,7 +31,7 @@ public class WarningMessage : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.M) && !ChattingManager.ChattingActive)
+            if (Input.GetKeyDown(KeyCode.M) && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
             {
                 if (GameManager.MainMenu)
                 {
@@ -42,7 +42,7 @@ public class WarningMessage : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.M) && !ChattingManager.ChattingActive)
+            if (Input.GetKeyDown(KeyCode.M) && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
             {
                 if (event_soft_lock.Play)
                 {

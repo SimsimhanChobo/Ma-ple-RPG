@@ -22,7 +22,7 @@ public class MessageAni : MonoBehaviour
     {
         Timer += Time.deltaTime;
 
-        if (text.text == Message || Message.Length <= index || (CanBeSkipped && (Input.GetButtonDown("X") || Input.GetButton("C")) && !ChattingManager.ChattingActive))
+        if (text.text == Message || Message.Length <= index || (CanBeSkipped && (Input.GetButtonDown("X") || Input.GetButton("C")) && !ChattingManager.ChattingActive && !InvManager.InventoryShow))
         {
             text.text = Message;
             Destroy(gameObject);

@@ -19,19 +19,19 @@ public class ChattingManager : MonoBehaviour
 
         ChattingText = _ChattingText;
 
-        if (Input.GetKeyDown(KeyCode.T) && !ChattingActive)
+        if (Input.GetKeyDown(KeyCode.T) && !ChattingActive && !InvManager.InventoryShow && !GameManager.isAction)
             ChattingActive = true;
-        else if (Input.GetKeyDown(KeyCode.Slash) && !ChattingActive)
+        else if (Input.GetKeyDown(KeyCode.Slash) && !ChattingActive && !InvManager.InventoryShow && !GameManager.isAction)
         {
             ChattingActive = true;
             inputField.text = "/";
         }
-        else if (Input.GetKeyDown(KeyCode.Escape) && ChattingActive)
+        else if (Input.GetKeyDown(KeyCode.Escape) && ChattingActive && !InvManager.InventoryShow && !GameManager.isAction)
         {
             ChattingCanvas.SetActive(false);
             return;
         }
-        else if (Input.GetKeyDown(KeyCode.Return) && ChattingActive)
+        else if (Input.GetKeyDown(KeyCode.Return) && ChattingActive && !InvManager.InventoryShow && !GameManager.isAction)
         {
             Chatting(inputField.text);
             ChattingActive = false;

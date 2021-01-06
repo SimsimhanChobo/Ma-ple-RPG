@@ -83,7 +83,7 @@ public class BGMManager : MonoBehaviour
                         audioSourceBit8.volume -= 0.025f * (MaxVol * GameManager.MainVolume);
                 }
 
-                if (Input.GetKeyDown(KeyCode.B) && !ChattingManager.ChattingActive)
+                if (Input.GetKeyDown(KeyCode.B) && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
                 {
                     if (GameManager.MyTurn)
                         GameManager.MyTurn = false;

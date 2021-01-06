@@ -377,7 +377,7 @@ public class GameManager : MonoBehaviour
 
 
                 //인벤토리
-                if (!ChattingManager.ChattingActive)
+                if (!ChattingManager.ChattingActive && !InvManager.InventoryShow)
                 {
                     if (Input.GetKeyDown(KeyCode.Minus) || MinusKey)
                     {
@@ -596,7 +596,7 @@ public class GameManager : MonoBehaviour
                 //메인 메뉴로
                 if (!MainMenu)
                 {
-                    if (Input.GetKeyDown(KeyCode.M) && !ChattingManager.ChattingActive)
+                    if (Input.GetKeyDown(KeyCode.M) && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
                     {
                         if (Player.rigid.velocity.x <= 0.0025f && Player.rigid.velocity.x >= -0.0025f && Player.rigid.velocity.y <= 0.0025f && Player.rigid.velocity.y >= -0.0025f && !event_soft_lock.Play)
                         {
@@ -637,7 +637,7 @@ public class GameManager : MonoBehaviour
             else if (!일시정지 && PlayerHP > 0.0001f)
                 Time.timeScale = GameSpeed;
 
-            if (Input.GetKey(KeyCode.V) && !ChattingManager.ChattingActive)
+            if (Input.GetKey(KeyCode.V) && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
             {
                 PlayerDamage(Random.Range(5, 11), false, 0);
                 //PlayerDamage(130, false);
@@ -670,7 +670,7 @@ public class GameManager : MonoBehaviour
             MainVolTemp = MainVolume;
 
             //ADOFAI Game
-            if (!ChattingManager.ChattingActive)
+            if (!ChattingManager.ChattingActive && !InvManager.InventoryShow)
             {
                 if (ADOFAIKey == 0 && Input.GetKeyDown(KeyCode.A))
                     ADOFAIKey = 1;
@@ -702,7 +702,7 @@ public class GameManager : MonoBehaviour
 
         if (ADOFAIGame)
         {
-            if (!ChattingManager.ChattingActive)
+            if (!ChattingManager.ChattingActive && !InvManager.InventoryShow)
             {
                 //Minecraft Game
                 if (MinecraftKey == 0 && Input.GetKeyDown(KeyCode.M))
@@ -854,14 +854,14 @@ public class GameManager : MonoBehaviour
     }
     public void Action(GameObject scanNPC)
     {
-        if (대화창TextEffect.isAnim == false && Input.GetKey(KeyCode.C) == false && !ChattingManager.ChattingActive)
+        if (대화창TextEffect.isAnim == false && Input.GetKey(KeyCode.C) == false && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
         {
             talkPanel.SetActive(true);
             NpcData npcData = scanNPC.GetComponent<NpcData>();
             Talk(npcData.NpcTalk);
         }
 
-        if (Input.GetKey(KeyCode.C) && NpcEventManager.b && !ChattingManager.ChattingActive)
+        if (Input.GetKey(KeyCode.C) && NpcEventManager.b && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
         {
             talkPanel.SetActive(true);
             NpcData npcData = scanNPC.GetComponent<NpcData>();

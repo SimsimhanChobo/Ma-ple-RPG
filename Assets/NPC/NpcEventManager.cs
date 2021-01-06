@@ -187,10 +187,10 @@ public class NpcEventManager : MonoBehaviour
 
     void SelectMove()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow) && !ChattingManager.ChattingActive)
+        if (Input.GetKeyDown(KeyCode.UpArrow))
             GameManager.EventSelection--;
 
-        if (Input.GetKeyDown(KeyCode.DownArrow) && !ChattingManager.ChattingActive)
+        if (Input.GetKeyDown(KeyCode.DownArrow))
             GameManager.EventSelection++;
 
         if (GameManager.UpKey)

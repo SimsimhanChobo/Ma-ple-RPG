@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     Rigidbody2D _Rigidbody2D;
     public static Rigidbody2D rigid;
     public GameObject particlesystem;
-    public GameObject MainCamera;
+    public GameObject mainCamera;
     public Image GameOverBackground;
     public GameObject GameOverBackground2;
     public GameObject GameOverManager;
@@ -108,7 +108,7 @@ public class Player : MonoBehaviour
         if (!GameManager.일시정지)
         {
             //뱡향 전환
-            if (!ChattingManager.ChattingActive)
+            if (!ChattingManager.ChattingActive && !InvManager.InventoryShow)
             {
                 if (Input.GetButton("Horizontal"))
                     flipX = (int)Input.GetAxisRaw("Horizontal");
@@ -338,7 +338,7 @@ public class Player : MonoBehaviour
             }
 
             //NPC 이벤트 실행
-            if (Input.GetButtonDown("Event") && scanNPC != null && !ChattingManager.ChattingActive)
+            if (Input.GetButtonDown("Event") && scanNPC != null && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
                 GameManager.gameManager.Action(scanNPC);
             else if (GameManager.ZKey && scanNPC != null)
             {
@@ -348,7 +348,7 @@ public class Player : MonoBehaviour
             else if (GameManager.ZKey && scanNPC == null)
                 GameManager.ZKey = false;
 
-            if (Input.GetKey(KeyCode.C) && scanNPC != null && GameManager.isAction && NpcEventManager.b && !ChattingManager.ChattingActive)
+            if (Input.GetKey(KeyCode.C) && scanNPC != null && GameManager.isAction && NpcEventManager.b && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
                 GameManager.gameManager.Action(scanNPC);
 
             if (GameManager.CKey && scanNPC != null && GameManager.isAction && NpcEventManager.b)
@@ -358,7 +358,7 @@ public class Player : MonoBehaviour
                 GameManager.gameManager.TalkEnd();
 
             //공격
-            if (Input.GetKeyDown(KeyCode.Mouse0) && GameManager.isAction == false && !GameManager.ButtonPointer && !ChattingManager.ChattingActive)
+            if (Input.GetKeyDown(KeyCode.Mouse0) && GameManager.isAction == false && !GameManager.ButtonPointer && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
             {
                 GameManager.PlayerAV = 0;
                 Attack = true;
@@ -463,10 +463,20 @@ public class Player : MonoBehaviour
         if (!GameManager.일시정지 || GameManager.isAction || GameManager.PlayerHP <= 0.0001f)
         {
             //애니메이션
-            if (flipX == -1 && !GameManager.isAction)
-                SkinRotation.skinRotation("All", new Vector3(0, 90, 0));
-            else if ((flipX == 1 || flipX == 0) && !GameManager.isAction)
-                SkinRotation.skinRotation("All", new Vector3(0, -90, 0));
+            if (MainCamera.Game3D)
+            {
+                if (flipX == -1 && (!GameManager.isAction || GameManager.PlayerMove))
+                    SkinRotation.skinRotation("All", new Vector3(0, 90, 0));
+                else if ((flipX == 1 || flipX == 0) && (!GameManager.isAction || GameManager.PlayerMove))
+                    SkinRotation.skinRotation("All", new Vector3(0, -90, 0));
+            }
+            else
+            {
+                if (flipX == -1 && (!GameManager.isAction || GameManager.PlayerMove))
+                    SkinRotation.skinRotation("All", new Vector3(0, 90, 0), true);
+                else if ((flipX == 1 || flipX == 0) && (!GameManager.isAction || GameManager.PlayerMove))
+                    SkinRotation.skinRotation("All", new Vector3(0, -90, 0), true);
+            }
 
             if (GameManager.PlayerMove && GameManager.PlayerHP > 0.0001f)
             {
@@ -507,10 +517,21 @@ public class Player : MonoBehaviour
                 SkinRotation.skinRotation("Right Leg", new Vector3(0, 0, 0));
             }
 
-            if (GameManager.isAction)
+            if (GameManager.isAction && !GameManager.PlayerMove)
             {
-                SkinRotation.skinLookAt(scanNPC.transform.Find("Minecraft Player Skin").gameObject, "All");
+                if (MainCamera.Game3D)
+                    SkinRotation.skinLookAt(scanNPC.transform.Find("Minecraft Player Skin").gameObject, "All");
+                else
+                    SkinRotation.skinLookAt(scanNPC.transform.Find("Minecraft Player Skin").gameObject, "All", true);
+
+                Debug.Log(SkinRotation.PlayerObject.transform.localEulerAngles.y);
+                if (!MainCamera.Game3D && SkinRotation.PlayerObject.transform.localEulerAngles.y > 180)
+                    SkinRotation.skinRotation("All", Quaternion.Euler(new Vector3(0, -90, 0)), true);
+                else if (!MainCamera.Game3D)
+                    SkinRotation.skinRotation("All", Quaternion.Euler(new Vector3(0, 90, 0)), true);
+
                 SkinRotation.skinPos(new Vector3(0, 0, -0.43f));
+                SkinRotation.skinRotation("All", Quaternion.Euler(new Vector3(0, SkinRotation.PlayerObject.transform.localRotation.eulerAngles.y, 0)), true);
             }
             else
                 SkinRotation.skinPos(new Vector3(0, 0, 0));
@@ -532,7 +553,7 @@ public class Player : MonoBehaviour
         if (!GameManager.일시정지)
         {
             //멈추기
-            if (Input.GetButtonUp("Horizontal") || ChattingManager.ChattingActive)
+            if (Input.GetButtonUp("Horizontal") || ChattingManager.ChattingActive || InvManager.InventoryShow)
                 GameManager.PlayerMove = false;
             else if (GameManager.leftKeyUp || GameManager.rightKeyUp)
             {
@@ -542,7 +563,7 @@ public class Player : MonoBehaviour
             }
 
             //걷기 애니메이션
-            if (Input.GetButton("Horizontal") && !ChattingManager.ChattingActive)
+            if (Input.GetButton("Horizontal") && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
                 GameManager.PlayerMove = true;
             else if (GameManager.LeftKey || GameManager.RightKey)
                 GameManager.PlayerMove = true;
@@ -569,7 +590,7 @@ public class Player : MonoBehaviour
             //플레이어 움직이기
             int h = (int)Input.GetAxisRaw("Horizontal");
 
-            if (ChattingManager.ChattingActive)
+            if (ChattingManager.ChattingActive || InvManager.InventoryShow)
                 h = 0;
 
             if (Water.collider == null && Water2.collider == null && Water3.collider == null && Water4.collider == null && Water5.collider == null && Water6.collider == null && Water7.collider == null && Water8.collider == null && Water9.collider == null)
@@ -619,7 +640,7 @@ public class Player : MonoBehaviour
             }
 
             //점프
-            if (!ChattingManager.ChattingActive)
+            if (!ChattingManager.ChattingActive && !InvManager.InventoryShow)
             {
                 if (Input.GetButton("Jump") && FallDamage4)
                 {
@@ -736,10 +757,10 @@ public class Player : MonoBehaviour
             if ((GameManager.Graphic == 0 && GameManager.CameraAni == 0) || GameManager.CameraAni == 1)
             {
                 target = Quaternion.Euler(0, 0, -6);
-                MainCamera.transform.localRotation = Quaternion.Lerp(MainCamera.transform.localRotation, target, 0.005f * (60 * Time.unscaledDeltaTime) * GameManager.GameSpeed);
+                mainCamera.transform.localRotation = Quaternion.Lerp(mainCamera.transform.localRotation, target, 0.005f * (60 * Time.unscaledDeltaTime) * GameManager.GameSpeed);
 
-                Vector3 target2 = new Vector3(MainCamera.transform.localPosition.x, MainCamera.transform.localPosition.y, -12);
-                MainCamera.transform.localPosition = Vector3.Lerp(MainCamera.transform.localPosition, target2, 0.005f * (60 * Time.unscaledDeltaTime) * GameManager.GameSpeed);
+                Vector3 target2 = new Vector3(mainCamera.transform.localPosition.x, mainCamera.transform.localPosition.y, -12);
+                mainCamera.transform.localPosition = Vector3.Lerp(mainCamera.transform.localPosition, target2, 0.005f * (60 * Time.unscaledDeltaTime) * GameManager.GameSpeed);
             }
 
             SkinRotation.PlayerObject.SetActive(false);

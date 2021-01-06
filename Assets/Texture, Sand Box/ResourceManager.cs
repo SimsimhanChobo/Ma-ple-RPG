@@ -36,8 +36,6 @@ public class ResourceManager : MonoBehaviour
             if (i < ResourcePackPath.Count)
                 if (!File.Exists(ResourcePackPath[i] + Path + ".png"))
                 {
-                    if (Path == "Minecraft Block Texture/stone")
-                        Debug.Log(Application.streamingAssetsPath + "/Basic Resource/" + Path + ".png");
                     if (File.Exists(Application.streamingAssetsPath + "/Basic Resource/" + Path + ".png"))
                         byteTexture = File.ReadAllBytes(Application.streamingAssetsPath + "/Basic Resource/" + Path + ".png");
                     if (byteTexture.Length > 0)

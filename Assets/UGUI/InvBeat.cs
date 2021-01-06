@@ -9,12 +9,12 @@ public class InvBeat : MonoBehaviour
     {
         if ((GameManager.Graphic == 0 && GameManager.GUIAni == 0) || GameManager.GUIAni == 1)
         {
-            Vector3 target = new Vector2(0, 70f - MainCameraSize.sizeDelta.y * 0.5f * (1f / GameManager.GUISize));
+            Vector3 target = new Vector2(0, 22f - MainCameraSize.sizeDelta.y * 0.5f * (1f / GameManager.GUISize));
             transform.localPosition = Vector2.Lerp(transform.localPosition, target, 0.125f * (60 * Time.deltaTime));
         }
         else
         {
-            Vector3 target = new Vector2(0, 70f - MainCameraSize.sizeDelta.y * 0.5f * (1f / GameManager.GUISize));
+            Vector3 target = new Vector2(0, 22f - MainCameraSize.sizeDelta.y * 0.5f * (1f / GameManager.GUISize));
             transform.localPosition = target;
         }
 
@@ -24,7 +24,7 @@ public class InvBeat : MonoBehaviour
             {
                 NextBeat += 1;
                 if ((GameManager.Graphic == 0 && GameManager.GUIAni == 0) || GameManager.GUIAni == 1)
-                    transform.localPosition = new Vector2(0, (70f + 3f) - MainCameraSize.sizeDelta.y * 0.5f * (1f / GameManager.GUISize));
+                    transform.localPosition = new Vector2(0, (22f + 3f) - MainCameraSize.sizeDelta.y * 0.5f * (1f / GameManager.GUISize));
             }
         }
 
@@ -34,7 +34,7 @@ public class InvBeat : MonoBehaviour
             {
                 NextBeat -= 1;
                 if ((GameManager.Graphic == 0 && GameManager.GUIAni == 0) || GameManager.GUIAni == 1)
-                    transform.localPosition = new Vector2(0, (70f + 3f) - MainCameraSize.sizeDelta.y * 0.5f * (1f / GameManager.GUISize));
+                    transform.localPosition = new Vector2(0, (22f + 3f) - MainCameraSize.sizeDelta.y * 0.5f * (1f / GameManager.GUISize));
             }
         }
     }

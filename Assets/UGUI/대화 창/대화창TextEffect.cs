@@ -67,7 +67,7 @@ public class 대화창TextEffect : MonoBehaviour
     {
         if (GameManager.isAction)
         {
-            if (Input.GetKeyDown(KeyCode.X) && !ChattingManager.ChattingActive) 
+            if (Input.GetKeyDown(KeyCode.X) && !ChattingManager.ChattingActive && !InvManager.InventoryShow) 
             {
                 msgText.text = targetMsg;
                 CancelInvoke();
@@ -82,20 +82,20 @@ public class 대화창TextEffect : MonoBehaviour
                 EffectEnd();
             }
 
-            if (Input.GetKeyDown(KeyCode.RightShift) && !ChattingManager.ChattingActive)
+            if (Input.GetKeyDown(KeyCode.RightShift) && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
             {
                 msgText.text = targetMsg;
                 CancelInvoke();
                 EffectEnd();
             }
 
-            if (Input.GetKey(KeyCode.C) && NpcEventManager.b && !ChattingManager.ChattingActive)
+            if (Input.GetKey(KeyCode.C) && NpcEventManager.b && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
                 msgText.text = targetMsg;
 
             if (GameManager.CKey && NpcEventManager.b)
                 msgText.text = targetMsg;
 
-            if (Input.GetKey(KeyCode.C) && !NpcEventManager.b && !ChattingManager.ChattingActive)
+            if (Input.GetKey(KeyCode.C) && !NpcEventManager.b && !ChattingManager.ChattingActive && !InvManager.InventoryShow && !InvManager.InventoryShow)
             {
                 GameObject scanNPC = Player.scanNPC;
                 NpcData npcData = scanNPC.GetComponent<NpcData>();
