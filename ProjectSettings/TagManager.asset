@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Map
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Map
+  - Npc
+  - Player
+  - event.soft_lock
+  - Fire
+  - Ladder
+  - Glass
+  - Stairs
+  - Door
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - UI
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Map Background
+    uniqueID: 1245089751
+    locked: 0
+  - name: Ladder
+    uniqueID: 743418223
+    locked: 0
+  - name: Entity
+    uniqueID: 1595412243
+    locked: 0
+  - name: Npc
+    uniqueID: 2267230381
+    locked: 0
+  - name: Player
+    uniqueID: 1715219091
+    locked: 0
+  - name: Mob
+    uniqueID: 3841678069
+    locked: 0
+  - name: Water
+    uniqueID: 3866874921
+    locked: 0
+  - name: Map
+    uniqueID: 1181835613
+    locked: 0
+  - name: UI
+    uniqueID: 3462878625
+    locked: 0

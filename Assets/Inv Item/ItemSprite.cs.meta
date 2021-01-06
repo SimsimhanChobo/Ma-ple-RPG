@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 0414f9e8c301aa74297e72abb6aa998b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _air: {fileID: 21300000, guid: da556423d5751ee49b50940ba910c54c, type: 3}
+  - _cooked_beef: {fileID: 21300000, guid: abda27bfcf7da904ab9c54509923cd8a, type: 3}
+  - _cooked_porkchop: {fileID: 21300000, guid: 84e3aa5501eee9b41bd3baff58a5bf42, type: 3}
+  - _pumpkin_pie: {fileID: 21300000, guid: 5468add0077618a4fa015a4fa304a467, type: 3}
+  - _wooden_sword: {fileID: 21300000, guid: 38b4c1147376013488aba9d0b0d74fb1, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

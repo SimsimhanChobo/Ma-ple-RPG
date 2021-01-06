@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 067a522240aa2cf469a94c26a613d744
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - Texture: {instanceID: 0}
+  - MapMaterial: {fileID: 2100000, guid: 7613c6cf1f318f14baaf8e3944d22d94, type: 2}
+  - MapXYPlipMaterial: {fileID: 2100000, guid: f287cd165ef5a6a429a3ad62a32a9e42, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
