@@ -1,2 +1,2 @@
-# Maple-RPG
-Maple Pan Game Project
+# Ma-ple-RPG
+Ma-ple YouTuber Pan Game Project
