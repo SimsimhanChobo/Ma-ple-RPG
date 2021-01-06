@@ -1,2 +1,2 @@
 # Ma-ple-RPG
-Ma-ple YouTuber Pan Game Projecta
+Ma-ple YouTuber Pan Game Project
