@@ -7,9 +7,9 @@
     }
 
         SubShader{
-            Tags { "Queue" = "Transparent" "RenderType" = "Transparent" }
-            LOD 200
-
+            Tags { "Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent"}
+            LOD 100
+            ZTest Always Cull Back ZWrite On Lighting Off Fog { Mode off }
             CGPROGRAM
             #pragma surface surf Lambert alpha
 
@@ -36,13 +36,11 @@
                 if (a < _Cutoff) {
                     o.Alpha = 0;
                 }
-     else {
-      o.Alpha = 1;
-  }
-}
-ENDCG
-         }
+                else {
+                o.Alpha = 1;
+                }
+            }
+            ENDCG
+        }
              FallBack "Diffuse"
 }
-
-출처: https://seokiki0413.tistory.com/1 [서키키 Dog발]

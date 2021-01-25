@@ -659,13 +659,11 @@ public class GameManager : MonoBehaviour
 
             //주 음량 변경
             if (MainVolTemp != MainVolume)
-            {
                 mainVolumeText.text = "주 음량: " + Mathf.Round(MainVolume * 100) + "%";
-                if (MainVolume <= -1)
-                {
-                    MainVolume = 0;
-                    mainVolumeText.text = "주 음량: 꺼짐";
-                }
+            if (MainVolume <= -1)
+            {
+                MainVolume = 0;
+                mainVolumeText.text = "주 음량: 꺼짐";
             }
             MainVolTemp = MainVolume;
 
