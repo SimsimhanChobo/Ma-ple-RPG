@@ -16,7 +16,7 @@ TagManager:
   - 
   - Map
   - Npc
-  - Player
+  - Entity
   - event.soft_lock
   - Fire
   - Ladder
@@ -36,7 +36,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Player
   - UI
   m_SortingLayers:
   - name: Default
