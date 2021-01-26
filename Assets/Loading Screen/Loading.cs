@@ -6,6 +6,8 @@ using DiscordPresence;
 
 public class Loading : MonoBehaviour
 {
+    public static bool isLoading = false;
+
     public Image progressBar;
 
     public Canvas LoadingUI;
@@ -24,6 +26,8 @@ public class Loading : MonoBehaviour
 
     public static void LoadScene(string sceneName, string LogoText)
     {
+        isLoading = true;
+
         if (!GameManager.isAction && !GameManager.일시정지)
         {
             nextScene = sceneName;
@@ -94,6 +98,7 @@ public class Loading : MonoBehaviour
                 if (progressBar.fillAmount >= 0.995f)
                 {
                     op.allowSceneActivation = true;
+                    isLoading = false;
                     yield break;
                 }
             }

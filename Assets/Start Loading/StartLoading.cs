@@ -56,7 +56,7 @@ public class StartLoading : MonoBehaviour
 
     IEnumerator LoadSceneProcess()
     {
-        AsyncOperation op = SceneManager.LoadSceneAsync("마플 RPG");
+        AsyncOperation op = SceneManager.LoadSceneAsync("마플 RPG System");
         op.allowSceneActivation = false;
 
         while (!op.isDone)

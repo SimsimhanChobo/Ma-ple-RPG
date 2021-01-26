@@ -45,6 +45,17 @@ public class NpcEventManager : MonoBehaviour
 
             if (GameManager.isAction)
             {
+                Transform[] allChildren = scanNPC.GetComponentsInChildren<Transform>();
+                for (int i = 0; i < allChildren.Length; i++)
+                {
+                    Transform child = allChildren[i];
+
+                    if (child.name == "Minecraft Door Texture")
+                        운터의숙소문Left = child.gameObject;
+                    else if (child.name == "Minecraft Door Right Texture")
+                        운터의숙소문Right = child.gameObject;
+                }
+
                 TalkEventEnd = false;
 
                 if (npcData.NpcID == 2 && manager.talkIndex == 1 && npcData.NpcMap == GameManager.Map)

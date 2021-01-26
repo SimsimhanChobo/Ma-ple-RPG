@@ -94,12 +94,22 @@ public class Player : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody2D>();
         player = gameObject;
+
+        rigid.bodyType = RigidbodyType2D.Static;
     }
 
-    void Start() => transform.position = new Vector2(GameManager.PlayerX, GameManager.PlayerY);
+    void Start()
+    {
+        GameManager.loadData();
+
+        transform.position = new Vector2(GameManager.PlayerX, GameManager.PlayerY);
+        rigid.velocity = Vector2.zero;
+    }
 
     void Update()
     {
+        rigid.bodyType = RigidbodyType2D.Dynamic;
+
         //X좌표랑 Y좌표 정하기
         GameManager.PlayerX = Mathf.Round(transform.position.x * 100) * 0.01f;
         GameManager.PlayerY = Mathf.Round(transform.position.y * 100) * 0.01f;
@@ -360,6 +370,16 @@ public class Player : MonoBehaviour
             //공격
             if (Input.GetKeyDown(KeyCode.Mouse0) && GameManager.isAction == false && !GameManager.ButtonPointer && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
             {
+                Debug.DrawRay(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX * 3, 1), new Color(1, 0, 0));
+                Debug.DrawRay(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX * 3, 0), new Color(1, 0, 0));
+                Debug.DrawRay(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX * 3, -1), new Color(1, 0, 0));
+                RaycastHit2D raycastHit2D = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX, 1), 3, LayerMask.GetMask("Entity", "Entity Collider"));
+                if (raycastHit2D.collider == null) raycastHit2D = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX, 0), 3, LayerMask.GetMask("Entity", "Entity Collider"));
+                if (raycastHit2D.collider == null) raycastHit2D = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX, -1), 3, LayerMask.GetMask("Entity", "Entity Collider"));
+
+                if (raycastHit2D.collider != null)
+                    raycastHit2D.collider.GetComponent<EntitySetting>().Damage(GameManager.PlayerAttack * GameManager.PlayerAV / GameManager.PlayerMaxAV, false, 0);
+
                 GameManager.PlayerAV = 0;
                 Attack = true;
                 Timer = 0;
@@ -524,7 +544,6 @@ public class Player : MonoBehaviour
                 else
                     SkinRotation.skinLookAt(scanNPC.transform.Find("Minecraft Player Skin").gameObject, "All", true);
 
-                Debug.Log(SkinRotation.PlayerObject.transform.localEulerAngles.y);
                 if (!MainCamera.Game3D && SkinRotation.PlayerObject.transform.localEulerAngles.y > 180)
                     SkinRotation.skinRotation("All", Quaternion.Euler(new Vector3(0, -90, 0)), true);
                 else if (!MainCamera.Game3D)

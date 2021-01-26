@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MinecraftSkyboxColorChange : MonoBehaviour
 {
+    public Material SkyBox;
+
     public Color DayTopColor;
     public Color DayBottomColor;
 
@@ -18,6 +20,8 @@ public class MinecraftSkyboxColorChange : MonoBehaviour
 
     void Update()
     {
+        RenderSettings.skybox = SkyBox;
+
         if (TimeControl.GameTime >= 10000 && TimeControl.GameTime <= 13800)
         {
             Brightness = 1f / (255f / ((3800 - TimeControl.time2) * 0.0739474f));

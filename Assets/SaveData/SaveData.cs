@@ -134,6 +134,7 @@ public class PlayerData
     [Space(15)]
     public float PlayerSpeed;
     public float PlayerJumpPower;
+    public string Chapter;
     public int Map;
 
     [Space(15)]

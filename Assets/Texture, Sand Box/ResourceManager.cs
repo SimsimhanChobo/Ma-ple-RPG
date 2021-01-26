@@ -15,7 +15,7 @@ public class ResourceManager : MonoBehaviour
 
     public static Texture2D ResourceLoad(string Path)
     {
-        Texture2D TextureLoadTemp = new Texture2D(0, 0);
+        /*Texture2D TextureLoadTemp = new Texture2D(0, 0);
 
         int i = 0;
         bool b = true;
@@ -58,10 +58,9 @@ public class ResourceManager : MonoBehaviour
                 b = false;
 
             i++;
-        }
+        }*/
 
-        Debug.Log(TextureLoadTemp.name);
-        return TextureLoadTemp;
+        return Resources.Load<Texture2D>(Path);
     }
 
     public static Texture2D GetBlockTextures(List<Texture2D> BlockTexture, out Vector2[] Uvs)
