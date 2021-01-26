@@ -373,8 +373,8 @@ public class Player : MonoBehaviour
                 Debug.DrawRay(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX * 3, 1), new Color(1, 0, 0));
                 Debug.DrawRay(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX * 3, 0), new Color(1, 0, 0));
                 Debug.DrawRay(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX * 3, -1), new Color(1, 0, 0));
-                RaycastHit2D raycastHit2D = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX, 1), 3, LayerMask.GetMask("Entity", "Entity Collider"));
-                if (raycastHit2D.collider == null) raycastHit2D = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX, 0), 3, LayerMask.GetMask("Entity", "Entity Collider"));
+                RaycastHit2D raycastHit2D = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX, 0), 3, LayerMask.GetMask("Entity", "Entity Collider"));
+                if (raycastHit2D.collider == null) raycastHit2D = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX, 1), 3, LayerMask.GetMask("Entity", "Entity Collider"));
                 if (raycastHit2D.collider == null) raycastHit2D = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX, -1), 3, LayerMask.GetMask("Entity", "Entity Collider"));
 
                 if (raycastHit2D.collider != null)
