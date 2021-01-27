@@ -118,6 +118,9 @@ public class PlayerData
     public float PlayerHP;
     public float PlayerMaxHG;
     public float PlayerHG;
+    public float PlayerHGSaturationLevel;
+    public float PlayerHGTickTimer;
+    public float PlayerHGExhaustionLevel;
     public float PlayerAS;
     public float Air;
 

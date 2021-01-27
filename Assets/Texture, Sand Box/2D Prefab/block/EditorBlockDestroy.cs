@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class EditorBlockDestroy : MonoBehaviour
 {
-    void Start() => Destroy(gameObject);
+    void Awake() => Destroy(gameObject);
 }

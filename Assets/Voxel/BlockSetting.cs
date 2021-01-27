@@ -57,7 +57,7 @@ public class BlockSetting : MonoBehaviour
     readonly List<int> triangles = new List<int>();
     Vector2[] uvs;
 
-    void Awake()
+    void Start()
     {
         material = GetComponent<Renderer>().material;
         meshFilter = GetComponent<MeshFilter>();
@@ -68,7 +68,7 @@ public class BlockSetting : MonoBehaviour
     [ContextMenu("Block Refresh")]
     public IEnumerator BlockRefresh(bool Reload)
     {
-        yield return new WaitUntil(() => Vector2.Distance(transform.position, MainCamera.Camera.transform.position) <= 100);
+        yield return new WaitUntil(() => Vector2.Distance(transform.position, MainCamera.Camera.transform.position) <= 25);
 
         if (!Reload)
         {

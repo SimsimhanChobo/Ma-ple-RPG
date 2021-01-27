@@ -147,7 +147,6 @@ MonoBehaviour:
   Back: {fileID: 0}
   Top: {fileID: 0}
   Bottom: {fileID: 0}
-  BlockRefresh: 1
 --- !u!1001 &335505837909596376
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -199,21 +198,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Editor Block Show Object
-      objectReference: {fileID: 0}
-    - target: {fileID: 2267038019422273172, guid: 7a3b4819a3862f24a8a1e568517f9fbe,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2267038019422273172, guid: 7a3b4819a3862f24a8a1e568517f9fbe,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2267038019422273172, guid: 7a3b4819a3862f24a8a1e568517f9fbe,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2267038019422273172, guid: 7a3b4819a3862f24a8a1e568517f9fbe,
         type: 3}

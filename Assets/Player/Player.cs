@@ -95,6 +95,7 @@ public class Player : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         player = gameObject;
 
+        rigid.velocity = Vector2.zero;
         rigid.bodyType = RigidbodyType2D.Static;
     }
 
@@ -103,7 +104,6 @@ public class Player : MonoBehaviour
         GameManager.loadData();
 
         transform.position = new Vector2(GameManager.PlayerX, GameManager.PlayerY);
-        rigid.velocity = Vector2.zero;
     }
 
     void Update()
@@ -158,9 +158,9 @@ public class Player : MonoBehaviour
             Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 0.5f * 0.9f), new Vector3(0.111f * 0.9f, -0.5f * 0.9f, 0), new Color(0, 1, 0));
 
             //점프 레이캐스트
-            Jump = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, -1.2f * 0.9f, 0), 1.2f * 0.9f, LayerMask.GetMask("Map", "Stairs"));
-            Jump2 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, -1.2f * 0.9f, 0), 1.2f * 0.9f, LayerMask.GetMask("Map", "Stairs"));
-            Jump3 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, -1.2f * 0.9f, 0), 1.2f * 0.9f, LayerMask.GetMask("Map", "Stairs"));
+            Jump = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, -1.2f * 0.9f, 0), 1.2f * 0.9f, LayerMask.GetMask("Map", "Stairs", "Glass"));
+            Jump2 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, -1.2f * 0.9f, 0), 1.2f * 0.9f, LayerMask.GetMask("Map", "Stairs", "Glass"));
+            Jump3 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, -1.2f * 0.9f, 0), 1.2f * 0.9f, LayerMask.GetMask("Map", "Stairs", "Glass"));
 
             //물 레이캐스트
             Water = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, -1f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Water"));
@@ -378,7 +378,10 @@ public class Player : MonoBehaviour
                 if (raycastHit2D.collider == null) raycastHit2D = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX, -1), 3, LayerMask.GetMask("Entity", "Entity Collider"));
 
                 if (raycastHit2D.collider != null)
-                    raycastHit2D.collider.GetComponent<EntitySetting>().Damage(GameManager.PlayerAttack * GameManager.PlayerAV / GameManager.PlayerMaxAV, false, 0);
+                {
+                    GameManager.PlayerHGExhaustionLevel += 0.1f;
+                    raycastHit2D.collider.GetComponent<EntitySetting>().Damage(GameManager.PlayerAttack * GameManager.PlayerAV / GameManager.PlayerMaxAV, false, 0, true);
+                }
 
                 GameManager.PlayerAV = 0;
                 Attack = true;
@@ -569,7 +572,7 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!GameManager.일시정지)
+        if (!GameManager.일시정지 && rigid.bodyType != RigidbodyType2D.Static)
         {
             //멈추기
             if (Input.GetButtonUp("Horizontal") || ChattingManager.ChattingActive || InvManager.InventoryShow)
@@ -663,6 +666,8 @@ public class Player : MonoBehaviour
             {
                 if (Input.GetButton("Jump") && FallDamage4)
                 {
+                    GameManager.PlayerHGExhaustionLevel += 0.05f;
+
                     if (jump && Water.collider == null && Water2.collider == null && Water3.collider == null && Water4.collider == null && Water5.collider == null && Water6.collider == null && Water7.collider == null && Water8.collider == null && Water9.collider == null)
                         rigid.velocity = new Vector2(rigid.velocity.x, GameManager.PlayerJumpPower);
                     else if (Water.collider != null || Water2.collider != null || Water3.collider != null || Water4.collider != null || Water5.collider != null || Water6.collider != null || Water7.collider != null || Water8.collider != null || Water9.collider != null)
@@ -673,6 +678,8 @@ public class Player : MonoBehaviour
                 }
                 else if (GameManager.UpKey && FallDamage4)
                 {
+                    GameManager.PlayerHGExhaustionLevel += 0.05f;
+
                     if (jump && Water.collider == null && Water2.collider == null && Water3.collider == null && Water4.collider == null && Water5.collider == null && Water6.collider == null && Water7.collider == null && Water8.collider == null && Water9.collider == null)
                         rigid.velocity = new Vector2(rigid.velocity.x, GameManager.PlayerJumpPower);
                     else if (Water.collider != null || Water2.collider != null || Water3.collider != null || Water4.collider != null || Water5.collider != null || Water6.collider != null || Water7.collider != null || Water8.collider != null || Water9.collider != null)

@@ -43,7 +43,7 @@ public class StartLoadingPadeImage : MonoBehaviour
         progressBar.color = new Color(1, 1, 1, i);
         LoadingProgressText.color = new Color(1, 1, 1, i);
 
-        i -= 0.025f * (60 * Time.unscaledDeltaTime);
+        i -= 0.025f * GameManager.GameSpeed;
         if (i <= 0)
             Destroy(gameObject);
     }

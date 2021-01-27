@@ -23,6 +23,9 @@ public class GameManager : MonoBehaviour
     public static float PlayerHP = PlayerMaxHP;
     public static float PlayerMaxHG = 20f;
     public static float PlayerHG = PlayerMaxHG;
+    public static float PlayerHGSaturationLevel = 5;
+    public static float PlayerHGTickTimer = 0;
+    public static float PlayerHGExhaustionLevel = 0;
     public static float PlayerMaxAV = 100f;
     public static float PlayerAV = PlayerMaxAV;
     public static float PlayerAS = 0.2f;
@@ -61,11 +64,6 @@ public class GameManager : MonoBehaviour
     public float _PlayerSpeed;
     public float _PlayerJumpPower;
     public bool _PlayerMove;
-    public float PlayerMoveHGTimer = 0;
-    public int PlayerMoveHGTimerRandom = 0;
-    public float PlayerHGHPTimer = 0;
-    public int PlayerHGHPTimerRandom = 0;
-    public float PlayerHGDamageTimer = 0;
     public float _PlayerDamageDelay = PlayerDamageDelay;
     public float _PlayerDamageDelayTimer = PlayerDamageDelayTimer;
 
@@ -536,46 +534,57 @@ public class GameManager : MonoBehaviour
                     PlayerAV = PlayerMaxAV;
 
                 //HG
-                if (PlayerMove && !MainMenu)
+                if (PlayerHG >= PlayerMaxHG && PlayerHGSaturationLevel > 0)
                 {
-                    PlayerMoveHGTimer += Time.deltaTime;
-                    if (PlayerMoveHGTimer >= PlayerMoveHGTimerRandom)
+                    PlayerHGTickTimer += Time.deltaTime;
+                    if (PlayerHGTickTimer > 0.5f)
                     {
-                        PlayerMoveHGTimer = 0;
-                        PlayerMoveHGTimerRandom = Random.Range(6, 12);
-                        PlayerHG -= Random.Range(0.25f, 0.5f);
+                        PlayerDamage(-2, false, 0);
+                        PlayerHGSaturationLevel -= 1.5f;
+                        PlayerHGTickTimer = 0;
                     }
                 }
-
-                if (PlayerHG <= 0)
+                else if (0.9f >= PlayerHG / PlayerMaxHG && PlayerHGSaturationLevel == 0)
                 {
-                    PlayerHGDamageTimer += Time.deltaTime;
-
-                    if (PlayerHGDamageTimer >= 2)
+                    PlayerHGTickTimer += Time.deltaTime;
+                    if (PlayerHGTickTimer > 4)
                     {
-                        PlayerDamage(0.05f * PlayerMaxHP, false, 0);
-                        PlayerHGDamageTimer = 0;
-                    }
-                }
-                else
-                    PlayerHGDamageTimer = 0;
-
-                if (PlayerMaxHP != PlayerHP && PlayerHG / PlayerMaxHG * 100 > 50 && !MainMenu)
-                {
-                    PlayerHGHPTimer += Time.deltaTime;
-                    if (PlayerHGHPTimer >= PlayerHGHPTimerRandom)
-                    {
-                        PlayerHGHPTimer = 0;
-                        PlayerHGHPTimerRandom = Random.Range(1, 3);
-                        PlayerHG -= 0.5f;
-                        PlayerHP += 2;
+                        PlayerDamage(-2, false, 0);
+                        PlayerHG -= 1.5f;
+                        PlayerHGTickTimer = 0;
                     }
                 }
 
                 PlayerMaxSpeed = 7.1f;
                 PlayerJumpPower = 8.17f;
-                if (PlayerHG / PlayerMaxHG * 100 < 30 && !event_soft_lock.Play && PlayerHGSpeedDown)
+                if (PlayerHG / PlayerMaxHG < 0.3f && !event_soft_lock.Play && PlayerHGSpeedDown)
                     PlayerMaxSpeed = 7.1f * 0.75f;
+
+                if (PlayerHG <= 0)
+                {
+                    PlayerHGTickTimer += Time.deltaTime;
+                    if (PlayerHGTickTimer > 4)
+                    {
+                        PlayerDamage(4, false, 0);
+                        PlayerHGTickTimer = 0;
+                    }
+                }
+
+                if (PlayerMove && !MainMenu)
+                    PlayerHGExhaustionLevel += 0.001f;
+
+                if (PlayerHGExhaustionLevel >= 4)
+                {
+                    if (PlayerHGSaturationLevel <= 0)
+                        PlayerHG -= 1;
+                    else
+                        PlayerHGSaturationLevel -= 1;
+
+                    PlayerHGExhaustionLevel = 0;
+                }
+
+                if (PlayerHGSaturationLevel >= PlayerHG)
+                    PlayerHGSaturationLevel = PlayerHG;
 
                 //자동 시작
                 if (MainMenu)
@@ -912,6 +921,9 @@ public class GameManager : MonoBehaviour
             SaveData.playerData.PlayerHP = PlayerHP;
         SaveData.playerData.PlayerMaxHG = PlayerMaxHG;
         SaveData.playerData.PlayerHG = PlayerHG;
+        SaveData.playerData.PlayerHGExhaustionLevel = PlayerHGExhaustionLevel;
+        SaveData.playerData.PlayerHGSaturationLevel = PlayerHGSaturationLevel;
+        SaveData.playerData.PlayerHGTickTimer = PlayerHGTickTimer;
         SaveData.playerData.Air = Player.Air;
         SaveData.playerData.FallDamage = Player.FallDamage;
 
@@ -972,6 +984,9 @@ public class GameManager : MonoBehaviour
         PlayerHP = SaveData.playerData.PlayerHP;
         PlayerMaxHG = SaveData.playerData.PlayerMaxHG;
         PlayerHG = SaveData.playerData.PlayerHG;
+        PlayerHGExhaustionLevel = SaveData.playerData.PlayerHGExhaustionLevel;
+        PlayerHGSaturationLevel = SaveData.playerData.PlayerHGSaturationLevel;
+        PlayerHGTickTimer = SaveData.playerData.PlayerHGTickTimer;
         Player.Air = SaveData.playerData.Air;
         Player.FallDamage = SaveData.playerData.FallDamage;
 
@@ -1040,6 +1055,9 @@ public class GameManager : MonoBehaviour
                 SaveData.playerData.PlayerHP = 130;
                 SaveData.playerData.PlayerMaxHG = 20;
                 SaveData.playerData.PlayerHG = 20;
+                SaveData.playerData.PlayerHGExhaustionLevel = 0;
+                SaveData.playerData.PlayerHGSaturationLevel = 5;
+                SaveData.playerData.PlayerHGTickTimer = 0;
                 SaveData.playerData.Air = 300;
                 SaveData.playerData.FallDamage = 0;
 
