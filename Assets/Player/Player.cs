@@ -158,9 +158,9 @@ public class Player : MonoBehaviour
             Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 0.5f * 0.9f), new Vector3(0.111f * 0.9f, -0.5f * 0.9f, 0), new Color(0, 1, 0));
 
             //점프 레이캐스트
-            Jump = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, -1.2f * 0.9f, 0), 1.2f * 0.9f, LayerMask.GetMask("Map", "Stairs", "Glass"));
-            Jump2 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, -1.2f * 0.9f, 0), 1.2f * 0.9f, LayerMask.GetMask("Map", "Stairs", "Glass"));
-            Jump3 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, -1.2f * 0.9f, 0), 1.2f * 0.9f, LayerMask.GetMask("Map", "Stairs", "Glass"));
+            Jump = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, -1.2f * 0.9f, 0), 1.2f * 0.9f, LayerMask.GetMask("Map", "Stairs", "Glass", "Entity Collider"));
+            Jump2 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, -1.2f * 0.9f, 0), 1.2f * 0.9f, LayerMask.GetMask("Map", "Stairs", "Glass", "Entity Collider"));
+            Jump3 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, -1.2f * 0.9f, 0), 1.2f * 0.9f, LayerMask.GetMask("Map", "Stairs", "Glass", "Entity Collider"));
 
             //물 레이캐스트
             Water = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, -1f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Water"));
@@ -180,7 +180,7 @@ public class Player : MonoBehaviour
             Fire2 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, -1f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Fire"));
             Fire3 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, -1f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Fire"));
 
-            Jump4 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, 1 * 0.9f, 0), 1, LayerMask.GetMask("Map"));
+            Jump4 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, 1 * 0.9f, 0), 1, LayerMask.GetMask("Map", "Entity Collider"));
 
             //이벤트 레이캐스트
             Event = Physics2D.Raycast(new Vector2(rigid.position.x - 2, rigid.position.y + 1 * 0.9f), new Vector3(4, 0, 0), 4, LayerMask.GetMask("Npc"));
@@ -191,9 +191,9 @@ public class Player : MonoBehaviour
             Ladder3 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 0.5f * 0.9f), new Vector3(0.111f * 0.9f, -0.5f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Ladder"));
 
             //질식
-            Suffocat = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1.51f * 0.9f), new Vector3(0, 0.5f * 0.9f, 0), 0.5f, LayerMask.GetMask("Map"));
-            Suffocat2 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1.51f * 0.9f), new Vector3(-0.251f * 0.9f, 0.5f * 0.9f, 0), 0.5f * 0.9f, LayerMask.GetMask("Map"));
-            Suffocat3 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1.51f * 0.9f), new Vector3(0.251f * 0.9f, 0.5f * 0.9f, 0), 0.5f * 0.9f, LayerMask.GetMask("Map"));
+            Suffocat = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1.51f * 0.9f), new Vector3(0, 0.5f * 0.9f, 0), 0.5f, LayerMask.GetMask("Map", "Entity Collider"));
+            Suffocat2 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1.51f * 0.9f), new Vector3(-0.251f * 0.9f, 0.5f * 0.9f, 0), 0.5f * 0.9f, LayerMask.GetMask("Map", "Entity Collider"));
+            Suffocat3 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1.51f * 0.9f), new Vector3(0.251f * 0.9f, 0.5f * 0.9f, 0), 0.5f * 0.9f, LayerMask.GetMask("Map", "Entity Collider"));
 
             if (Jump.collider != null)
             {
@@ -702,15 +702,15 @@ public class Player : MonoBehaviour
             //반 블록 올라가기
             Debug.DrawRay(transform.position, new Vector2(0.5f * h, 0), new Color(0, 1, 1));
             Debug.DrawRay(new Vector2(transform.position.x, transform.position.y + 0.6f), new Vector2(0.5f * h, 0), new Color(0, 1, 1));
-
-            RaycastHit2D AutoJump = Physics2D.Raycast(transform.position, new Vector2(0.5f * h, 0), 0.2f, LayerMask.GetMask("Map", "Stairs"));
-            RaycastHit2D AutoJump2 = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.6f), new Vector2(0.5f * h, 0), 0.5f, LayerMask.GetMask("Map", "Stairs"));
+            
+            RaycastHit2D AutoJump = Physics2D.Raycast(transform.position, new Vector2(0.5f * h, 0), 0.2f, LayerMask.GetMask("Map", "Stairs", "Entity Collider"));
+            RaycastHit2D AutoJump2 = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 0.6f), new Vector2(0.5f * h, 0), 0.5f, LayerMask.GetMask("Map", "Stairs", "Entity Collider"));
 
             if (Input.GetButton("Horizontal") && AutoJump.collider != null && AutoJump2.collider == null && FallDamage4 && jump)
             {
                 while (AutoJump.collider != null)
                 {
-                    AutoJump = Physics2D.Raycast(rigid.position, new Vector2(0.2f * h, 0), 0.2f, LayerMask.GetMask("Map", "Stairs"));
+                    AutoJump = Physics2D.Raycast(rigid.position, new Vector2(0.2f * h, 0), 0.2f, LayerMask.GetMask("Map", "Stairs", "Entity Collider"));
                     rigid.position = new Vector2(rigid.position.x, rigid.position.y + 0.001f);
                     rigid.velocity = new Vector2(GameManager.PlayerMaxSpeed * h * 1.5f, rigid.velocity.y);
                 }
