@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     public float _PlayerZ;
 
     //플레이어 상태
-    public static float PlayerMaxHP = 130f;
+    public static float PlayerMaxHP = 20f;
     public static float PlayerHP = PlayerMaxHP;
     public static float PlayerMaxHG = 20f;
     public static float PlayerHG = PlayerMaxHG;
@@ -155,7 +155,6 @@ public class GameManager : MonoBehaviour
     public GameObject scanNPC;
     public GameObject talkPanel;
     public static bool isAction;
-    public int talkIndex;
     public GameObject 대화창화살표;
 
     public static int EventSelection = 0;
@@ -534,22 +533,22 @@ public class GameManager : MonoBehaviour
                     PlayerAV = PlayerMaxAV;
 
                 //HG
-                if (PlayerHG >= PlayerMaxHG && PlayerHGSaturationLevel > 0)
+                if (PlayerHG >= PlayerMaxHG && PlayerHGSaturationLevel > 0 && PlayerHP < PlayerMaxHP)
                 {
                     PlayerHGTickTimer += Time.deltaTime;
                     if (PlayerHGTickTimer > 0.5f)
                     {
-                        PlayerDamage(-2, false, 0);
+                        PlayerHP += 1;
                         PlayerHGSaturationLevel -= 1.5f;
                         PlayerHGTickTimer = 0;
                     }
                 }
-                else if (0.9f >= PlayerHG / PlayerMaxHG && PlayerHGSaturationLevel == 0)
+                else if (0.9f <= PlayerHG / PlayerMaxHG && PlayerHGSaturationLevel <= 0 && PlayerHP < PlayerMaxHP)
                 {
                     PlayerHGTickTimer += Time.deltaTime;
                     if (PlayerHGTickTimer > 4)
                     {
-                        PlayerDamage(-2, false, 0);
+                        PlayerHP += 1;
                         PlayerHG -= 1.5f;
                         PlayerHGTickTimer = 0;
                     }
@@ -565,7 +564,7 @@ public class GameManager : MonoBehaviour
                     PlayerHGTickTimer += Time.deltaTime;
                     if (PlayerHGTickTimer > 4)
                     {
-                        PlayerDamage(4, false, 0);
+                        PlayerDamage(1, false, 0);
                         PlayerHGTickTimer = 0;
                     }
                 }
@@ -585,6 +584,9 @@ public class GameManager : MonoBehaviour
 
                 if (PlayerHGSaturationLevel >= PlayerHG)
                     PlayerHGSaturationLevel = PlayerHG;
+
+                if (PlayerHGSaturationLevel < 0)
+                    PlayerHGSaturationLevel = 0;
 
                 //자동 시작
                 if (MainMenu)
@@ -860,37 +862,13 @@ public class GameManager : MonoBehaviour
         _TalkAni = TalkAni;
         _Particle = Particle;
     }
-    public void Action(GameObject scanNPC)
+
+    public void Talk(string talk)
     {
-        if (대화창TextEffect.isAnim == false && Input.GetKey(KeyCode.C) == false && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
-        {
-            talkPanel.SetActive(true);
-            NpcData npcData = scanNPC.GetComponent<NpcData>();
-            Talk(npcData.NpcTalk);
-        }
-
-        if (Input.GetKey(KeyCode.C) && NpcEventManager.b && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
-        {
-            talkPanel.SetActive(true);
-            NpcData npcData = scanNPC.GetComponent<NpcData>();
-            Talk(npcData.NpcTalk);
-        }
-    }
-
-    public void Talk(List<string> talk)
-    {
-        if (talk.Count == talkIndex)
-        {
-            TalkEnd();
-            return;
-        }
-
-        string talkData = talk[talkIndex];
-
         isAction = true;
 
-        talkeffect.SetMsg(talkData);
-        talkIndex++;
+        talkPanel.SetActive(true);
+        talkeffect.SetMsg(talk);
     }
 
     public void TalkEnd()
@@ -898,7 +876,6 @@ public class GameManager : MonoBehaviour
         talkeffect.EffectEnd();
         isAction = false;
         talkPanel.SetActive(false);
-        talkIndex = 0;
     }
 
     public void GameQuit() => Application.Quit();
@@ -1051,8 +1028,8 @@ public class GameManager : MonoBehaviour
                 SaveData.playerData.PlayerZ = 0;
                 SaveData.playerData.MainCameraPos = new Vector3(0, -0.5f, 14);
 
-                SaveData.playerData.PlayerMaxHP = 130;
-                SaveData.playerData.PlayerHP = 130;
+                SaveData.playerData.PlayerMaxHP = 20;
+                SaveData.playerData.PlayerHP = 20;
                 SaveData.playerData.PlayerMaxHG = 20;
                 SaveData.playerData.PlayerHG = 20;
                 SaveData.playerData.PlayerHGExhaustionLevel = 0;

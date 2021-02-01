@@ -11,11 +11,10 @@ public class DebugText : MonoBehaviour
     float tempTimer;
     float tempFPS;
     int tempFPS2;
+    float Timer;
 
     int FPS;
     int FPS2;
-
-    void Start() => StartCoroutine("DebugTextUpdate");
 
     void Update()
     {
@@ -41,14 +40,14 @@ public class DebugText : MonoBehaviour
             else
                 DebugActive = true;
         }
-    }
 
-    IEnumerator DebugTextUpdate()
-    {
-        while (true)
+        Timer += Time.unscaledDeltaTime;
+        if (DebugActive)
         {
-            if (DebugActive)
+            if (Timer >= 0.1f)
             {
+                Timer = 0;
+
                 if (Time.deltaTime != 0)
                     Text.text = "Delta Time : " + Time.deltaTime + "\nUnscaled Delta Time : " + Time.unscaledDeltaTime + "\n\nDelta Time FPS : " + Mathf.Round(1 / Time.deltaTime) + "\nUnscaled Delta Time FPS : " + Mathf.Round(1 / Time.unscaledDeltaTime) + "\n\nDelta Time × 60 : " + (60 * Time.deltaTime) + "\nUnscaled Delta Time × 60 : " + (60 * (60 * Time.unscaledDeltaTime)) + "\n\nFPS : " + FPS + "\nUnscaled FPS : " + FPS2;
                 else
@@ -110,11 +109,9 @@ public class DebugText : MonoBehaviour
                     Text.text += "\nMap : " + GameManager.ADOFAIMap;
                 }
             }
-            else
-                Text.text = null;
-
-            yield return new WaitForSecondsRealtime(0.1f);
         }
+        else
+            Text.text = null;
     }
 
     public void DebugToggle()

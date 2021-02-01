@@ -8,45 +8,54 @@ public class EntitySetting : MonoBehaviour
     public List<MobType> mobType;
 
     public GameObject prefab;
-    public Canvas canvas;
     public Slider HPSlider;
     public GameObject EntitySkin;
     public GameObject DIEParticle;
 
-    public float ColliderX;
-    public float ColliderY;
+    public string EntityName;
 
-    public float MaxHP;
-    public float HP;
+    public float ColliderSizeX = 1;
+    public float ColliderSizeY = 1;
 
-    public float AV;
+    public float RealColliderSizeX = 1;
+    public float RealColliderSizeY = 1;
 
-    public float MaxAir;
-    public float Air;
+    public Vector3 Collider;
 
-    public float DamageMaterialTimer;
-    public float DieTimer;
+    public float MaxHP = 100;
+    public float HP = 100;
 
-    public float MaxSpeed;
-    public float MaxJump;
+    public bool Invincible = false;
 
-    public float EntitySpeed;
-    public float EntityJump;
+    public float AV = 100;
 
-    public float FireTimer;
-    public float FireTimer2;
+    public float MaxAir = 300;
+    public float Air = 300;
 
-    public float SuffocatTimer;
+    public float DamageMaterialTimer = 0;
+    public bool DamageMaterialTimerTemp = false;
+    public float DieTimer = 0;
+
+    public float MaxSpeed = 3.55f;
+    public float MaxJump = 8.17f;
+
+    public float EntitySpeed = 3.55f;
+    public float EntityJump = 8.17f;
+
+    public float FireTimer = 0;
+    public float FireTimer2 = 0;
+
+    public float SuffocatTimer = 0;
 
     Rigidbody2D rigid;
     BoxCollider2D boxCollider2D;
 
     public bool jump = false;
 
-    public float FallDamage;
-    public int FallDamage2;
-    public float FallDamage3;
-    public bool FallDamage4;
+    public float FallDamage = 0;
+    public int FallDamage2 = 0;
+    public float FallDamage3 = 0;
+    public bool FallDamage4 = false;
 
     public RaycastHit2D Jump;
     public RaycastHit2D Water;
@@ -59,16 +68,21 @@ public class EntitySetting : MonoBehaviour
 
         rigid = GetComponent<Rigidbody2D>();
         boxCollider2D = GetComponent<BoxCollider2D>();
+
+        transform.position = new Vector3(transform.position.x, transform.position.y + 0.1f, transform.position.z);
     }
 
     void FixedUpdate()
     {
         if (!GameManager.일시정지)
         {
-            boxCollider2D.size = new Vector2(0.975f * ColliderX, 0.975f * ColliderY);
+            boxCollider2D.size = new Vector2(0.975f * RealColliderSizeX, 0.975f * RealColliderSizeY);
 
-            HPSlider.maxValue = MaxHP;
-            HPSlider.value = Mathf.Lerp(HPSlider.value, HP, 0.1f * (60 * Time.deltaTime));
+            if (HPSlider != null)
+            {
+                HPSlider.maxValue = MaxHP;
+                HPSlider.value = Mathf.Lerp(HPSlider.value, HP, 0.1f * (60 * Time.deltaTime));
+            }
 
             if (HP > MaxHP)
                 HP = MaxHP;
@@ -77,17 +91,17 @@ public class EntitySetting : MonoBehaviour
                 HP = 0;
 
             //점프 레이캐스트
-            Jump = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y), new Vector3(0, -0.7f, 0), 1.1f * ColliderY, LayerMask.GetMask("Map", "Stairs", "Glass"));
+            Jump = Physics2D.Raycast(transform.position + Collider, new Vector3(0, -0.7f, 0), 1.1f * ColliderSizeY, LayerMask.GetMask("Map", "Stairs", "Glass"));
             if (Jump.collider != null)
             {
-                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y), new Vector3(0, -0.7f, 0), new Color(1, 0, 0));
+                Debug.DrawRay(transform.position + Collider, new Vector3(0, -0.7f, 0), new Color(1, 0, 0));
                 jump = true;
             }
             else
                 jump = false;
 
             //Water
-            Water = Physics2D.Raycast(transform.position, new Vector2(0, 0.01f), 0.01f, LayerMask.GetMask("Water"));
+            Water = Physics2D.Raycast(transform.position + Collider, new Vector2(0, 0.01f), 0.01f, LayerMask.GetMask("Water"));
 
             //AIR
             if (Water.collider != null)
@@ -96,7 +110,7 @@ public class EntitySetting : MonoBehaviour
 
                 if (Air <= -20)
                 {
-                    Damage(2, false, 1, false);
+                    Damage(2, false, 1, false, false);
                     Air = 0;
                 }
 
@@ -110,41 +124,49 @@ public class EntitySetting : MonoBehaviour
 
             if (DamageMaterialTimer <= 0)
             {
-                Transform[] allChildren = GetComponentsInChildren<Transform>();
-                for (int i = 0; i < allChildren.Length; i++)
+                if (!DamageMaterialTimerTemp)
                 {
-                    Transform child = allChildren[i];
-                    Renderer Renderer = child.GetComponent<Renderer>();
-
-                    if (Renderer != null)
+                    Transform[] allChildren = GetComponentsInChildren<Transform>();
+                    for (int i = 0; i < allChildren.Length; i++)
                     {
-                        Renderer.material.color = new Color(1, 1, 1);
-                        Renderer.material.SetColor("_EmissionColor", new Color(0, 0, 0));
+                        Transform child = allChildren[i];
+                        Renderer Renderer = child.GetComponent<Renderer>();
+
+                        if (Renderer != null)
+                        {
+                            Renderer.material.color = new Color(1, 1, 1);
+                            Renderer.material.SetColor("_EmissionColor", new Color(0, 0, 0));
+                        }
                     }
                 }
 
+                DamageMaterialTimerTemp = true;
                 DamageMaterialTimer = 0;
             }
             else
             {
-                Transform[] allChildren = GetComponentsInChildren<Transform>();
-                for (int i = 0; i < allChildren.Length; i++)
+                if (DamageMaterialTimerTemp)
                 {
-                    Transform child = allChildren[i];
-                    Renderer Renderer = child.GetComponent<Renderer>();
-
-                    if (Renderer != null && child.name != "DIE Particle")
+                    Transform[] allChildren = GetComponentsInChildren<Transform>();
+                    for (int i = 0; i < allChildren.Length; i++)
                     {
-                        Renderer.material.color = new Color(1, 0.5f, 0.5f);
-                        Renderer.material.SetColor("_EmissionColor", new Color(0.5f, 0, 0));
+                        Transform child = allChildren[i];
+                        Renderer Renderer = child.GetComponent<Renderer>();
+
+                        if (Renderer != null && child.name != "DIE Particle")
+                        {
+                            Renderer.material.color = new Color(1, 0.5f, 0.5f);
+                            Renderer.material.SetColor("_EmissionColor", new Color(0.5f, 0, 0));
+                        }
                     }
                 }
 
+                DamageMaterialTimerTemp = false;
                 DamageMaterialTimer -= Time.deltaTime;
             }
 
             //불 데미지
-            Fire = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y), new Vector3(0, 0.01f, 0), 1f, LayerMask.GetMask("Fire"));
+            Fire = Physics2D.Raycast(transform.position + Collider, new Vector3(0, 0.01f, 0), 1f, LayerMask.GetMask("Fire"));
 
             if (Fire.collider != null)
             {
@@ -154,7 +176,7 @@ public class EntitySetting : MonoBehaviour
 
                 if (FireTimer2 >= 0.5f)
                 {
-                    Damage(1, false, 2, false);
+                    Damage(1, false, 2, false, false);
                     FireTimer2 = 0;
                 }
             }
@@ -166,7 +188,7 @@ public class EntitySetting : MonoBehaviour
 
                 if (FireTimer2 >= 1f)
                 {
-                    Damage(1, false, 2, false);
+                    Damage(1, false, 2, false, false);
                     FireTimer2 = 0;
                 }
             }
@@ -177,13 +199,13 @@ public class EntitySetting : MonoBehaviour
             }
 
             //질식
-            Suffocat = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y), new Vector3(0, 0.5f, 0), 0.5f * ColliderY, LayerMask.GetMask("Map"));
+            Suffocat = Physics2D.Raycast(transform.position + Collider, new Vector3(0, 0.5f, 0), 0.5f * ColliderSizeY, LayerMask.GetMask("Map"));
             if (Suffocat.collider)
             {
                 SuffocatTimer += Time.deltaTime;
                 if (SuffocatTimer >= 0.5f)
                 {
-                    Damage(1, false, 0, false);
+                    Damage(1, false, 0, false, false);
                     SuffocatTimer = 0;
                 }
             }
@@ -192,7 +214,7 @@ public class EntitySetting : MonoBehaviour
 
             //세계 밖
             if (transform.position.y <= -50 && GameManager.PlayerHP > 0.0001f)
-                Damage(0.18f * GameManager.PlayerMaxHP, false, 0, false);
+                Damage(0.18f * GameManager.PlayerMaxHP, false, 0, false, false);
 
             //낙뎀
             if (!jump)
@@ -236,7 +258,7 @@ public class EntitySetting : MonoBehaviour
             if (!FallDamage4 && jump && Water.collider == null)
             {
                 if (FallDamage > 3)
-                    Damage(FallDamage - 3, false, 0, false);
+                    Damage(FallDamage - 3, false, 0, false, false);
 
                 FallDamage = 0;
                 FallDamage4 = true;
@@ -282,7 +304,8 @@ public class EntitySetting : MonoBehaviour
                     }
 
                     boxCollider2D.enabled = false;
-                    HPSlider.gameObject.SetActive(false);
+                    if (HPSlider != null)
+                        HPSlider.gameObject.SetActive(false);
                     DIEParticle.SetActive(true);
                     DieTimer += Time.deltaTime;
                 }
@@ -308,76 +331,109 @@ public class EntitySetting : MonoBehaviour
         }
     }
 
-    public void Damage(float damage, bool set, int type, bool PlayerAttack)
+    public void Damage(float damage, bool set, int type, bool PlayerAttack, bool Critical)
     {
+        if (Invincible)
+            return;
+
+        bool Miss = false;
+
+        if (Random.Range(0, 101) <= 15 && PlayerAttack)
+        {
+            Miss = true;
+            if (GameManager.MainMenu)
+                GameManager.PlayerHGExhaustionLevel -= 0.1f;
+        }
+
         if (HP > 0.0001F)
         {
             if (HP < 0)
                 HP = 0;
 
             //무적 시간
-            if (DamageMaterialTimer > 0 + Time.deltaTime && ((damage < HP && set) || (HP - damage < HP && !set)))
+            if (DamageMaterialTimer > 0 + Time.deltaTime && ((damage < HP && set) || (HP - damage < HP && !set)) && !Miss)
                 HP += damage;
             else if (DamageMaterialTimer <= 0 + Time.deltaTime && ((damage < HP && set) || (HP - damage < HP && !set)))
             {
                 if (PlayerAttack)
                 {
                     GameObject temp = Instantiate(prefab, transform.position, transform.rotation);
-                    temp.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = (Mathf.Round(damage * 10) * 0.1f) + "";
+                    if (!Miss && !Critical)
+                        temp.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = (Mathf.Round(damage * 10) * 0.1f) + "";
+                    else if (!Miss && Critical)
+                    {
+                        temp.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = (Mathf.Round(damage * 10) * 0.1f) + "";
+                        temp.transform.GetChild(0).GetChild(0).GetComponent<Text>().color = new Color(1, 1, 1);
+                        temp.transform.GetChild(0).GetChild(0).GetComponents<Outline>()[0].effectColor = new Color(1, 0, 0);
+                        temp.transform.GetChild(0).GetChild(0).GetComponents<Outline>()[1].effectColor = new Color(1, 0, 0);
+                    }
+                    else
+                    {
+                        temp.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "Miss";
+                        temp.transform.GetChild(0).GetChild(0).GetComponent<Text>().color = new Color(0, 0, 0);
+                        temp.transform.GetChild(0).GetChild(0).GetComponents<Outline>()[0].effectColor = new Color(1, 1, 1);
+                        temp.transform.GetChild(0).GetChild(0).GetComponents<Outline>()[1].effectColor = new Color(1, 1, 1);
+                    }
                 }
 
-                DamageMaterialTimer = 0.5f;
-
-                if (type == 0)
+                if (!Miss)
                 {
-                    int r = Random.Range(1, 4);
+                    DamageMaterialTimer = 0.5f;
 
-                    if (r == 1)
-                        SoundManager.PlaySound("damage.hit1", 1, 1);
-                    else if (r == 2)
-                        SoundManager.PlaySound("damage.hit2", 1, 1);
-                    else if (r == 3)
-                        SoundManager.PlaySound("damage.hit3", 1, 1);
-                }
-                else if (type == 1)
-                {
-                    int r = Random.Range(1, 5);
+                    if (type == 0)
+                    {
+                        int r = Random.Range(1, 4);
 
-                    if (r == 1)
-                        SoundManager.PlaySound("entity.player.hurt.drown1", 1, 1);
-                    else if (r == 2)
-                        SoundManager.PlaySound("entity.player.hurt.drown2", 1, 1);
-                    else if (r == 3)
-                        SoundManager.PlaySound("entity.player.hurt.drown3", 1, 1);
-                    else if (r == 4)
-                        SoundManager.PlaySound("entity.player.hurt.drown4", 1, 1);
-                }
-                else if (type == 2)
-                {
-                    int r = Random.Range(1, 4);
+                        if (r == 1)
+                            SoundManager.PlaySound("damage.hit1", 1, 1);
+                        else if (r == 2)
+                            SoundManager.PlaySound("damage.hit2", 1, 1);
+                        else if (r == 3)
+                            SoundManager.PlaySound("damage.hit3", 1, 1);
+                    }
+                    else if (type == 1)
+                    {
+                        int r = Random.Range(1, 5);
 
-                    if (r == 1)
-                        SoundManager.PlaySound("entity.player.hurt.fire_hurt1", 1, 1);
-                    else if (r == 2)
-                        SoundManager.PlaySound("entity.player.hurt.fire_hurt2", 1, 1);
-                    else if (r == 3)
-                        SoundManager.PlaySound("entity.player.hurt.fire_hurt3", 1, 1);
-                }
-                else if (type == 4)
-                {
-                    int r = Random.Range(1, 3);
+                        if (r == 1)
+                            SoundManager.PlaySound("entity.player.hurt.drown1", 1, 1);
+                        else if (r == 2)
+                            SoundManager.PlaySound("entity.player.hurt.drown2", 1, 1);
+                        else if (r == 3)
+                            SoundManager.PlaySound("entity.player.hurt.drown3", 1, 1);
+                        else if (r == 4)
+                            SoundManager.PlaySound("entity.player.hurt.drown4", 1, 1);
+                    }
+                    else if (type == 2)
+                    {
+                        int r = Random.Range(1, 4);
 
-                    if (r == 1)
-                        SoundManager.PlaySound("entity.player.hurt.berrybush_hurt1", 1, 1);
-                    else if (r == 2)
-                        SoundManager.PlaySound("entity.player.hurt.berrybush_hurt2", 1, 1);
+                        if (r == 1)
+                            SoundManager.PlaySound("entity.player.hurt.fire_hurt1", 1, 1);
+                        else if (r == 2)
+                            SoundManager.PlaySound("entity.player.hurt.fire_hurt2", 1, 1);
+                        else if (r == 3)
+                            SoundManager.PlaySound("entity.player.hurt.fire_hurt3", 1, 1);
+                    }
+                    else if (type == 4)
+                    {
+                        int r = Random.Range(1, 3);
+
+                        if (r == 1)
+                            SoundManager.PlaySound("entity.player.hurt.berrybush_hurt1", 1, 1);
+                        else if (r == 2)
+                            SoundManager.PlaySound("entity.player.hurt.berrybush_hurt2", 1, 1);
+                    }
                 }
             }
 
-            if (set)
-                HP = damage;
-            else
-                HP -= damage;
+            if (!Miss)
+            {
+                if (set)
+                    HP = damage;
+                else
+                    HP -= damage;
+            }
         }
     }
 }
@@ -386,6 +442,7 @@ public enum MobType
 {
     None,
     Boss,
+    Npc,
     Slime,
     Undead,
     Zombie,

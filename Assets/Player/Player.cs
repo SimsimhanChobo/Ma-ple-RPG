@@ -103,7 +103,7 @@ public class Player : MonoBehaviour
     {
         GameManager.loadData();
 
-        transform.position = new Vector2(GameManager.PlayerX, GameManager.PlayerY);
+        transform.position = new Vector2(GameManager.PlayerX, GameManager.PlayerY + 0.1f);
     }
 
     void Update()
@@ -182,9 +182,6 @@ public class Player : MonoBehaviour
 
             Jump4 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, 1 * 0.9f, 0), 1, LayerMask.GetMask("Map", "Entity Collider"));
 
-            //이벤트 레이캐스트
-            Event = Physics2D.Raycast(new Vector2(rigid.position.x - 2, rigid.position.y + 1 * 0.9f), new Vector3(4, 0, 0), 4, LayerMask.GetMask("Npc"));
-
             //사다리 레이캐스트
             Ladder = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 0.5f * 0.9f), new Vector3(0, -1f * 0.9f, 0), 0.5f * 0.9f, LayerMask.GetMask("Ladder"));
             Ladder2 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 0.5f * 0.9f), new Vector3(-0.111f * 0.9f, -0.5f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Ladder"));
@@ -253,7 +250,7 @@ public class Player : MonoBehaviour
 
                 if (Air <= -20)
                 {
-                    GameManager.gameManager.PlayerDamage(2 * (GameManager.PlayerMaxHP / 20f), false, 1);
+                    GameManager.gameManager.PlayerDamage(2, false, 1);
                     if (GameManager.PlayerHP < 0.0001f)
                         GameManager.gameManager.GameOver("익사 했습니다");
 
@@ -284,7 +281,7 @@ public class Player : MonoBehaviour
 
                 if (FireTimer2 >= 0.5f)
                 {
-                    GameManager.gameManager.PlayerDamage(1 * (GameManager.PlayerMaxHP / 20f), false, 2);
+                    GameManager.gameManager.PlayerDamage(1, false, 2);
                     if (GameManager.PlayerHP < 0.0001f)
                         GameManager.gameManager.GameOver("화염에 휩싸였습니다");
 
@@ -301,7 +298,7 @@ public class Player : MonoBehaviour
 
                 if (FireTimer2 >= 1f)
                 {
-                    GameManager.gameManager.PlayerDamage(1 * (GameManager.PlayerMaxHP / 20f), false, 2);
+                    GameManager.gameManager.PlayerDamage(1, false, 2);
                     if (GameManager.PlayerHP < 0.0001f)
                         GameManager.gameManager.GameOver("불에 타 사망했습니다");
 
@@ -328,7 +325,7 @@ public class Player : MonoBehaviour
                 SuffocatTimer += Time.deltaTime;
                 if (SuffocatTimer >= 0.5f)
                 {
-                    GameManager.gameManager.PlayerDamage(1 * (GameManager.PlayerMaxHP / 20f), false, 0);
+                    GameManager.gameManager.PlayerDamage(1, false, 0);
                     if (GameManager.PlayerHP < 0.0001f)
                         GameManager.gameManager.GameOver("벽 속에서 질식했습니다");
                     SuffocatTimer = 0;
@@ -336,36 +333,6 @@ public class Player : MonoBehaviour
             }
             else
                 SuffocatTimer = 0;
-
-
-            //NPC 감지
-            scanNPC = null;
-
-            if (Event.collider != null)
-            {
-                Debug.DrawRay(new Vector2(rigid.position.x - 2, rigid.position.y + 1 * 0.9f), new Vector3(4, 0, 0), new Color(1, 0, 0));
-                scanNPC = Event.collider.gameObject;
-            }
-
-            //NPC 이벤트 실행
-            if (Input.GetButtonDown("Event") && scanNPC != null && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
-                GameManager.gameManager.Action(scanNPC);
-            else if (GameManager.ZKey && scanNPC != null)
-            {
-                GameManager.gameManager.Action(scanNPC);
-                GameManager.ZKey = false;
-            }
-            else if (GameManager.ZKey && scanNPC == null)
-                GameManager.ZKey = false;
-
-            if (Input.GetKey(KeyCode.C) && scanNPC != null && GameManager.isAction && NpcEventManager.b && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
-                GameManager.gameManager.Action(scanNPC);
-
-            if (GameManager.CKey && scanNPC != null && GameManager.isAction && NpcEventManager.b)
-                GameManager.gameManager.Action(scanNPC);
-
-            if (GameManager.isAction && scanNPC == null)
-                GameManager.gameManager.TalkEnd();
 
             //공격
             if (Input.GetKeyDown(KeyCode.Mouse0) && GameManager.isAction == false && !GameManager.ButtonPointer && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
@@ -379,8 +346,13 @@ public class Player : MonoBehaviour
 
                 if (raycastHit2D.collider != null)
                 {
-                    GameManager.PlayerHGExhaustionLevel += 0.1f;
-                    raycastHit2D.collider.GetComponent<EntitySetting>().Damage(GameManager.PlayerAttack * GameManager.PlayerAV / GameManager.PlayerMaxAV, false, 0, true);
+                    if (!GameManager.MainMenu)
+                        GameManager.PlayerHGExhaustionLevel += 0.1f;
+
+                    if (rigid.velocity.y < 0)
+                        raycastHit2D.collider.GetComponent<EntitySetting>().Damage(GameManager.PlayerAttack * GameManager.PlayerAV / GameManager.PlayerMaxAV * 1.5f, false, 0, true, true);
+                    else
+                        raycastHit2D.collider.GetComponent<EntitySetting>().Damage(GameManager.PlayerAttack * GameManager.PlayerAV / GameManager.PlayerMaxAV, false, 0, true, false);
                 }
 
                 GameManager.PlayerAV = 0;
@@ -457,7 +429,7 @@ public class Player : MonoBehaviour
             {
                 Debug.Log("Fall " + FallDamage);
                 if (FallDamage > 3)
-                    GameManager.gameManager.PlayerDamage((FallDamage - 3) * (GameManager.PlayerMaxHP / 20f), false, 0);
+                    GameManager.gameManager.PlayerDamage(FallDamage - 3, false, 0);
 
                 if (GameManager.PlayerHP < 0.0001f && FallDamage - 3 > 2)
                     GameManager.gameManager.GameOver("높은 곳에서 떨어졌습니다");
@@ -584,11 +556,14 @@ public class Player : MonoBehaviour
                 GameManager.rightKeyUp = false;
             }
 
-            //걷기 애니메이션
-            if (Input.GetButton("Horizontal") && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
-                GameManager.PlayerMove = true;
-            else if (GameManager.LeftKey || GameManager.RightKey)
-                GameManager.PlayerMove = true;
+            if (!GameManager.isAction)
+            {
+                //걷기 애니메이션
+                if (Input.GetButton("Horizontal") && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
+                    GameManager.PlayerMove = true;
+                else if (GameManager.LeftKey || GameManager.RightKey)
+                    GameManager.PlayerMove = true;
+            }
 
             if (rigid.velocity.x >= -0.5f && rigid.velocity.x <= 0.5f || rigid.velocity.x == 0)
                 GameManager.PlayerMove = false;
@@ -611,6 +586,8 @@ public class Player : MonoBehaviour
 
             //플레이어 움직이기
             int h = (int)Input.GetAxisRaw("Horizontal");
+            if (GameManager.isAction)
+                h = 0;
 
             if (ChattingManager.ChattingActive || InvManager.InventoryShow)
                 h = 0;
@@ -662,14 +639,16 @@ public class Player : MonoBehaviour
             }
 
             //점프
-            if (!ChattingManager.ChattingActive && !InvManager.InventoryShow)
+            if (!ChattingManager.ChattingActive && !InvManager.InventoryShow && !GameManager.isAction)
             {
                 if (Input.GetButton("Jump") && FallDamage4)
                 {
-                    GameManager.PlayerHGExhaustionLevel += 0.05f;
-
                     if (jump && Water.collider == null && Water2.collider == null && Water3.collider == null && Water4.collider == null && Water5.collider == null && Water6.collider == null && Water7.collider == null && Water8.collider == null && Water9.collider == null)
+                    {
                         rigid.velocity = new Vector2(rigid.velocity.x, GameManager.PlayerJumpPower);
+                        if (!GameManager.MainMenu)
+                            GameManager.PlayerHGExhaustionLevel += 0.05f;
+                    }
                     else if (Water.collider != null || Water2.collider != null || Water3.collider != null || Water4.collider != null || Water5.collider != null || Water6.collider != null || Water7.collider != null || Water8.collider != null || Water9.collider != null)
                         rigid.AddForce(new Vector2(0, 0.000045f), ForceMode2D.Impulse);
                     else if (Ladder.collider != null || Ladder2.collider != null || Ladder3.collider != null)
@@ -678,10 +657,12 @@ public class Player : MonoBehaviour
                 }
                 else if (GameManager.UpKey && FallDamage4)
                 {
-                    GameManager.PlayerHGExhaustionLevel += 0.05f;
-
                     if (jump && Water.collider == null && Water2.collider == null && Water3.collider == null && Water4.collider == null && Water5.collider == null && Water6.collider == null && Water7.collider == null && Water8.collider == null && Water9.collider == null)
+                    {
                         rigid.velocity = new Vector2(rigid.velocity.x, GameManager.PlayerJumpPower);
+                        if (!GameManager.MainMenu)
+                            GameManager.PlayerHGExhaustionLevel += 0.05f;
+                    }
                     else if (Water.collider != null || Water2.collider != null || Water3.collider != null || Water4.collider != null || Water5.collider != null || Water6.collider != null || Water7.collider != null || Water8.collider != null || Water9.collider != null)
                         rigid.AddForce(new Vector2(0, 0.000045f), ForceMode2D.Impulse);
                     else if (Ladder.collider != null || Ladder2.collider != null || Ladder3.collider != null)

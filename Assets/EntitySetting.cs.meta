@@ -3,7 +3,13 @@ guid: d76c5078d66046f45a9ebee6f8d2ef95
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - prefab: {fileID: 7874232799766184852, guid: 10e58562b4df5e346b3ca1f706b79d73,
+      type: 3}
+  - canvas: {instanceID: 0}
+  - HPSlider: {instanceID: 0}
+  - EntitySkin: {instanceID: 0}
+  - DIEParticle: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -8,28 +8,31 @@ public class InventoryPlayerSkin : MonoBehaviour
 
     Vector3 MousePos;
 
-    void Update()
+    void LateUpdate()
     {
-        MousePos = Input.mousePosition;
-        MousePos.x -= 565f * (Screen.width / 1280f);
-        MousePos.y -= 470f * (Screen.width / 1280f);
-        MousePos.z += 100;
-
-        PlayerPos.transform.localPosition = new Vector3(0, 0, 0);
-
-        SkinRotation.skinLookAt(PlayerPos, MousePos, "All", true);
-        if (PlayerPos.transform.localRotation.w >= 0)
+        if (InvManager.InventoryShow)
         {
-            SkinRotation.skinRotation(gameObject, "All", Quaternion.Euler(PlayerPos.transform.localEulerAngles.x * 0.25f, (-PlayerPos.transform.localEulerAngles.y - 180) * 0.5f, 0), true);
-            SkinRotation.skinRotation(gameObject, "Head", Quaternion.Euler(PlayerPos.transform.localEulerAngles.x * 0.25f, (((-PlayerPos.transform.localEulerAngles.y - 180) * 0.5f) + 180) * 0.5f, 0), true);
-        }
-        else
-        {
-            SkinRotation.skinRotation(gameObject, "All", Quaternion.Euler((PlayerPos.transform.localEulerAngles.x - 360) * 0.25f, (-PlayerPos.transform.localEulerAngles.y - 180) * 0.5f, 0), true);
-            SkinRotation.skinRotation(gameObject, "Head", Quaternion.Euler((PlayerPos.transform.localEulerAngles.x - 360) * 0.25f, (((-PlayerPos.transform.localEulerAngles.y - 180) * 0.5f) + 180) * 0.5f, 0), true);
-        }
+            MousePos = Input.mousePosition;
+            MousePos.x -= 565f * (Screen.width / 1280f);
+            MousePos.y -= 470f * (Screen.width / 1280f);
+            MousePos.z += 100;
 
-        PlayerPos.transform.localPosition = new Vector2(0, 15);
+            PlayerPos.transform.localPosition = new Vector3(0, 0, 0);
+
+            SkinRotation.skinLookAt(PlayerPos, MousePos, "All", true);
+            if (PlayerPos.transform.localRotation.w >= 0)
+            {
+                SkinRotation.skinRotation(gameObject, "All", Quaternion.Euler(PlayerPos.transform.localEulerAngles.x * 0.25f, (-PlayerPos.transform.localEulerAngles.y - 180) * 0.5f, 0), true);
+                SkinRotation.skinRotation(gameObject, "Head", Quaternion.Euler(PlayerPos.transform.localEulerAngles.x * 0.25f, (((-PlayerPos.transform.localEulerAngles.y - 180) * 0.5f) + 180) * 0.5f, 0), true);
+            }
+            else
+            {
+                SkinRotation.skinRotation(gameObject, "All", Quaternion.Euler((PlayerPos.transform.localEulerAngles.x - 360) * 0.25f, (-PlayerPos.transform.localEulerAngles.y - 180) * 0.5f, 0), true);
+                SkinRotation.skinRotation(gameObject, "Head", Quaternion.Euler((PlayerPos.transform.localEulerAngles.x - 360) * 0.25f, (((-PlayerPos.transform.localEulerAngles.y - 180) * 0.5f) + 180) * 0.5f, 0), true);
+            }
+
+            PlayerPos.transform.localPosition = new Vector2(0, 15);
+        }
 
         //애니메이션
         if (GameManager.PlayerMove && GameManager.PlayerHP > 0.0001f)

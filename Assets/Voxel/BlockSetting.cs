@@ -62,14 +62,12 @@ public class BlockSetting : MonoBehaviour
         material = GetComponent<Renderer>().material;
         meshFilter = GetComponent<MeshFilter>();
 
-        StartCoroutine(BlockRefresh(false));
+        BlockRefresh(false);
     }
 
     [ContextMenu("Block Refresh")]
-    public IEnumerator BlockRefresh(bool Reload)
+    public void BlockRefresh(bool Reload)
     {
-        yield return new WaitUntil(() => Vector2.Distance(transform.position, MainCamera.Camera.transform.position) <= 25);
-
         if (!Reload)
         {
             if (blockType == BlockType.Normal && Texture != null)
@@ -147,7 +145,7 @@ public class BlockSetting : MonoBehaviour
         {
             if (Left != null && Front != null && Right != null && Back != null && Top != null && Bottom != null)
                 if (Left.width != 16 && Left.height != 16 && Front.width != 16 && Front.height != 16 && Right.width != 16 && Right.height != 16 && Back.width != 16 && Back.height != 16 && Top.width != 16 && Top.height != 16 && Bottom.width != 16 && Bottom.height != 16)
-                    yield return null;
+                    return;
 
             blockTypeTemp = blockType;
 

@@ -3,13 +3,28 @@ using UnityEngine.UI;
 
 public class 대화창TextEffect : MonoBehaviour
 {
-    public string targetMsg;
+    public static MonoBehaviour monoBehaviour;
+    public static string targetMsg;
     public float Speed;
     public GameObject 대화창화살표;
     public Text msgText;
+    public static Text Text;
     int index = 0;
     public static bool isAnim = false;
     public GameManager manager;
+
+    void Start()
+    {
+        Text = msgText;
+        monoBehaviour = this;
+    }
+
+    public static void SetText(string text)
+    {
+        monoBehaviour.CancelInvoke();
+        targetMsg = text;
+        Text.text = text;
+    }
 
     public void SetMsg(string msg)
     {
@@ -82,37 +97,11 @@ public class 대화창TextEffect : MonoBehaviour
                 EffectEnd();
             }
 
-            if (Input.GetKeyDown(KeyCode.RightShift) && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
-            {
-                msgText.text = targetMsg;
-                CancelInvoke();
-                EffectEnd();
-            }
-
-            if (Input.GetKey(KeyCode.C) && NpcEventManager.b && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
+            if (Input.GetKey(KeyCode.C) && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
                 msgText.text = targetMsg;
 
-            if (GameManager.CKey && NpcEventManager.b)
+            if (GameManager.CKey)
                 msgText.text = targetMsg;
-
-            if (Input.GetKey(KeyCode.C) && !NpcEventManager.b && !ChattingManager.ChattingActive && !InvManager.InventoryShow && !InvManager.InventoryShow)
-            {
-                GameObject scanNPC = Player.scanNPC;
-                NpcData npcData = scanNPC.GetComponent<NpcData>();
-
-                if (npcData.NpcTalk.Count < manager.talkIndex - 1)
-                    targetMsg = npcData.NpcTalk[manager.talkIndex - 1];
-                msgText.text = targetMsg;
-            }
-
-            if (GameManager.CKey && !NpcEventManager.b)
-            {
-                GameObject scanNPC = Player.scanNPC;
-                NpcData npcData = scanNPC.GetComponent<NpcData>();
-
-                targetMsg = npcData.NpcTalk[manager.talkIndex - 1];
-                msgText.text = targetMsg;
-            }
         }
     }
 }

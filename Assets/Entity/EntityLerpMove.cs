@@ -6,6 +6,8 @@ public class EntityLerpMove : MonoBehaviour
     public Vector3 target;
     public float Timer = 0;
 
+    public Vector3 Offset;
+
     void FixedUpdate() => Move();
 
     void Move()
@@ -17,8 +19,7 @@ public class EntityLerpMove : MonoBehaviour
             {
                 Timer = 0;
 
-                target = transform.parent.position;
-                target.y -= 0.5f;
+                target = transform.parent.position + Offset;
             }
 
             if (GameManager.PlayerLerpMove == 0)

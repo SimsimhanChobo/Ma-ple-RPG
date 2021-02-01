@@ -7,13 +7,15 @@ public class 대화창NpcName : MonoBehaviour
     public GameObject scanNPC;
     public Image image;
     public GameManager manager;
-    int i = 0;
+    public int i = 0;
     public static string NpcName = "";
 
     RectTransform rectTransform;
     public RectTransform 대화창NpcNameText;
     void Update()
     {
+        text.text = NpcName;
+
         if (GameManager.isAction)
         {
             image.color = new Color(1, 1, 1, 1);
@@ -24,45 +26,6 @@ public class 대화창NpcName : MonoBehaviour
             image.color = new Color(1, 1, 1, 0);
             text.color = new Color(0, 0, 0, 0);
             i = 0;
-        }
-
-        scanNPC = Player.scanNPC;
-
-        if (scanNPC != null)
-        {
-            NpcData npcData = scanNPC.GetComponent<NpcData>();
-
-            if (npcData.IntNpcNameChange.Length == 0)
-            {
-                NpcName = "";
-                text.text = "";
-                image.color = new Color(1, 1, 1, 0);
-                text.color = new Color(0, 0, 0, 0);
-                return;
-            }
-            else if (npcData.IntNpcNameChange.Length < i)
-                if (npcData.IntNpcNameChange[i] <= manager.talkIndex - 1 && npcData.NpcNameChange[i] == "")
-                {
-                    NpcName = "";
-                    text.text = "";
-                    image.color = new Color(1, 1, 1, 0);
-                    text.color = new Color(0, 0, 0, 0);
-                    return;
-                }    
-
-            if (npcData.IntNpcNameChange[i] <= manager.talkIndex - 1)
-            {
-                NpcName = npcData.NpcNameChange[i];
-                i++;
-                if (npcData.IntNpcNameChange.Length <= i)
-                    i = npcData.IntNpcNameChange.Length - 1;
-
-            }
-
-            text.text = NpcName;
-
-            if (!GameManager.isAction)
-                text.text = npcData.NpcNameChange[0];
         }
 
         if (text.text == "")

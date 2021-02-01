@@ -12,13 +12,15 @@ public class PlayerSkinChange : MonoBehaviour
 
     Texture2D SkinTemp = null;
 
+    public bool Size64x32 = false;
+
     [ContextMenu("Skin Reload")]
     public void SkinReload(bool Reload)
     {
         if (Sprite || (!Sprite && !GamePlay.EditorPlay))
             if (Skin != null && PlayerSkinAutoChange && !Reload && Skin != SkinTemp)
             {
-                if (Skin.width == 64 && Skin.height == 64)
+                if ((Skin.width == 64 && Skin.height == 32) || (Skin.width == 64 && Skin.height == 64))
                 {
                     SkinChange("Head Top", 8, 56, 8, 8);
                     SkinChange("Head Left", 0, 48, 8, 8);
@@ -46,31 +48,62 @@ public class PlayerSkinChange : MonoBehaviour
                     SkinChange("Bodywear Back", 32, 16, 8, 12);
                     SkinChange("Bodywear Bottom", 28, 28, 8, 4);
 
-                    SkinChange("Left Arm Top", 36, 12, 4, 4);
-                    SkinChange("Left Arm Left", 32, 0, 4, 12);
-                    SkinChange("Left Arm Front", 36, 0, 4, 12);
-                    SkinChange("Left Arm Right", 40, 0, 4, 12);
-                    SkinChange("Left Arm Back", 44, 0, 4, 12);
-                    SkinChange("Left Arm Bottom", 40, 12, 4, 4);
-                    SkinChange("Left Armwear Top", 52, 12, 4, 4);
-                    SkinChange("Left Armwear Left", 48, 0, 4, 12);
-                    SkinChange("Left Armwear Front", 52, 0, 4, 12);
-                    SkinChange("Left Armwear Right", 56, 0, 4, 12);
-                    SkinChange("Left Armwear Back", 60, 0, 4, 12);
-                    SkinChange("Left Armwear Bottom", 56, 12, 4, 4);
+                    if (!Size64x32)
+                    {
+                        SkinChange("Left Arm Top", 36, 12, 4, 4);
+                        SkinChange("Left Arm Left", 32, 0, 4, 12);
+                        SkinChange("Left Arm Front", 36, 0, 4, 12);
+                        SkinChange("Left Arm Right", 40, 0, 4, 12);
+                        SkinChange("Left Arm Back", 44, 0, 4, 12);
+                        SkinChange("Left Arm Bottom", 40, 12, 4, 4);
+                        SkinChange("Left Armwear Top", 52, 12, 4, 4);
+                        SkinChange("Left Armwear Left", 48, 0, 4, 12);
+                        SkinChange("Left Armwear Front", 52, 0, 4, 12);
+                        SkinChange("Left Armwear Right", 56, 0, 4, 12);
+                        SkinChange("Left Armwear Back", 60, 0, 4, 12);
+                        SkinChange("Left Armwear Bottom", 56, 12, 4, 4);
 
-                    SkinChange("Left Leg Top", 20, 12, 4, 4);
-                    SkinChange("Left Leg Left", 16, 0, 4, 12);
-                    SkinChange("Left Leg Front", 20, 0, 4, 12);
-                    SkinChange("Left Leg Right", 24, 0, 4, 12);
-                    SkinChange("Left Leg Back", 28, 0, 4, 12);
-                    SkinChange("Left Leg Bottom", 24, 12, 4, 4);
-                    SkinChange("Left Legwear Top", 4, 12, 4, 4);
-                    SkinChange("Left Legwear Left", 0, 0, 4, 12);
-                    SkinChange("Left Legwear Front", 4, 0, 4, 12);
-                    SkinChange("Left Legwear Right", 8, 0, 4, 12);
-                    SkinChange("Left Legwear Back", 12, 0, 4, 12);
-                    SkinChange("Left Legwear Bottom", 8, 12, 4, 4);
+                        SkinChange("Left Leg Top", 20, 12, 4, 4);
+                        SkinChange("Left Leg Left", 16, 0, 4, 12);
+                        SkinChange("Left Leg Front", 20, 0, 4, 12);
+                        SkinChange("Left Leg Right", 24, 0, 4, 12);
+                        SkinChange("Left Leg Back", 28, 0, 4, 12);
+                        SkinChange("Left Leg Bottom", 24, 12, 4, 4);
+                        SkinChange("Left Legwear Top", 4, 12, 4, 4);
+                        SkinChange("Left Legwear Left", 0, 0, 4, 12);
+                        SkinChange("Left Legwear Front", 4, 0, 4, 12);
+                        SkinChange("Left Legwear Right", 8, 0, 4, 12);
+                        SkinChange("Left Legwear Back", 12, 0, 4, 12);
+                        SkinChange("Left Legwear Bottom", 8, 12, 4, 4);
+                    }
+                    else
+                    {
+                        SkinChange("Left Arm Top", 44, 44, 4, 4);
+                        SkinChange("Left Arm Left", 40, 32, 4, 12);
+                        SkinChange("Left Arm Front", 44, 32, 4, 12);
+                        SkinChange("Left Arm Right", 48, 32, 4, 12);
+                        SkinChange("Left Arm Back", 52, 32, 4, 12);
+                        SkinChange("Left Arm Bottom", 48, 44, 4, 4);
+                        SkinChange("Left Armwear Top", 44, 28, 4, 4);
+                        SkinChange("Left Armwear Left", 40, 16, 4, 12);
+                        SkinChange("Left Armwear Front", 44, 16, 4, 12);
+                        SkinChange("Left Armwear Right", 48, 16, 4, 12);
+                        SkinChange("Left Armwear Back", 52, 16, 4, 12);
+                        SkinChange("Left Armwear Bottom", 48, 28, 4, 4);
+
+                        SkinChange("Left Leg Top", 4, 44, 4, 4);
+                        SkinChange("Left Leg Left", 0, 32, 4, 12);
+                        SkinChange("Left Leg Front", 4, 32, 4, 12);
+                        SkinChange("Left Leg Right", 8, 32, 4, 12);
+                        SkinChange("Left Leg Back", 12, 32, 4, 12);
+                        SkinChange("Left Leg Bottom", 8, 44, 4, 4);
+                        SkinChange("Left Legwear Top", 4, 28, 4, 4);
+                        SkinChange("Left Legwear Left", 0, 16, 4, 12);
+                        SkinChange("Left Legwear Front", 4, 16, 4, 12);
+                        SkinChange("Left Legwear Right", 8, 16, 4, 12);
+                        SkinChange("Left Legwear Back", 12, 16, 4, 12);
+                        SkinChange("Left Legwear Bottom", 8, 28, 4, 4);
+                    }
 
                     SkinChange("Right Arm Top", 44, 44, 4, 4);
                     SkinChange("Right Arm Left", 40, 32, 4, 12);
@@ -129,31 +162,62 @@ public class PlayerSkinChange : MonoBehaviour
                 SkinChange("Bodywear Back", 32, 16, 8, 12);
                 SkinChange("Bodywear Bottom", 28, 28, 8, 4);
 
-                SkinChange("Left Arm Top", 36, 12, 4, 4);
-                SkinChange("Left Arm Left", 32, 0, 4, 12);
-                SkinChange("Left Arm Front", 36, 0, 4, 12);
-                SkinChange("Left Arm Right", 40, 0, 4, 12);
-                SkinChange("Left Arm Back", 44, 0, 4, 12);
-                SkinChange("Left Arm Bottom", 40, 12, 4, 4);
-                SkinChange("Left Armwear Top", 52, 12, 4, 4);
-                SkinChange("Left Armwear Left", 48, 0, 4, 12);
-                SkinChange("Left Armwear Front", 52, 0, 4, 12);
-                SkinChange("Left Armwear Right", 56, 0, 4, 12);
-                SkinChange("Left Armwear Back", 60, 0, 4, 12);
-                SkinChange("Left Armwear Bottom", 56, 12, 4, 4);
+                if (!Size64x32)
+                {
+                    SkinChange("Left Arm Top", 36, 12, 4, 4);
+                    SkinChange("Left Arm Left", 32, 0, 4, 12);
+                    SkinChange("Left Arm Front", 36, 0, 4, 12);
+                    SkinChange("Left Arm Right", 40, 0, 4, 12);
+                    SkinChange("Left Arm Back", 44, 0, 4, 12);
+                    SkinChange("Left Arm Bottom", 40, 12, 4, 4);
+                    SkinChange("Left Armwear Top", 52, 12, 4, 4);
+                    SkinChange("Left Armwear Left", 48, 0, 4, 12);
+                    SkinChange("Left Armwear Front", 52, 0, 4, 12);
+                    SkinChange("Left Armwear Right", 56, 0, 4, 12);
+                    SkinChange("Left Armwear Back", 60, 0, 4, 12);
+                    SkinChange("Left Armwear Bottom", 56, 12, 4, 4);
 
-                SkinChange("Left Leg Top", 20, 12, 4, 4);
-                SkinChange("Left Leg Left", 16, 0, 4, 12);
-                SkinChange("Left Leg Front", 20, 0, 4, 12);
-                SkinChange("Left Leg Right", 24, 0, 4, 12);
-                SkinChange("Left Leg Back", 28, 0, 4, 12);
-                SkinChange("Left Leg Bottom", 24, 12, 4, 4);
-                SkinChange("Left Legwear Top", 4, 12, 4, 4);
-                SkinChange("Left Legwear Left", 0, 0, 4, 12);
-                SkinChange("Left Legwear Front", 4, 0, 4, 12);
-                SkinChange("Left Legwear Right", 8, 0, 4, 12);
-                SkinChange("Left Legwear Back", 12, 0, 4, 12);
-                SkinChange("Left Legwear Bottom", 8, 12, 4, 4);
+                    SkinChange("Left Leg Top", 20, 12, 4, 4);
+                    SkinChange("Left Leg Left", 16, 0, 4, 12);
+                    SkinChange("Left Leg Front", 20, 0, 4, 12);
+                    SkinChange("Left Leg Right", 24, 0, 4, 12);
+                    SkinChange("Left Leg Back", 28, 0, 4, 12);
+                    SkinChange("Left Leg Bottom", 24, 12, 4, 4);
+                    SkinChange("Left Legwear Top", 4, 12, 4, 4);
+                    SkinChange("Left Legwear Left", 0, 0, 4, 12);
+                    SkinChange("Left Legwear Front", 4, 0, 4, 12);
+                    SkinChange("Left Legwear Right", 8, 0, 4, 12);
+                    SkinChange("Left Legwear Back", 12, 0, 4, 12);
+                    SkinChange("Left Legwear Bottom", 8, 12, 4, 4);
+                }
+                else
+                {
+                    SkinChange("Left Arm Top", 44, 44, 4, 4);
+                    SkinChange("Left Arm Left", 40, 32, 4, 12);
+                    SkinChange("Left Arm Front", 44, 32, 4, 12);
+                    SkinChange("Left Arm Right", 48, 32, 4, 12);
+                    SkinChange("Left Arm Back", 52, 32, 4, 12);
+                    SkinChange("Left Arm Bottom", 48, 44, 4, 4);
+                    SkinChange("Left Armwear Top", 44, 28, 4, 4);
+                    SkinChange("Left Armwear Left", 40, 16, 4, 12);
+                    SkinChange("Left Armwear Front", 44, 16, 4, 12);
+                    SkinChange("Left Armwear Right", 48, 16, 4, 12);
+                    SkinChange("Left Armwear Back", 52, 16, 4, 12);
+                    SkinChange("Left Armwear Bottom", 48, 28, 4, 4);
+
+                    SkinChange("Left Leg Top", 4, 44, 4, 4);
+                    SkinChange("Left Leg Left", 0, 32, 4, 12);
+                    SkinChange("Left Leg Front", 4, 32, 4, 12);
+                    SkinChange("Left Leg Right", 8, 32, 4, 12);
+                    SkinChange("Left Leg Back", 12, 32, 4, 12);
+                    SkinChange("Left Leg Bottom", 8, 44, 4, 4);
+                    SkinChange("Left Legwear Top", 4, 28, 4, 4);
+                    SkinChange("Left Legwear Left", 0, 16, 4, 12);
+                    SkinChange("Left Legwear Front", 4, 16, 4, 12);
+                    SkinChange("Left Legwear Right", 8, 16, 4, 12);
+                    SkinChange("Left Legwear Back", 12, 16, 4, 12);
+                    SkinChange("Left Legwear Bottom", 8, 28, 4, 4);
+                }
 
                 SkinChange("Right Arm Top", 44, 44, 4, 4);
                 SkinChange("Right Arm Left", 40, 32, 4, 12);
