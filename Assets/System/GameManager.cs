@@ -212,6 +212,11 @@ public class GameManager : MonoBehaviour
 
     //전투
     public static bool MyTurn = true;
+    public static bool Boss = false;
+    public static string BossName = "";
+    public static float BossMaxHP = 0;
+    public static float BossHP = 0;
+    public Slider BossHPBar;
 
     [Header("전투")]
     [Tooltip("전투와 관련된 변수들 입니다")]
@@ -354,9 +359,12 @@ public class GameManager : MonoBehaviour
                 if (MapMove)
                 {
                     MapMove = false;
-                    Timer = 0;
-                    CurrentBeat = 0;
-                    BeatManager.NextBeatRestart();
+                    if (!Boss)
+                    {
+                        Timer = 0;
+                        CurrentBeat = 0;
+                        BeatManager.NextBeatRestart();
+                    }
                 }
 
                 if (MainMenu)
@@ -595,13 +603,15 @@ public class GameManager : MonoBehaviour
                     {
                         MainMenu = false;
                         MapMove = true;
-                        SoundRestart = true;
+                        if (!Boss)
+                            SoundRestart = true;
                     }
                     else if (PlayerX >= 7 && PlayerX <= 8.5f && (Input.GetButton("Horizontal") || LeftKey || RightKey))
                     {
                         MainMenu = false;
                         MapMove = true;
-                        SoundRestart = true;
+                        if (!Boss)
+                            SoundRestart = true;
                     }
                 }
 
@@ -784,6 +794,14 @@ public class GameManager : MonoBehaviour
 
         //현실 시간
         RealTime = (int.Parse(DateTime.Now.ToString("HH")) * 3600f) + (int.Parse(DateTime.Now.ToString("mm")) * 60f) + int.Parse(DateTime.Now.ToString("ss"));
+
+        //보스바
+        if (!Boss && BossHPBar.value <= 0.01f)
+            BossHPBar.gameObject.SetActive(false);
+        else if (!Boss)
+            BossHPBar.value = Mathf.Lerp(BossHPBar.value, 0, 0.1f * (60 * Time.unscaledDeltaTime * GameManager.GameSpeed));
+        else
+            BossHPBar.gameObject.SetActive(true);
 
         _Bpm = BPM;
         _CameraX고정 = CameraX고정;
@@ -1098,6 +1116,7 @@ public class GameManager : MonoBehaviour
                 if (b)
                 {
                     mainMenu();
+                    Boss = false;
                     event_soft_lock.Stop = true;
                     일시정지Canvas.PauseToggle();
                     Invoke("PlayerDataResetNextCode", 1 / 60);
@@ -1233,7 +1252,8 @@ public class GameManager : MonoBehaviour
     public void mainMenu()
     {
         player.MainMenu();
-        BeatManager.NextBeatRestart();
+        if (!Boss)
+            BeatManager.NextBeatRestart();
         MainMenu = true;
     }
 

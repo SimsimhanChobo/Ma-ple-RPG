@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class EntitySetting : MonoBehaviour
 {
+    public static EntitySetting entitySetting;
+
     public List<MobType> mobType;
 
     public GameObject prefab;
@@ -62,8 +64,23 @@ public class EntitySetting : MonoBehaviour
     public RaycastHit2D Fire;
     public RaycastHit2D Suffocat;
 
+    bool Boss = false;
+
     void Start()
     {
+        entitySetting = GetComponent<EntitySetting>();
+
+        for (int i = 0; mobType.Count > i; i++)
+            if (mobType[i] == MobType.Boss)
+            {
+                if (GameManager.Boss)
+                    Destroy(gameObject);
+
+                Boss = true;
+                GameManager.Boss = true;
+                HPSlider = GameManager.gameManager.BossHPBar;
+            }
+
         HP = MaxHP;
 
         rigid = GetComponent<Rigidbody2D>();
@@ -72,16 +89,14 @@ public class EntitySetting : MonoBehaviour
         transform.position = new Vector3(transform.position.x, transform.position.y + 0.1f, transform.position.z);
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        if (!GameManager.일시정지)
+        if (!GameManager.일시정지 || (Boss && GameManager.PlayerHP <= 0.0001f))
         {
-            boxCollider2D.size = new Vector2(0.975f * RealColliderSizeX, 0.975f * RealColliderSizeY);
-
             if (HPSlider != null)
             {
                 HPSlider.maxValue = MaxHP;
-                HPSlider.value = Mathf.Lerp(HPSlider.value, HP, 0.1f * (60 * Time.deltaTime));
+                HPSlider.value = Mathf.Lerp(HPSlider.value, HP, 0.1f * (60 * Time.unscaledDeltaTime * GameManager.GameSpeed));
             }
 
             if (HP > MaxHP)
@@ -89,6 +104,21 @@ public class EntitySetting : MonoBehaviour
 
             if (HP < 0)
                 HP = 0;
+        }
+
+        if (Boss)
+        {
+            GameManager.BossName = gameObject.name;
+            GameManager.BossMaxHP = MaxHP;
+            GameManager.BossHP = HP;
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (!GameManager.일시정지)
+        {
+            boxCollider2D.size = new Vector2(0.975f * RealColliderSizeX, 0.975f * RealColliderSizeY);
 
             //점프 레이캐스트
             Jump = Physics2D.Raycast(transform.position + Collider, new Vector3(0, -0.7f, 0), 1.1f * ColliderSizeY, LayerMask.GetMask("Map", "Stairs", "Glass"));
@@ -106,6 +136,9 @@ public class EntitySetting : MonoBehaviour
             //AIR
             if (Water.collider != null)
             {
+                FireTimer = 0;
+                FireTimer2 = 1;
+
                 Air -= 1 * (20 * Time.deltaTime);
 
                 if (Air <= -20)
@@ -166,7 +199,7 @@ public class EntitySetting : MonoBehaviour
             }
 
             //불 데미지
-            Fire = Physics2D.Raycast(transform.position + Collider, new Vector3(0, 0.01f, 0), 1f, LayerMask.GetMask("Fire"));
+            Fire = Physics2D.Raycast(transform.position + (Collider * 0.5f), new Vector3(0, 0.01f, 0), 0.01f, LayerMask.GetMask("Fire"));
 
             if (Fire.collider != null)
             {
@@ -213,8 +246,8 @@ public class EntitySetting : MonoBehaviour
                 SuffocatTimer = 0;
 
             //세계 밖
-            if (transform.position.y <= -50 && GameManager.PlayerHP > 0.0001f)
-                Damage(0.18f * GameManager.PlayerMaxHP, false, 0, false, false);
+            if (transform.position.y <= -50)
+                Damage(3.6f, false, 0, false, false);
 
             //낙뎀
             if (!jump)
@@ -347,9 +380,6 @@ public class EntitySetting : MonoBehaviour
 
         if (HP > 0.0001F)
         {
-            if (HP < 0)
-                HP = 0;
-
             //무적 시간
             if (DamageMaterialTimer > 0 + Time.deltaTime && ((damage < HP && set) || (HP - damage < HP && !set)) && !Miss)
                 HP += damage;
@@ -434,7 +464,36 @@ public class EntitySetting : MonoBehaviour
                 else
                     HP -= damage;
             }
+
+            if (HP <= 0)
+            {
+                HP = 0;
+                SendMessage("Die");
+            }
         }
+    }
+
+    public void DieCancel()
+    {
+        HP = MaxHP;
+        DamageMaterialTimer = 0;
+        DamageMaterialTimerTemp = false;
+        DieTimer = 0;
+    }
+
+    public void Die()
+    {
+        //SendMessage Error
+    }
+
+    public void PlayerDie()
+    {
+        //SendMessage Error
+    }
+
+    public void PlayerRespawn()
+    {
+        //SendMessage Error
     }
 }
 

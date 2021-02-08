@@ -15,7 +15,7 @@ TagManager:
   - 
   - 
   - Map
-  - Npc
+  - 
   - 
   - event.soft_lock
   - Fire
@@ -32,8 +32,8 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - UI2
+  - Npc
   - Entity
   - Entity Collider
   - Player

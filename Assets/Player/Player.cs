@@ -731,6 +731,9 @@ public class Player : MonoBehaviour
 
     public void GameOver()
     {
+        if (EntitySetting.entitySetting != null)
+            EntitySetting.entitySetting.gameObject.SendMessage("PlayerDie");
+
         FallDamage = 0;
         FallDamage2 = 0;
         FallDamage3 = 0;
@@ -774,7 +777,7 @@ public class Player : MonoBehaviour
 
             GameOverRotationSuc = true;
 
-            SoundManager.StopAll(SoundType.BGM);
+            SoundManager.StopAll(SoundType.BGM, false);
 
             if (time >= 4f)
                 particlesystem.SetActive(false);
@@ -810,6 +813,9 @@ public class Player : MonoBehaviour
         GameManager.gameManager.mainMenu();
         bgmManager.MainMenu = false;
         beatManager.MainMenu = false;
+
+        if (EntitySetting.entitySetting != null)
+            EntitySetting.entitySetting.gameObject.SendMessage("PlayerRespawn");
     }
 
     //맵을 이동했을때 또는 메인메뉴로 갔을때 위치 초기화

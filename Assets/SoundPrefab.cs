@@ -10,6 +10,9 @@ public class SoundPrefab : MonoBehaviour
     public float Vol = 1;
     public float Pitch = 1;
 
+    public bool PadeIn = false;
+    public bool PadeOut = false;
+
     AudioSource audioSource;
 
     void OnEnable() => audioSource = GetComponent<AudioSource>();
@@ -17,7 +20,18 @@ public class SoundPrefab : MonoBehaviour
     void Update()
     {
         if (!Bit8)
-            audioSource.volume = GameManager.MainVolume * Vol;
+        {
+            if (!PadeIn && !PadeOut)
+                audioSource.volume = GameManager.MainVolume * Vol;
+            else if (audioSource.volume < GameManager.MainVolume * Vol && PadeIn && !PadeOut)
+                audioSource.volume += 0.0075f * GameManager.MainVolume * Vol * 60 * Time.deltaTime;
+            else if (audioSource.volume > GameManager.MainVolume * Vol && PadeIn && !PadeOut)
+                audioSource.volume = GameManager.MainVolume * Vol;
+            else if (audioSource.volume > 0 && PadeOut)
+                audioSource.volume -= 0.0075f * GameManager.MainVolume * Vol * 60 * Time.deltaTime;
+            else if (audioSource.volume <= 0)
+                Destroy(gameObject);
+        }
 
         if (RhythmPitchUse)
             audioSource.pitch = GameManager.Pitch * Pitch * GameManager.GameSpeed;

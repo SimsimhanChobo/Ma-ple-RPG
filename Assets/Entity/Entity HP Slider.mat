@@ -113,7 +113,7 @@ Material:
     - _EnvironmentReflections: 0
     - _FlipbookMode: 0
     - _GlossMapScale: 1
-    - _Glossiness: 1
+    - _Glossiness: 0
     - _GlossyReflections: 0
     - _LightingEnabled: 0
     - _Metallic: 1

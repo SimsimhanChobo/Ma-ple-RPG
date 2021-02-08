@@ -7,6 +7,9 @@ public class BeatManager : MonoBehaviour
     public LogoBeat LogoBeat;
     public PlayerStateBeat PlayerStateBeat;
     public InvBeat InvBeat;
+    public static BeatManager beatManager;
+
+    void Start() => beatManager = GetComponent<BeatManager>();
 
     void Update()
     {
@@ -16,12 +19,12 @@ public class BeatManager : MonoBehaviour
             {
                 event_soft_lock_end = true;
 
-                if (GameManager.MainMenu)
+                if (GameManager.MainMenu && !GameManager.Boss)
                 {
                     GameManager.BPM = 128;
                     GameManager.StartDelay = 0.3f;
                 }
-                else if (GameManager.MainMenu == false)
+                else if (GameManager.MainMenu == false && !GameManager.Boss)
                 {
                     if (GameManager.Map == 0)
                     {
@@ -30,7 +33,7 @@ public class BeatManager : MonoBehaviour
                     }
                 }
             }
-            else if (event_soft_lock.Play)
+            else if (event_soft_lock.Play && !GameManager.Boss)
             {
                 if (GameManager.CurrentBeat < 2)
                 {
@@ -55,7 +58,7 @@ public class BeatManager : MonoBehaviour
 
         if (GameManager.MainMenu)
         {
-            if (!MainMenu)
+            if (!MainMenu && !GameManager.Boss)
                 NextBeatRestart();
             MainMenu = true;
 

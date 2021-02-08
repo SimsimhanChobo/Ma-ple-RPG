@@ -30,7 +30,7 @@ public class MapleRpgSystem : MonoBehaviour
 
     IEnumerator ChapterLoading()
     {
-        yield return new WaitForEndOfFrame();
+        yield return null;
         Loading.LoadScene(GameManager.Chapter, GameManager.Chapter);
     }
 }

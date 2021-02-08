@@ -28,7 +28,7 @@ public class Loading : MonoBehaviour
     {
         isLoading = true;
 
-        if (!GameManager.isAction && !GameManager.일시정지)
+        if (!GameManager.isAction)
         {
             nextScene = sceneName;
             logoText = LogoText;
@@ -62,7 +62,7 @@ public class Loading : MonoBehaviour
         if (iii)
         {
             Logo.color = new Color(1, 1, 1, i);
-            i += 0.025f * (60 * Time.deltaTime);
+            i += 0.025f * (60 * Time.unscaledDeltaTime);
 
             if (i > 1.5)
             {
@@ -70,7 +70,7 @@ public class Loading : MonoBehaviour
                 LoadingBarBackground.color = new Color(1, 1, 1, ii);
                 progressBar.color = new Color(1, 1, 1, ii);
                 LoadingProgressText.color = new Color(1, 1, 1, ii);
-                ii += 0.025f * (60 * Time.deltaTime);
+                ii += 0.025f * (60 * Time.unscaledDeltaTime);
 
                 if (ii >= 1)
                 {
@@ -91,10 +91,10 @@ public class Loading : MonoBehaviour
             yield return null;
 
             if (op.progress < 0.9f)
-                progressBar.fillAmount = Mathf.Lerp(progressBar.fillAmount, op.progress, 0.05f * (60 * Time.deltaTime));
+                progressBar.fillAmount = Mathf.Lerp(progressBar.fillAmount, op.progress, 0.05f * (60 * Time.unscaledDeltaTime));
             else
             {
-                progressBar.fillAmount = Mathf.Lerp(progressBar.fillAmount, 1, 0.05f * (60 * Time.deltaTime));
+                progressBar.fillAmount = Mathf.Lerp(progressBar.fillAmount, 1, 0.05f * (60 * Time.unscaledDeltaTime));
                 if (progressBar.fillAmount >= 0.995f)
                 {
                     op.allowSceneActivation = true;

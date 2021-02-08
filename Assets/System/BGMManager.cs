@@ -24,9 +24,9 @@ public class BGMManager : MonoBehaviour
             {
                 일시정지Canvas.volume = GameManager.MainVolume;
 
-                if (GameManager.SoundRestart)
+                if (GameManager.SoundRestart && !GameManager.Boss)
                 {
-                    SoundManager.StopAll(SoundType.BGM);
+                    SoundManager.StopAll(SoundType.BGM, false);
                     GameManager.SoundRestart = false;
 
                     GameManager.Timer = 0;
@@ -34,16 +34,16 @@ public class BGMManager : MonoBehaviour
                     BeatManager.NextBeatRestart();
 
                     if (GameManager.Map == 0)
-                        SoundManager.PlayBGM("Lachesis Dance", true, 0.6f, 1, false);
+                        SoundManager.PlayBGM("Lachesis Dance", true, 0.6f, 1, false, false);
                     //SoundManager.PlayBGM8Bit("battle", "8-Bit.battle 8-Bit", true, 0.25f, 1, true);
                 }
 
-                if (GameManager.MainMenu)
+                if (GameManager.MainMenu && !GameManager.Boss)
                 {
                     if (!MainMenu)
                     {
-                        SoundManager.StopAll(SoundType.BGM);
-                        SoundManager.PlayBGM("Altair", true, 0.3f, 1, true);
+                        SoundManager.StopAll(SoundType.BGM, false);
+                        SoundManager.PlayBGM("Altair", true, 0.3f, 1, true, false);
 
                         //SoundManager.PlayBGM8Bit("joker", "8-Bit.joker 8-Bit", true, 0.25f, 1, true);
                     }

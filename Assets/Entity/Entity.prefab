@@ -289,6 +289,8 @@ MonoBehaviour:
   EntityName: 
   ColliderSizeX: 1
   ColliderSizeY: 1
+  RealColliderSizeX: 1
+  RealColliderSizeY: 1
   Collider: {x: 0, y: 0, z: 0}
   MaxHP: 100
   HP: 100
@@ -358,6 +360,7 @@ MonoBehaviour:
   vector3: {x: 0, y: 0, z: 0}
   target: {x: 0, y: 0, z: 0}
   Timer: 0
+  Offset: {x: 0, y: 0, z: 0}
 --- !u!1 &4289420004111649664
 GameObject:
   m_ObjectHideFlags: 0

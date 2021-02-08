@@ -10,6 +10,7 @@
     SubShader
     {
         Tags { "RenderType"="Opaque" }
+        Lighting Off
         LOD 200
 
         CGPROGRAM

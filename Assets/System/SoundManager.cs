@@ -41,7 +41,7 @@ public class SoundManager : MonoBehaviour
     /// <summary>
     /// Play BGM
     /// </summary>
-    public static void PlayBGM(string BGMName, bool Loop, float Vol, float Pitch, bool RhythmPitchUse)
+    public static void PlayBGM(string BGMName, bool Loop, float Vol, float Pitch, bool RhythmPitchUse, bool Pade)
     {
         if (BGMCount < 10)
         {
@@ -58,7 +58,10 @@ public class SoundManager : MonoBehaviour
             AudioSource BGM = BGMObject.GetComponent<AudioSource>();
             BGM.clip = Resources.Load<AudioClip>("BGM/" + BGMName.Replace(".", "/"));
             BGM.loop = Loop;
-            BGM.volume = GameManager.MainVolume * Vol;
+            if (Pade)
+                SoundPrefab.PadeIn = true;
+            else
+                BGM.volume = GameManager.MainVolume * Vol;
             if (RhythmPitchUse)
                 BGM.pitch = GameManager.Pitch * Pitch * GameManager.GameSpeed;
             else
@@ -70,7 +73,7 @@ public class SoundManager : MonoBehaviour
     /// <summary>
     /// Stop BGM
     /// </summary>
-    public static void StopBGM(string SoundBGM)
+    public static void StopBGM(string SoundBGM, bool Pade)
     {
         BGMCount -= 1;
 
@@ -78,7 +81,12 @@ public class SoundManager : MonoBehaviour
 
         for (int i = 1; i < allChildren.Length; i++)
             if (allChildren[i].name == "BGM." + SoundBGM.Replace(".", "/"))
-                Destroy(allChildren[i].gameObject);
+            {
+                if (!Pade)
+                    Destroy(allChildren[i].gameObject);
+                else
+                    allChildren[i].GetComponent<SoundPrefab>().PadeOut = true;
+            }
     }
 
     /// <summary>
@@ -118,15 +126,20 @@ public class SoundManager : MonoBehaviour
                 Destroy(allChildren[i].gameObject);
     }
 
-    public static void StopAll(SoundType soundType)
+    public static void StopAll(SoundType soundType, bool BGMPade)
     {
         if (soundType == SoundType.All)
         {
             Transform[] allChildren = soundManager.GetComponentsInChildren<Transform>();
 
             for (int i = 1; i < allChildren.Length; i++)
-                if (soundManager != allChildren[i])
-                    Destroy(allChildren[i].gameObject);
+                if (soundManager != allChildren[i] && allChildren[i].GetComponent<SoundPrefab>() != null)
+                {
+                    if (!BGMPade || !allChildren[i].GetComponent<SoundPrefab>().BGM)
+                        Destroy(allChildren[i].gameObject);
+                    else
+                        allChildren[i].GetComponent<SoundPrefab>().PadeOut = true;
+                }
         }
         else if (soundType == SoundType.BGM)
         {
@@ -134,7 +147,12 @@ public class SoundManager : MonoBehaviour
 
             for (int i = 1; i < allChildren.Length; i++)
                 if (soundManager != allChildren[i])
-                    Destroy(allChildren[i].gameObject);
+                {
+                    if (!BGMPade)
+                        Destroy(allChildren[i].gameObject);
+                    else
+                        allChildren[i].GetComponent<SoundPrefab>().PadeOut = true;
+                }
         }
         else if (soundType == SoundType.Sound)
         {

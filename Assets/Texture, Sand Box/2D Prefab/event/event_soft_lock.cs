@@ -22,8 +22,11 @@ public class event_soft_lock : MonoBehaviour
             start = false;
             Play = true;
 
-            SoundManager.StopAll(SoundType.BGM);
-            SoundManager.PlayBGM("MIDI.Slide Start", false, 0.3f, 1, true);
+            if (!GameManager.Boss)
+            {
+                SoundManager.StopAll(SoundType.BGM, false);
+                SoundManager.PlayBGM("MIDI.Slide Start", false, 0.3f, 1, true, false);
+            }
 
             NINTENDO64Logo.event_soft_lock();
 
@@ -36,14 +39,21 @@ public class event_soft_lock : MonoBehaviour
             {
                 Play = false;
                 Stop = false;
-                GameManager.SoundRestart = true;
-                SoundManager.StopBGM("MIDI.Slide Start");
-                SoundManager.StopBGM("MIDI.Slide");
-                NINTENDO64Logo.Start = false;
+                if (!GameManager.Boss)
+                {
+                    GameManager.SoundRestart = true;
+                    SoundManager.StopBGM("MIDI.Slide Start", false);
+                    SoundManager.StopBGM("MIDI.Slide", false);
+                    NINTENDO64Logo.Start = false;
+                }
                 CancelInvoke();
             }
         }
     }
 
-    void Loop() => SoundManager.PlayBGM("MIDI.Slide", true, 0.3f, 1, true);
+    void Loop()
+    {
+        if (!GameManager.Boss)
+            SoundManager.PlayBGM("MIDI.Slide", true, 0.3f, 1, true, false);
+    }
 }
