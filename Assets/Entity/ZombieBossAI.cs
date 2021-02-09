@@ -7,6 +7,7 @@ public class ZombieBossAI : MonoBehaviour
     EntitySetting entitySetting;
 
     bool die = false;
+    bool die2 = false;
 
     void Start() => BossStart();
 
@@ -59,6 +60,15 @@ public class ZombieBossAI : MonoBehaviour
         BeatManager.beatManager.NextBeatRestart();
     }
 
+    void BossStop()
+    {
+        die2 = true;
+        CancelInvoke();
+        GameManager.Boss = false;
+        SoundManager.StopAll(SoundType.BGM, false);
+        GameManager.SoundRestart = true;
+    }
+
     public void PlayerDie()
     {
         CancelInvoke();
@@ -85,10 +95,14 @@ public class ZombieBossAI : MonoBehaviour
         }
         else
         {
-            CancelInvoke();
-            GameManager.Boss = false;
-            SoundManager.StopAll(SoundType.BGM, false);
-            GameManager.SoundRestart = true;
+            if (!die2)
+                BossStop();
         }
+    }
+
+    void OnDestroy()
+    {
+        if (!die2)
+            BossStop();
     }
 }

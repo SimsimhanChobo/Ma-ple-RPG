@@ -66,15 +66,15 @@ public class EntitySetting : MonoBehaviour
 
     bool Boss = false;
 
-    void Start()
+    void OnEnable()
     {
         entitySetting = GetComponent<EntitySetting>();
 
-        for (int i = 0; mobType.Count > i; i++)
+        for (int i = 0; i < mobType.Count; i++)
             if (mobType[i] == MobType.Boss)
             {
                 if (GameManager.Boss)
-                    Destroy(gameObject);
+                    gameObject.SetActive(false);
 
                 Boss = true;
                 GameManager.Boss = true;
