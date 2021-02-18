@@ -102,119 +102,88 @@ public class MainCamera : MonoBehaviour
 
     void Move()
     {
-        if (GameManager.CameraX고정)
-            MainCameraCanvas.SetActive(true);
-        else
-            MainCameraCanvas.SetActive(false);
-
-        if ((GameManager.Graphic == 0 && GameManager.CameraAni == 0) || GameManager.CameraAni == 1)
+        if (!GameManager.DeltaruneBattle && !DeltaruneBattleManager.StartAni && !DeltaruneBattleManager.EndAni)
         {
-            // 카메라 이동과 고정
-            x = transform.localPosition.x;
-            y = transform.localPosition.y;
-            z = transform.localPosition.z;
-
-            Vector3 velo = Vector3.zero;
             if (GameManager.CameraX고정)
-            {
-                if (!GameManager.CameraY고정)
-                {
-                    target = new Vector3(transform.localPosition.x, 마플캐릭터.transform.position.y, -14 + GameManager.PlayerZ);
-                    카메라고정();
-                    transform.localPosition = Vector3.Lerp(transform.localPosition, target, 0.075f * (35 * Time.deltaTime));
-                    target = new Vector3(transform.localPosition.x, GameManager.PlayerY, -14 + GameManager.PlayerZ);
-                    카메라고정();
-                    벽Camera.transform.localPosition = target;
-                }
-            }
+                MainCameraCanvas.SetActive(true);
+            else
+                MainCameraCanvas.SetActive(false);
 
-            if (GameManager.CameraY고정)
+            if ((GameManager.Graphic == 0 && GameManager.CameraAni == 0) || GameManager.CameraAni == 1)
             {
-                if (!GameManager.CameraX고정)
-                {
-                    target = new Vector3(마플캐릭터.transform.position.x, transform.localPosition.y, -14 + GameManager.PlayerZ);
-                    카메라고정();
-                    transform.localPosition = Vector3.Lerp(transform.localPosition, target, 0.075f * (35 * Time.deltaTime));
-                    target = new Vector3(GameManager.PlayerX, transform.localPosition.y, -14 + GameManager.PlayerZ);
-                    카메라고정();
-                    벽Camera.transform.localPosition = target;
-                }
-            }
+                // 카메라 이동과 고정
+                x = transform.localPosition.x;
+                y = transform.localPosition.y;
+                z = transform.localPosition.z;
 
-            if (GameManager.CameraX고정)
-            {
-                if (GameManager.CameraY고정)
-                {
-                    target = new Vector3(transform.localPosition.x, transform.localPosition.y, -14 + GameManager.PlayerZ);
-                    카메라고정();
-                    transform.localPosition = Vector3.Lerp(transform.localPosition, target, 0.075f * (35 * Time.deltaTime));
-                    벽Camera.transform.localPosition = target;
-                }
-            }
-
-            if (!GameManager.CameraX고정)
-            {
-                if (!GameManager.CameraY고정)
-                {
-                    target = new Vector3(마플캐릭터.transform.position.x, 마플캐릭터.transform.position.y, -14 + GameManager.PlayerZ);
-                    카메라고정();
-                    transform.localPosition = Vector3.Lerp(transform.localPosition, target, 0.075f * (35 * Time.deltaTime));
-                    target = new Vector3(GameManager.PlayerX, GameManager.PlayerY, -14 + GameManager.PlayerZ);
-                    카메라고정();
-                    벽Camera.transform.localPosition = target;
-                }
-            }
-
-            if (GameManager.MainMenu)
-            {
-                target = new Vector3(0, -0.5f, -14 + GameManager.PlayerZ);
+                target = new Vector3(마플캐릭터.transform.position.x, 마플캐릭터.transform.position.y + 1, -14 + GameManager.PlayerZ);
+                CameraLook();
                 transform.localPosition = Vector3.Lerp(transform.localPosition, target, 0.075f * (35 * Time.deltaTime));
+                target = new Vector3(transform.localPosition.x, GameManager.PlayerY, -14 + GameManager.PlayerZ);
+                CameraLook();
+                벽Camera.transform.localPosition = target;
+
+                if (GameManager.MainMenu)
+                {
+                    target = new Vector3(0, -0.5f, -14 + GameManager.PlayerZ);
+                    transform.localPosition = Vector3.Lerp(transform.localPosition, target, 0.075f * (35 * Time.deltaTime));
+                    벽Camera.transform.localPosition = target;
+                }
+
+                Quaternion target2 = Quaternion.Euler(0, 0, 0);
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, target2, 0.075f * (80 * Time.deltaTime));
+            }
+            else
+            {
+                target = new Vector3(마플캐릭터.transform.position.x, 마플캐릭터.transform.position.y + 1, -14 + GameManager.PlayerZ);
+                CameraLook();
+
+                if (GameManager.MainMenu)
+                    target = new Vector3(0, -0.5f, -14 + GameManager.PlayerZ);
+
+                transform.localPosition = target;
+                transform.localRotation = Quaternion.Euler(0, 0, 0);
                 벽Camera.transform.localPosition = target;
             }
-
-            Quaternion target2 = Quaternion.Euler(0, 0, 0);
-            transform.localRotation = Quaternion.Lerp(transform.localRotation, target2, 0.075f * (80 * Time.deltaTime));
-        }
-        else
-        {
-            target = new Vector3(마플캐릭터.transform.position.x, 마플캐릭터.transform.position.y, -14 + GameManager.PlayerZ);
-            카메라고정();
-
-            if (GameManager.MainMenu)
-                target = new Vector3(0, -0.5f, -14 + GameManager.PlayerZ);
-
-            transform.localPosition = target;
-            transform.localRotation = Quaternion.Euler(0, 0, 0);
-            벽Camera.transform.localPosition = target;
         }
     }
 
-    public void 카메라고정()
+    public void CameraLook()
     {
         //카메라 고정
+        if (GameManager.CameraX고정)
+            target.x = transform.position.x;
+
+        if (GameManager.CameraY고정)
+            target.y = transform.position.y;
+
+
         if (GameManager.MainMenu == false)
         {
-            if (GameManager.Map == 0)
+            if (GameManager.Chapter == "Tutorial")
             {
-                if (GameManager.CameraX고정 == false)
+                if (GameManager.Map == 0)
                 {
-                    if (마플캐릭터.transform.position.x <= -0.69)
+                    if (GameManager.CameraX고정 == false)
                     {
-                        MainCameraCanvas.SetActive(true);
+                        if (마플캐릭터.transform.position.x <= -0.69)
+                        {
+                            MainCameraCanvas.SetActive(true);
 
-                        if (GameManager.CameraY고정)
-                            target = new Vector3(-0.69f, transform.localPosition.y, -14 + GameManager.PlayerZ);
-                        else
-                            target = new Vector3(-0.69f, 마플캐릭터.transform.position.y, -14 + GameManager.PlayerZ);
+                            if (GameManager.CameraY고정)
+                                target = new Vector3(-0.69f, transform.localPosition.y, -14 + GameManager.PlayerZ);
+                            else
+                                target = new Vector3(-0.69f, 마플캐릭터.transform.position.y, -14 + GameManager.PlayerZ);
+                        }
                     }
-                }
 
-                if (마플캐릭터.transform.position.y < -8 && 마플캐릭터.transform.position.y < -22)
-                    target = new Vector3(target.x, -25, -14 + GameManager.PlayerZ);
-                else if (마플캐릭터.transform.position.y > -22 && 마플캐릭터.transform.position.y < -8)
-                    target = new Vector3(target.x, -15, -14 + GameManager.PlayerZ);
-                else
-                    target = new Vector3(target.x, -0.5f, -14 + GameManager.PlayerZ);
+                    if (마플캐릭터.transform.position.y < -8 && 마플캐릭터.transform.position.y < -22)
+                        target = new Vector3(target.x, -25, -14 + GameManager.PlayerZ);
+                    else if (마플캐릭터.transform.position.y > -22 && 마플캐릭터.transform.position.y < -8)
+                        target = new Vector3(target.x, -15, -14 + GameManager.PlayerZ);
+                    else
+                        target = new Vector3(target.x, -0.5f, -14 + GameManager.PlayerZ);
+                }
             }
         }
     }

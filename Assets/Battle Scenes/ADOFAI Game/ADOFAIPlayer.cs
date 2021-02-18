@@ -13,14 +13,6 @@ public class ADOFAIPlayer : MonoBehaviour
 
     void Awake()
     {
-        if (!GameStart)
-        {
-            GameManager.ADOFAIGame = true;
-            GameManager.MinecraftGame = false;
-
-            Debug.Log("ADOFAI Game Start!");
-        }
-
         GameStart = true;
     }
 

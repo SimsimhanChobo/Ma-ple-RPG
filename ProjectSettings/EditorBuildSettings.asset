@@ -5,6 +5,9 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/Background.unity
+    guid: fb530f604d110994fb1b2520d9bdc0b3
   - enabled: 1
     path: Assets/System/Start Loading.unity
     guid: 872d05d34ed4c59438ec69bdd0f829d0
@@ -17,10 +20,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/System/Loading Screen.unity
     guid: 3af52edc58c86084582be8994033a5f5
-  - enabled: 0
-    path: Assets/Scenes/Background.unity
-    guid: fb530f604d110994fb1b2520d9bdc0b3
   - enabled: 1
     path: Assets/Chapter Scenes/Tutorial.unity
     guid: c11ca8331411bf242b0e17cc140e0610
+  - enabled: 1
+    path: Assets/Battle Scenes/Deltarune/test.unity
+    guid: 160ad3b8618c1e84ea0785f497c86141
   m_configObjects: {}

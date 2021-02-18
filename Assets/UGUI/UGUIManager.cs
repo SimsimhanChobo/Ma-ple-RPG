@@ -14,6 +14,7 @@ public class UGUIManager : MonoBehaviour
     public Canvas canvas9;
     public Canvas canvas10;
     public Canvas canvas11;
+    public Canvas canvas12;
 
     void Update()
     {
@@ -33,5 +34,6 @@ public class UGUIManager : MonoBehaviour
         canvas9.scaleFactor = GameManager.GUISize;
         canvas10.scaleFactor = GameManager.GUISize;
         canvas11.scaleFactor = GameManager.GUISize;
+        canvas12.scaleFactor = GameManager.GUISize;
     }
 }

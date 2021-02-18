@@ -14,9 +14,9 @@ public class MinecraftSkyboxColorChange : MonoBehaviour
 
     public Color color;
 
-    public float Brightness;
-    public float Brightness2;
-    public float Brightness3;
+    float Brightness;
+    float Brightness2;
+    float Brightness3;
 
     void Update()
     {

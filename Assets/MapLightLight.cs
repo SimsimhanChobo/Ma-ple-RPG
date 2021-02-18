@@ -25,6 +25,11 @@ public class MapLightLight : MonoBehaviour
             if (TimeControl.GameTime >= 2300 && TimeControl.GameTime < 10000)
                 Brightness = 1;
 
+            if (Brightness < 0)
+                Brightness = 0;
+            else if (Brightness > 1)
+                Brightness = 1;
+
             light.color = new Color((1 - Brightness) * color.r, (1 - Brightness) * color.g, (1 - Brightness) * color.b, color.a);
         }
         else if (!All)
@@ -38,6 +43,11 @@ public class MapLightLight : MonoBehaviour
             if (TimeControl.GameTime >= 0 && TimeControl.GameTime < 2300)
                 Brightness = 1f / (255f / ((TimeControl.GameTime + 1500) * 0.0539474f + 50f));
             if (TimeControl.GameTime >= 2300 && TimeControl.GameTime < 10000)
+                Brightness = 1;
+
+            if (Brightness < 0)
+                Brightness = 0;
+            else if (Brightness > 1)
                 Brightness = 1;
 
             light.color = new Color(Brightness * color.r, Brightness * color.g, Brightness * color.b, color.a);
@@ -55,6 +65,11 @@ public class MapLightLight : MonoBehaviour
             if (TimeControl.GameTime >= 2300 && TimeControl.GameTime < 10000)
                 Brightness = 1;
 
+            if (Brightness < 0)
+                Brightness = 0;
+            else if (Brightness > 1)
+                Brightness = 1;
+
             light.color = new Color((1 - Brightness) * color.r, (1 - Brightness) * color.g, (1 - Brightness) * color.b, color.a);
         }
         else if (All)
@@ -68,6 +83,11 @@ public class MapLightLight : MonoBehaviour
             if (TimeControl.GameTime >= 0 && TimeControl.GameTime < 2300)
                 Brightness = 1f / (255f / ((TimeControl.GameTime + 1500) * 0.07f));
             if (TimeControl.GameTime >= 2300 && TimeControl.GameTime < 10000)
+                Brightness = 1;
+
+            if (Brightness < 0)
+                Brightness = 0;
+            else if (Brightness > 1)
                 Brightness = 1;
 
             light.color = new Color(Brightness * color.r, Brightness * color.g, Brightness * color.b, color.a);

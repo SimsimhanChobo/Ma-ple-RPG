@@ -1,4 +1,4 @@
-﻿Shader "Transparent/Cutout/ChromakeyShader" {
+﻿Shader "Transparent/Cutout/ChromakeyShader2" {
     Properties{
          _MainTex("Base (RGB)", 2D) = "white" {}
          _Sens("Sensibilidad", Range(0,1)) = 0.3

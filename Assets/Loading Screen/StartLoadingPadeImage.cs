@@ -18,6 +18,9 @@ public class StartLoadingPadeImage : MonoBehaviour
 
     void Awake()
     {
+        if (Loading.LoadingScreenHide)
+            Destroy(gameObject);
+
         if (!StartLoading.b)
         {
             StartLoading.b = true;

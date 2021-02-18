@@ -265,11 +265,7 @@ public class GameManager : MonoBehaviour
     public int ADOFAIKey = 0;
     public int MinecraftKey = 0;
 
-    public static bool MinecraftGame = true;
-    public static bool ADOFAIGame = false;
-
-    public bool _MinecraftGame = MinecraftGame;
-    public bool _ADOFAIGame = ADOFAIGame;
+    public static bool DeltaruneBattle = false;
 
     public static bool GameStart = false;
 
@@ -311,17 +307,14 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        ResourceManager.ResourcePackAdd("C:/Users/Simsimhan Chobo/Documents/asdfasdfsafsdfasdfsasfasdfsdfa");
+        //ResourceManager.ResourcePackAdd("C:/Users/Simsimhan Chobo/Documents/asdfasdfsafsdfasdfsasfasdfsdfa");
 
         gameManager = gameObject.GetComponent<GameManager>();
 
-        if (MinecraftGame)
-        {
-            PhoneControllerCanvas.SetActive(true);
-            MinecraftUGUIManager.SetActive(true);
-            MainCameraSize.SetActive(true);
-            DebugCanvas.SetActive(true);
-        }
+        PhoneControllerCanvas.SetActive(true);
+        MinecraftUGUIManager.SetActive(true);
+        MainCameraSize.SetActive(true);
+        DebugCanvas.SetActive(true);
 
         if (!GameStart)
         {
@@ -350,325 +343,360 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        //Minecraft
-        if (MinecraftGame)
+        if (!일시정지 && !isAction)
         {
-            if (!일시정지 && !isAction)
+            //맵
+            if (MapMove)
             {
-                //맵
-                if (MapMove)
+                MapMove = false;
+                if (!Boss)
                 {
-                    MapMove = false;
-                    if (!Boss)
-                    {
-                        Timer = 0;
-                        CurrentBeat = 0;
-                        BeatManager.NextBeatRestart();
-                    }
+                    Timer = 0;
+                    CurrentBeat = 0;
+                    BeatManager.NextBeatRestart();
                 }
+            }
 
-                if (MainMenu)
-                {
-                    CameraX고정 = true;
-                    CameraY고정 = true;
-                }
-                else if (MainMenu == false)
+            if (MainMenu)
+            {
+                CameraX고정 = true;
+                CameraY고정 = true;
+            }
+            else if (MainMenu == false)
+            {
+                if (Chapter == "Tutorial")
                 {
                     if (Map == 0)
                     {
                         CameraX고정 = false;
                         CameraY고정 = true;
+
+                        if (Input.GetKeyDown(KeyCode.J))
+                        {
+                            Chapter = "test";
+                            MapMove = true;
+                            if (!MainMenu)
+                                SoundRestart = true;
+                            Player.player.transform.position = new Vector2(0, -4);
+                            Player.rigid.velocity = Vector2.zero;
+                            Loading.LoadScene(Chapter, "???", false);
+                            
+                        }
                     }
                 }
-
-
-                //인벤토리
-                if (!ChattingManager.ChattingActive && !InvManager.InventoryShow)
+                else if (Chapter == "test")
                 {
-                    if (Input.GetKeyDown(KeyCode.Minus) || MinusKey)
+                    if (Map == 0)
                     {
-                        if (MinusKey)
-                            ButtonPointer = false;
+                        CameraX고정 = false;
+                        CameraY고정 = false;
 
-                        PlayerInvLine -= 1;
-                        if (PlayerInvLine < 0)
-                            PlayerInvLine = PlayerInvMaxLine;
-                        if (PlayerInvMaxLine < PlayerInvLine)
-                            PlayerInvLine = 0;
-                        if (PlayerInvLine * 10 > PlayerInv.Count)
+                        if (Input.GetKeyDown(KeyCode.J))
                         {
-                            while (PlayerInvLine * 10 > PlayerInv.Count)
-                                PlayerInvLine -= 1;
-                        }
-
-                        MinusKey = false;
-                    }
-
-                    if (Input.GetKeyDown(KeyCode.Equals) || PlusKey)
-                    {
-                        if (PlusKey)
-                            ButtonPointer = false;
-
-                        PlayerInvLine += 1;
-                        if (PlayerInvLine <= 0)
-                            PlayerInvLine = PlayerInvMaxLine;
-                        if (PlayerInvMaxLine < PlayerInvLine)
-                            PlayerInvLine = 0;
-                        if (PlayerInvLine * 10 > PlayerInv.Count)
-                            PlayerInvLine = 0;
-
-                        PlusKey = false;
-                    }
-
-                    if (PlayerInv.Count >= 10)
-                    {
-                        MinusButton.SetActive(true);
-                        PlusButton.SetActive(true);
-                    }
-                    else
-                    {
-                        MinusButton.SetActive(false);
-                        PlusButton.SetActive(false);
-                    }
-
-                    if (0 < Input.GetAxis("Mouse ScrollWheel"))
-                    {
-                        PlayerInvCannes -= 1;
-                        PlayerAV = 0;
-                        if (PlayerInvCannes < 0)
-                            PlayerInvCannes = 8;
-                    }
-                    if (0 > Input.GetAxis("Mouse ScrollWheel"))
-                    {
-                        PlayerInvCannes += 1;
-                        PlayerAV = 0;
-                        if (PlayerInvCannes > 8)
-                            PlayerInvCannes = 0;
-                    }
-
-                    if (Input.GetKeyDown(KeyCode.Alpha1))
-                    {
-                        if (PlayerInvCannes != 0)
-                        {
-                            PlayerAV = 0;
-                            PlayerInvCannes = 0;
-                        }
-                    }
-
-                    if (Input.GetKeyDown(KeyCode.Alpha2))
-                    {
-                        if (PlayerInvCannes != 1)
-                        {
-                            PlayerAV = 0;
-                            PlayerInvCannes = 1;
-                        }
-                    }
-
-                    if (Input.GetKeyDown(KeyCode.Alpha3))
-                    {
-                        if (PlayerInvCannes != 2)
-                        {
-                            PlayerAV = 0;
-                            PlayerInvCannes = 2;
-                        }
-                    }
-
-                    if (Input.GetKeyDown(KeyCode.Alpha4))
-                    {
-                        if (PlayerInvCannes != 3)
-                        {
-                            PlayerAV = 0;
-                            PlayerInvCannes = 3;
-                        }
-                    }
-
-                    if (Input.GetKeyDown(KeyCode.Alpha5))
-                    {
-                        if (PlayerInvCannes != 4)
-                        {
-                            PlayerAV = 0;
-                            PlayerInvCannes = 4;
-                        }
-                    }
-
-                    if (Input.GetKeyDown(KeyCode.Alpha6))
-                    {
-                        if (PlayerInvCannes != 5)
-                        {
-                            PlayerAV = 0;
-                            PlayerInvCannes = 5;
-                        }
-                    }
-
-                    if (Input.GetKeyDown(KeyCode.Alpha7))
-                    {
-                        if (PlayerInvCannes != 6)
-                        {
-                            PlayerAV = 0;
-                            PlayerInvCannes = 6;
-                        }
-                    }
-
-                    if (Input.GetKeyDown(KeyCode.Alpha8))
-                    {
-                        if (PlayerInvCannes != 7)
-                        {
-                            PlayerAV = 0;
-                            PlayerInvCannes = 7;
-                        }
-                    }
-
-                    if (Input.GetKeyDown(KeyCode.Alpha9))
-                    {
-                        if (PlayerInvCannes != 8)
-                        {
-                            PlayerAV = 0;
-                            PlayerInvCannes = 8;
+                            Chapter = "Tutorial";
+                            MapMove = true;
+                            if (!MainMenu)
+                                SoundRestart = true;
+                            Player.player.transform.position = new Vector2(0, -4);
+                            Player.rigid.velocity = Vector2.zero;
+                            Loading.LoadScene(Chapter, Chapter, true);
                         }
                     }
                 }
 
-                if (PlayerInv.Count - 1 < PlayerInvCannes + PlayerInvLine * 9)
-                    PlayerInvItem = "air";
-                else
-                    PlayerInvItem = PlayerInv[PlayerInvCannes + PlayerInvLine * 9];
-
-                //AV
-                if (PlayerAV <= PlayerMaxAV)
-                    PlayerAV += PlayerMaxAV / (60 * PlayerAS) * (60 * Time.deltaTime);
-
-                if (PlayerAV >= PlayerMaxAV)
-                    PlayerAV = PlayerMaxAV;
-
-                //HG
-                if (PlayerHG >= PlayerMaxHG && PlayerHGSaturationLevel > 0 && PlayerHP < PlayerMaxHP)
-                {
-                    PlayerHGTickTimer += Time.deltaTime;
-                    if (PlayerHGTickTimer > 0.5f)
-                    {
-                        PlayerHP += 1;
-                        PlayerHGSaturationLevel -= 1.5f;
-                        PlayerHGTickTimer = 0;
-                    }
-                }
-                else if (0.9f <= PlayerHG / PlayerMaxHG && PlayerHGSaturationLevel <= 0 && PlayerHP < PlayerMaxHP)
-                {
-                    PlayerHGTickTimer += Time.deltaTime;
-                    if (PlayerHGTickTimer > 4)
-                    {
-                        PlayerHP += 1;
-                        PlayerHG -= 1.5f;
-                        PlayerHGTickTimer = 0;
-                    }
-                }
-
-                PlayerMaxSpeed = 7.1f;
-                PlayerJumpPower = 8.17f;
-                if (PlayerHG / PlayerMaxHG < 0.3f && !event_soft_lock.Play && PlayerHGSpeedDown)
-                    PlayerMaxSpeed = 7.1f * 0.75f;
-
-                if (PlayerHG <= 0)
-                {
-                    PlayerHGTickTimer += Time.deltaTime;
-                    if (PlayerHGTickTimer > 4)
-                    {
-                        PlayerDamage(1, false, 0);
-                        PlayerHGTickTimer = 0;
-                    }
-                }
-
-                if (PlayerMove && !MainMenu)
-                    PlayerHGExhaustionLevel += 0.001f;
-
-                if (PlayerHGExhaustionLevel >= 4)
-                {
-                    if (PlayerHGSaturationLevel <= 0)
-                        PlayerHG -= 1;
-                    else
-                        PlayerHGSaturationLevel -= 1;
-
-                    PlayerHGExhaustionLevel = 0;
-                }
-
-                if (PlayerHGSaturationLevel >= PlayerHG)
-                    PlayerHGSaturationLevel = PlayerHG;
-
-                if (PlayerHGSaturationLevel < 0)
-                    PlayerHGSaturationLevel = 0;
-
-                //자동 시작
-                if (MainMenu)
-                {
-                    if (PlayerX <= -7 && PlayerX >= -8.5f && (Input.GetButton("Horizontal") || LeftKey || RightKey))
-                    {
-                        MainMenu = false;
-                        MapMove = true;
-                        if (!Boss)
-                            SoundRestart = true;
-                    }
-                    else if (PlayerX >= 7 && PlayerX <= 8.5f && (Input.GetButton("Horizontal") || LeftKey || RightKey))
-                    {
-                        MainMenu = false;
-                        MapMove = true;
-                        if (!Boss)
-                            SoundRestart = true;
-                    }
-                }
-
-                //메인 메뉴로
-                if (!MainMenu)
-                {
-                    if (Input.GetKeyDown(KeyCode.M) && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
-                    {
-                        if (Player.rigid.velocity.x <= 0.0025f && Player.rigid.velocity.x >= -0.0025f && Player.rigid.velocity.y <= 0.0025f && Player.rigid.velocity.y >= -0.0025f && !event_soft_lock.Play)
-                        {
-                            PlayerAV = PlayerMaxAV;
-                            mainMenu();
-                        }
-                    }
-                }
             }
 
-            //HP, HG가 최대 HP또는 HG를 넘어섰을때
-            if (PlayerMaxHP < PlayerHP)
-                PlayerHP = PlayerMaxHP;
-            if (PlayerMaxHG < PlayerHG)
-                PlayerHG = PlayerMaxHG;
-            if (PlayerHG < 0)
-                PlayerHG = 0;
 
-            /*if (b)
-                GameSpeed -= 0.01f * 60 * Time.deltaTime;
-            else
-                GameSpeed += 0.01f * 60 * Time.deltaTime;*/
-
-            if (GameSpeed >= 2)
-                b = true;
-            else if (GameSpeed <= 0.5f)
-                b = false;
-
-            if (GameSpeed > 100)
-                GameSpeed = 100;
-
-            if (GameSpeed < 0)
-                GameSpeed = 0;
-
-            //일시정지
-            if (일시정지 && PlayerHP > 0.0001f)
-                Time.timeScale = 0;
-            else if (!일시정지 && PlayerHP > 0.0001f)
-                Time.timeScale = GameSpeed;
-
-            if (Input.GetKey(KeyCode.V) && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
+            //인벤토리
+            if (!ChattingManager.ChattingActive && !InvManager.InventoryShow)
             {
-                PlayerDamage(Random.Range(5, 11), false, 0);
-                //PlayerDamage(130, false);
+                if (Input.GetKeyDown(KeyCode.Minus) || MinusKey)
+                {
+                    if (MinusKey)
+                        ButtonPointer = false;
+
+                    PlayerInvLine -= 1;
+                    if (PlayerInvLine < 0)
+                        PlayerInvLine = PlayerInvMaxLine;
+                    if (PlayerInvMaxLine < PlayerInvLine)
+                        PlayerInvLine = 0;
+                    if (PlayerInvLine * 10 > PlayerInv.Count)
+                    {
+                        while (PlayerInvLine * 10 > PlayerInv.Count)
+                            PlayerInvLine -= 1;
+                    }
+
+                    MinusKey = false;
+                }
+
+                if (Input.GetKeyDown(KeyCode.Equals) || PlusKey)
+                {
+                    if (PlusKey)
+                        ButtonPointer = false;
+
+                    PlayerInvLine += 1;
+                    if (PlayerInvLine <= 0)
+                        PlayerInvLine = PlayerInvMaxLine;
+                    if (PlayerInvMaxLine < PlayerInvLine)
+                        PlayerInvLine = 0;
+                    if (PlayerInvLine * 10 > PlayerInv.Count)
+                        PlayerInvLine = 0;
+
+                    PlusKey = false;
+                }
+
+                if (PlayerInv.Count >= 10)
+                {
+                    MinusButton.SetActive(true);
+                    PlusButton.SetActive(true);
+                }
+                else
+                {
+                    MinusButton.SetActive(false);
+                    PlusButton.SetActive(false);
+                }
+
+                if (0 < Input.GetAxis("Mouse ScrollWheel"))
+                {
+                    PlayerInvCannes -= 1;
+                    PlayerAV = 0;
+                    if (PlayerInvCannes < 0)
+                        PlayerInvCannes = 8;
+                }
+                if (0 > Input.GetAxis("Mouse ScrollWheel"))
+                {
+                    PlayerInvCannes += 1;
+                    PlayerAV = 0;
+                    if (PlayerInvCannes > 8)
+                        PlayerInvCannes = 0;
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha1))
+                {
+                    if (PlayerInvCannes != 0)
+                    {
+                        PlayerAV = 0;
+                        PlayerInvCannes = 0;
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha2))
+                {
+                    if (PlayerInvCannes != 1)
+                    {
+                        PlayerAV = 0;
+                        PlayerInvCannes = 1;
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha3))
+                {
+                    if (PlayerInvCannes != 2)
+                    {
+                        PlayerAV = 0;
+                        PlayerInvCannes = 2;
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha4))
+                {
+                    if (PlayerInvCannes != 3)
+                    {
+                        PlayerAV = 0;
+                        PlayerInvCannes = 3;
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha5))
+                {
+                    if (PlayerInvCannes != 4)
+                    {
+                        PlayerAV = 0;
+                        PlayerInvCannes = 4;
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha6))
+                {
+                    if (PlayerInvCannes != 5)
+                    {
+                        PlayerAV = 0;
+                        PlayerInvCannes = 5;
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha7))
+                {
+                    if (PlayerInvCannes != 6)
+                    {
+                        PlayerAV = 0;
+                        PlayerInvCannes = 6;
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha8))
+                {
+                    if (PlayerInvCannes != 7)
+                    {
+                        PlayerAV = 0;
+                        PlayerInvCannes = 7;
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha9))
+                {
+                    if (PlayerInvCannes != 8)
+                    {
+                        PlayerAV = 0;
+                        PlayerInvCannes = 8;
+                    }
+                }
             }
 
-            //무적 시간
-            PlayerDamageDelayTimer += Time.deltaTime;
+            if (PlayerInv.Count - 1 < PlayerInvCannes + PlayerInvLine * 9)
+                PlayerInvItem = "air";
+            else
+                PlayerInvItem = PlayerInv[PlayerInvCannes + PlayerInvLine * 9];
 
-            //게임 오버
+            //AV
+            if (PlayerAV <= PlayerMaxAV)
+                PlayerAV += PlayerMaxAV / (60 * PlayerAS) * (60 * Time.deltaTime);
+
+            if (PlayerAV >= PlayerMaxAV)
+                PlayerAV = PlayerMaxAV;
+
+            //HG
+            if (PlayerHG >= PlayerMaxHG && PlayerHGSaturationLevel > 0 && PlayerHP < PlayerMaxHP)
+            {
+                PlayerHGTickTimer += Time.deltaTime;
+                if (PlayerHGTickTimer > 0.5f)
+                {
+                    PlayerHP += 1;
+                    PlayerHGSaturationLevel -= 1.5f;
+                    PlayerHGTickTimer = 0;
+                }
+            }
+            else if (0.9f <= PlayerHG / PlayerMaxHG && PlayerHGSaturationLevel <= 0 && PlayerHP < PlayerMaxHP)
+            {
+                PlayerHGTickTimer += Time.deltaTime;
+                if (PlayerHGTickTimer > 4)
+                {
+                    PlayerHP += 1;
+                    PlayerHG -= 1.5f;
+                    PlayerHGTickTimer = 0;
+                }
+            }
+
+            PlayerMaxSpeed = 7.1f;
+            PlayerJumpPower = 8.17f;
+            if (PlayerHG / PlayerMaxHG < 0.3f && !event_soft_lock.Play && PlayerHGSpeedDown)
+                PlayerMaxSpeed = 7.1f * 0.75f;
+
+            if (PlayerHG <= 0)
+            {
+                PlayerHGTickTimer += Time.deltaTime;
+                if (PlayerHGTickTimer > 4)
+                {
+                    PlayerDamage(1, false, 0);
+                    PlayerHGTickTimer = 0;
+                }
+            }
+
+            if (PlayerMove && !MainMenu)
+                PlayerHGExhaustionLevel += 0.001f;
+
+            if (PlayerHGExhaustionLevel >= 4)
+            {
+                if (PlayerHGSaturationLevel <= 0)
+                    PlayerHG -= 1;
+                else
+                    PlayerHGSaturationLevel -= 1;
+
+                PlayerHGExhaustionLevel = 0;
+            }
+
+            if (PlayerHGSaturationLevel >= PlayerHG)
+                PlayerHGSaturationLevel = PlayerHG;
+
+            if (PlayerHGSaturationLevel < 0)
+                PlayerHGSaturationLevel = 0;
+
+            //자동 시작
+            if (MainMenu)
+            {
+                if (PlayerX <= -7 && PlayerX >= -8.5f && (Input.GetButton("Horizontal") || LeftKey || RightKey))
+                {
+                    MainMenu = false;
+                    MapMove = true;
+                    if (!Boss)
+                        SoundRestart = true;
+                }
+                else if (PlayerX >= 7 && PlayerX <= 8.5f && (Input.GetButton("Horizontal") || LeftKey || RightKey))
+                {
+                    MainMenu = false;
+                    MapMove = true;
+                    if (!Boss)
+                        SoundRestart = true;
+                }
+            }
+
+            //메인 메뉴로
+            if (!MainMenu)
+            {
+                if (Input.GetKeyDown(KeyCode.M) && !ChattingManager.ChattingActive && !InvManager.InventoryShow && !GameManager.DeltaruneBattle)
+                {
+                    if (Player.rigid.velocity.x <= 0.0025f && Player.rigid.velocity.x >= -0.0025f && Player.rigid.velocity.y <= 0.0025f && Player.rigid.velocity.y >= -0.0025f && !event_soft_lock.Play)
+                    {
+                        PlayerAV = PlayerMaxAV;
+                        mainMenu();
+                    }
+                }
+            }
+        }
+
+        //HP, HG가 최대 HP또는 HG를 넘어섰을때
+        if (PlayerMaxHP < PlayerHP)
+            PlayerHP = PlayerMaxHP;
+        if (PlayerMaxHG < PlayerHG)
+            PlayerHG = PlayerMaxHG;
+        if (PlayerHG < 0)
+            PlayerHG = 0;
+
+        /*if (b)
+            GameSpeed -= 0.01f * 60 * Time.deltaTime;
+        else
+            GameSpeed += 0.01f * 60 * Time.deltaTime;*/
+
+        if (GameSpeed >= 2)
+            b = true;
+        else if (GameSpeed <= 0.5f)
+            b = false;
+
+        if (GameSpeed > 100)
+            GameSpeed = 100;
+
+        if (GameSpeed < 0)
+            GameSpeed = 0;
+
+        //일시정지
+        if (일시정지 && PlayerHP > 0.0001f)
+            Time.timeScale = 0;
+        else if (!일시정지 && PlayerHP > 0.0001f)
+            Time.timeScale = GameSpeed;
+
+        if (Input.GetKey(KeyCode.V) && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
+        {
+            PlayerHP -= 5;
+            //PlayerDamage(Random.Range(5, 11), false, 0);
+            //PlayerDamage(130, false);
+        }
+
+        //무적 시간
+        PlayerDamageDelayTimer += Time.deltaTime;
+
+        //게임 오버
+        if (!DeltaruneBattle)
+        {
             if (PlayerHP < 0.0001f)
             {
                 if (PlayerY <= -50)
@@ -678,82 +706,21 @@ public class GameManager : MonoBehaviour
                 else
                     GameOver("시스템에 의해 데미지를 받았습니다");
             }
-
-            //주 음량 변경
-            if (MainVolTemp != MainVolume)
-                mainVolumeText.text = "주 음량: " + Mathf.Round(MainVolume * 100) + "%";
-            if (MainVolume <= -1)
-            {
-                MainVolume = 0;
-                mainVolumeText.text = "주 음량: 꺼짐";
-            }
-            MainVolTemp = MainVolume;
-
-            //ADOFAI Game
-            if (!ChattingManager.ChattingActive && !InvManager.InventoryShow)
-            {
-                if (ADOFAIKey == 0 && Input.GetKeyDown(KeyCode.A))
-                    ADOFAIKey = 1;
-                else if (ADOFAIKey == 1 && Input.GetKeyDown(KeyCode.D))
-                    ADOFAIKey = 2;
-                else if (ADOFAIKey == 2 && Input.GetKeyDown(KeyCode.O))
-                    ADOFAIKey = 3;
-                else if (ADOFAIKey == 3 && Input.GetKeyDown(KeyCode.F))
-                    ADOFAIKey = 4;
-                else if (ADOFAIKey == 4 && Input.GetKeyDown(KeyCode.A))
-                    ADOFAIKey = 5;
-                else if (ADOFAIKey == 5 && Input.GetKeyDown(KeyCode.I))
-                {
-                    if (!isAction && !일시정지)
-                    {
-                        MinecraftGame = false;
-                        ADOFAIGame = true;
-                    }
-
-                    ADOFAIKey = 0;
-                    Loading.LoadScene("ADOFAI", "A Dance of Fire and Ice");
-                }
-            }
-
-            //대화창 화살표 안보이게
-            if (!isAction)
-                대화창화살표.SetActive(false);
         }
 
-        if (ADOFAIGame)
+        //주 음량 변경
+        if (MainVolTemp != MainVolume)
+            mainVolumeText.text = "주 음량: " + Mathf.Round(MainVolume * 100) + "%";
+        if (MainVolume <= -1)
         {
-            if (!ChattingManager.ChattingActive && !InvManager.InventoryShow)
-            {
-                //Minecraft Game
-                if (MinecraftKey == 0 && Input.GetKeyDown(KeyCode.M))
-                    MinecraftKey = 1;
-                else if (MinecraftKey == 1 && Input.GetKeyDown(KeyCode.I))
-                    MinecraftKey = 2;
-                else if (MinecraftKey == 2 && Input.GetKeyDown(KeyCode.N))
-                    MinecraftKey = 3;
-                else if (MinecraftKey == 3 && Input.GetKeyDown(KeyCode.E))
-                    MinecraftKey = 4;
-                else if (MinecraftKey == 4 && Input.GetKeyDown(KeyCode.C))
-                    MinecraftKey = 5;
-                else if (MinecraftKey == 5 && Input.GetKeyDown(KeyCode.R))
-                    MinecraftKey = 6;
-                else if (MinecraftKey == 6 && Input.GetKeyDown(KeyCode.A))
-                    MinecraftKey = 7;
-                else if (MinecraftKey == 7 && Input.GetKeyDown(KeyCode.F))
-                    MinecraftKey = 8;
-                else if (MinecraftKey == 8 && Input.GetKeyDown(KeyCode.T))
-                {
-                    if (!isAction && !일시정지)
-                    {
-                        MinecraftGame = true;
-                        ADOFAIGame = false;
-                    }
-
-                    MinecraftKey = 0;
-                    Loading.LoadScene("마플 RPG", "마플 RPG");
-                }
-            }
+            MainVolume = 0;
+            mainVolumeText.text = "주 음량: 꺼짐";
         }
+        MainVolTemp = MainVolume;
+
+        //대화창 화살표 안보이게
+        if (!isAction)
+            대화창화살표.SetActive(false);
 
         //성능
         if (Graphic != tempGrabhic)
@@ -850,9 +817,6 @@ public class GameManager : MonoBehaviour
         _일시정지 = 일시정지;
 
         _SoundRestart = SoundRestart;
-
-        _MinecraftGame = MinecraftGame;
-        _ADOFAIGame = ADOFAIGame;
 
         _ButtonPointer = ButtonPointer;
         _LeftKey = LeftKey;
@@ -1150,9 +1114,9 @@ public class GameManager : MonoBehaviour
     //플레이어 데미지
     public void PlayerDamage(float damage, bool set, int type)
     {
-        if (!일시정지 && !isAction && PlayerHP > 0.0001F)
+        if (!일시정지 && !isAction && ((PlayerHP > 0.0001f && !DeltaruneBattle) || DeltaruneBattle))
         {
-            if (PlayerHP < 0)
+            if (PlayerHP < 0 && !DeltaruneBattle)
             {
                 PlayerHP = 0;
 

@@ -26,10 +26,21 @@ public class BeatManager : MonoBehaviour
                 }
                 else if (GameManager.MainMenu == false && !GameManager.Boss)
                 {
-                    if (GameManager.Map == 0)
+                    if (GameManager.Chapter == "Tutorial")
                     {
-                        GameManager.BPM = 0;
-                        GameManager.StartDelay = 0;
+                        if (GameManager.Map == 0)
+                        {
+                            GameManager.BPM = 0;
+                            GameManager.StartDelay = 0;
+                        }
+                    }
+                    else if (GameManager.Chapter == "test")
+                    {
+                        if (GameManager.Map == 0)
+                        {
+                            GameManager.BPM = 189.375f;
+                            GameManager.StartDelay = 0;
+                        }
                     }
                 }
             }

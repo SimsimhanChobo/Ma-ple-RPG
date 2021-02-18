@@ -446,10 +446,12 @@ public class CommandManager : MonoBehaviour
         ChattingManager.Message("MinedApple을(를) " + vector3.x + ", " + vector3.y + ", " + vector3.z + "(으)로 순간이동 시켰습니다.");
     }
 
-    public static void Motion(Vector3 vector3)
+    public static void Motion(Vector2 vector2)
     {
         Rigidbody2D rigidbody2D = Player.player.GetComponent<Rigidbody2D>();
-        rigidbody2D.velocity = vector3;
+        rigidbody2D.velocity = vector2;
+
+        ChattingManager.Message("MinedApple의 개체 데이터 Motion을(를) [" + vector2.x + "f, " + vector2.y + "f]로 변경했습니다");
     }
 
     public static void SetBlock(Vector3 vector3, string Block)
@@ -470,7 +472,10 @@ public class CommandManager : MonoBehaviour
         raycastHit2D = Physics2D.Raycast(vector3, new Vector2(0, 0.01f), 0.01f, LayerMask.GetMask("Map", "Water", "Fire", "Glass", "Stairs"));
 
         if (raycastHit2D.collider != null)
-            Destroy(raycastHit2D.collider.transform.parent.gameObject);
+        {
+            Destroy(raycastHit2D.collider.transform.gameObject);
+            BlockBrightness.Reload(vector3);
+        }
 
         if (Block == "air")
         {
@@ -519,8 +524,8 @@ public class CommandManager : MonoBehaviour
 
     public static void Kill()
     {
-        GameManager.gameManager.GetComponent<GameManager>().PlayerDamage(-GameManager.PlayerHP, true, 0);
-        if (GameManager.PlayerHP < 0)
+        GameManager.gameManager.GetComponent<GameManager>().PlayerDamage(ulong.MaxValue, false, 0);
+        if (GameManager.PlayerHP < 0 && !GameManager.DeltaruneBattle)
             GameManager.gameManager.GetComponent<GameManager>().GameOver("세계 밖으로 떨어졌습니다");
         ChattingManager.Message("MinedApple을(를) 죽였습니다");
     }
@@ -528,7 +533,7 @@ public class CommandManager : MonoBehaviour
     public static void Damage(float Damage, int Type)
     {
         GameManager.gameManager.GetComponent<GameManager>().PlayerDamage(Damage, false, Type);
-        if (GameManager.PlayerHP < 0)
+        if (GameManager.PlayerHP < 0 && !GameManager.DeltaruneBattle)
             GameManager.gameManager.GetComponent<GameManager>().GameOver("너무 많은 데미지 명령어를 받았습니다");
         ChattingManager.Message("MinedApple의 개체 데이터를 변경했습니다");
     }

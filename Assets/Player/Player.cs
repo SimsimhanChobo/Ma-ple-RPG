@@ -108,443 +108,451 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        rigid.bodyType = RigidbodyType2D.Dynamic;
-
-        //X좌표랑 Y좌표 정하기
-        GameManager.PlayerX = Mathf.Round(transform.position.x * 100) * 0.01f;
-        GameManager.PlayerY = Mathf.Round(transform.position.y * 100) * 0.01f;
-        GameManager.PlayerZ = Mathf.Round(transform.position.z * 100) * 0.01f;
-
-        if (!GameManager.일시정지)
+        if (!GameManager.DeltaruneBattle && !DeltaruneBattleManager.StartAni && !DeltaruneBattleManager.EndAni)
         {
-            //뱡향 전환
-            if (!ChattingManager.ChattingActive && !InvManager.InventoryShow)
+            rigid.bodyType = RigidbodyType2D.Dynamic;
+
+            //X좌표랑 Y좌표 정하기
+            GameManager.PlayerX = Mathf.Round(transform.position.x * 100) * 0.01f;
+            GameManager.PlayerY = Mathf.Round(transform.position.y * 100) * 0.01f;
+            GameManager.PlayerZ = Mathf.Round(transform.position.z * 100) * 0.01f;
+
+            if (!GameManager.일시정지)
             {
-                if (Input.GetButton("Horizontal"))
-                    flipX = (int)Input.GetAxisRaw("Horizontal");
-
-                if (GameManager.LeftKey)
-                    flipX = -1;
-                if (GameManager.RightKey)
-                    flipX = 1;
-
-                if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
+                //뱡향 전환
+                if (!ChattingManager.ChattingActive && !InvManager.InventoryShow)
                 {
-                    rigid.velocity = new Vector2(0, rigid.velocity.y);
-                    GameManager.PlayerMove = false;
+                    if (Input.GetButton("Horizontal"))
+                        flipX = (int)Input.GetAxisRaw("Horizontal");
+
+                    if (GameManager.LeftKey)
+                        flipX = -1;
+                    if (GameManager.RightKey)
+                        flipX = 1;
+
+                    if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
+                    {
+                        rigid.velocity = new Vector2(0, rigid.velocity.y);
+                        GameManager.PlayerMove = false;
+                    }
+
+                    if (Input.GetKey(KeyCode.LeftArrow) && Input.GetKey(KeyCode.RightArrow))
+                    {
+                        rigid.velocity = new Vector2(0, rigid.velocity.y);
+                        GameManager.PlayerMove = false;
+                    }
                 }
 
-                if (Input.GetKey(KeyCode.LeftArrow) && Input.GetKey(KeyCode.RightArrow))
+                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, -1.2f * 0.9f, 0), new Color(0, 1, 0));
+                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, -1.2f * 0.9f, 0), new Color(0, 1, 0));
+                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, -1.2f * 0.9f, 0), new Color(0, 1, 0));
+
+                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1.5f * 0.9f), new Vector3(0, 0.5f * 0.9f, 0), new Color(0, 0, 1));
+                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1.5f * 0.9f), new Vector3(-0.251f * 0.9f, 0.5f * 0.9f, 0), new Color(0, 0, 1));
+                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1.5f * 0.9f), new Vector3(0.21f * 0.9f, 0.5f * 0.9f, 0), new Color(0, 0, 1));
+
+                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, 1 * 0.9f, 0), new Color(0, 1, 0));
+
+                Debug.DrawRay(new Vector2(rigid.position.x - 2, rigid.position.y + 1 * 0.9f), new Vector3(4, 0, 0), new Color(0, 1, 0));
+
+                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 0.5f * 0.9f), new Vector3(0, -0.5f * 0.9f, 0), new Color(0, 1, 0));
+                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 0.5f * 0.9f), new Vector3(-0.111f * 0.9f, -0.5f * 0.9f, 0), new Color(0, 1, 0));
+                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 0.5f * 0.9f), new Vector3(0.111f * 0.9f, -0.5f * 0.9f, 0), new Color(0, 1, 0));
+
+                //점프 레이캐스트
+                Jump = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, -1.2f * 0.9f, 0), 1.2f * 0.9f, LayerMask.GetMask("Map", "Stairs", "Glass", "Entity Collider"));
+                Jump2 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, -1.2f * 0.9f, 0), 1.2f * 0.9f, LayerMask.GetMask("Map", "Stairs", "Glass", "Entity Collider"));
+                Jump3 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, -1.2f * 0.9f, 0), 1.2f * 0.9f, LayerMask.GetMask("Map", "Stairs", "Glass", "Entity Collider"));
+
+                //물 레이캐스트
+                Water = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, -1f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Water"));
+                Water2 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, -1f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Water"));
+                Water3 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, -1f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Water"));
+
+                Water4 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1.51f * 0.9f), new Vector3(0, 0.5f * 0.9f, 0), 0.5f, LayerMask.GetMask("Water"));
+                Water5 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1.51f * 0.9f), new Vector3(-0.251f * 0.9f, 0.5f * 0.9f, 0), 0.5f * 0.9f, LayerMask.GetMask("Water"));
+                Water6 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1.51f * 0.9f), new Vector3(0.251f * 0.9f, 0.5f * 0.9f, 0), 0.5f * 0.9f, LayerMask.GetMask("Water"));
+
+                Water7 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, 1 * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Water"));
+                Water8 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, 1 * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Water"));
+                Water9 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, 1 * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Water"));
+
+                //불 레이캐스트
+                Fire = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, -1f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Fire"));
+                Fire2 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, -1f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Fire"));
+                Fire3 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, -1f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Fire"));
+
+                Jump4 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, 1 * 0.9f, 0), 1, LayerMask.GetMask("Map", "Entity Collider"));
+
+                //사다리 레이캐스트
+                Ladder = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 0.5f * 0.9f), new Vector3(0, -1f * 0.9f, 0), 0.5f * 0.9f, LayerMask.GetMask("Ladder"));
+                Ladder2 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 0.5f * 0.9f), new Vector3(-0.111f * 0.9f, -0.5f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Ladder"));
+                Ladder3 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 0.5f * 0.9f), new Vector3(0.111f * 0.9f, -0.5f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Ladder"));
+
+                //질식
+                Suffocat = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1.51f * 0.9f), new Vector3(0, 0.5f * 0.9f, 0), 0.5f, LayerMask.GetMask("Map", "Entity Collider"));
+                Suffocat2 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1.51f * 0.9f), new Vector3(-0.251f * 0.9f, 0.5f * 0.9f, 0), 0.5f * 0.9f, LayerMask.GetMask("Map", "Entity Collider"));
+                Suffocat3 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1.51f * 0.9f), new Vector3(0.251f * 0.9f, 0.5f * 0.9f, 0), 0.5f * 0.9f, LayerMask.GetMask("Map", "Entity Collider"));
+
+                if (Jump.collider != null)
                 {
-                    rigid.velocity = new Vector2(0, rigid.velocity.y);
-                    GameManager.PlayerMove = false;
-                }
-            }
-
-            Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, -1.2f * 0.9f, 0), new Color(0, 1, 0));
-            Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, -1.2f * 0.9f, 0), new Color(0, 1, 0));
-            Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, -1.2f * 0.9f, 0), new Color(0, 1, 0));
-
-            Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1.5f * 0.9f), new Vector3(0, 0.5f * 0.9f, 0), new Color(0, 0, 1));
-            Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1.5f * 0.9f), new Vector3(-0.251f * 0.9f, 0.5f * 0.9f, 0), new Color(0, 0, 1));
-            Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1.5f * 0.9f), new Vector3(0.21f * 0.9f, 0.5f * 0.9f, 0), new Color(0, 0, 1));
-
-            Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, 1 * 0.9f, 0), new Color(0, 1, 0));
-
-            Debug.DrawRay(new Vector2(rigid.position.x - 2, rigid.position.y + 1 * 0.9f), new Vector3(4, 0, 0), new Color(0, 1, 0));
-
-            Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 0.5f * 0.9f), new Vector3(0, -0.5f * 0.9f, 0), new Color(0, 1, 0));
-            Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 0.5f * 0.9f), new Vector3(-0.111f * 0.9f, -0.5f * 0.9f, 0), new Color(0, 1, 0));
-            Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 0.5f * 0.9f), new Vector3(0.111f * 0.9f, -0.5f * 0.9f, 0), new Color(0, 1, 0));
-
-            //점프 레이캐스트
-            Jump = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, -1.2f * 0.9f, 0), 1.2f * 0.9f, LayerMask.GetMask("Map", "Stairs", "Glass", "Entity Collider"));
-            Jump2 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, -1.2f * 0.9f, 0), 1.2f * 0.9f, LayerMask.GetMask("Map", "Stairs", "Glass", "Entity Collider"));
-            Jump3 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, -1.2f * 0.9f, 0), 1.2f * 0.9f, LayerMask.GetMask("Map", "Stairs", "Glass", "Entity Collider"));
-
-            //물 레이캐스트
-            Water = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, -1f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Water"));
-            Water2 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, -1f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Water"));
-            Water3 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, -1f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Water"));
-
-            Water4 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1.51f * 0.9f), new Vector3(0, 0.5f * 0.9f, 0), 0.5f, LayerMask.GetMask("Water"));
-            Water5 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1.51f * 0.9f), new Vector3(-0.251f * 0.9f, 0.5f * 0.9f, 0), 0.5f * 0.9f, LayerMask.GetMask("Water"));
-            Water6 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1.51f * 0.9f), new Vector3(0.251f * 0.9f, 0.5f * 0.9f, 0), 0.5f * 0.9f, LayerMask.GetMask("Water"));
-
-            Water7 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, 1 * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Water"));
-            Water8 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, 1 * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Water"));
-            Water9 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, 1 * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Water"));
-
-            //불 레이캐스트
-            Fire = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, -1f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Fire"));
-            Fire2 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, -1f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Fire"));
-            Fire3 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, -1f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Fire"));
-
-            Jump4 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, 1 * 0.9f, 0), 1, LayerMask.GetMask("Map", "Entity Collider"));
-
-            //사다리 레이캐스트
-            Ladder = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 0.5f * 0.9f), new Vector3(0, -1f * 0.9f, 0), 0.5f * 0.9f, LayerMask.GetMask("Ladder"));
-            Ladder2 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 0.5f * 0.9f), new Vector3(-0.111f * 0.9f, -0.5f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Ladder"));
-            Ladder3 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 0.5f * 0.9f), new Vector3(0.111f * 0.9f, -0.5f * 0.9f, 0), 1f * 0.9f, LayerMask.GetMask("Ladder"));
-
-            //질식
-            Suffocat = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1.51f * 0.9f), new Vector3(0, 0.5f * 0.9f, 0), 0.5f, LayerMask.GetMask("Map", "Entity Collider"));
-            Suffocat2 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1.51f * 0.9f), new Vector3(-0.251f * 0.9f, 0.5f * 0.9f, 0), 0.5f * 0.9f, LayerMask.GetMask("Map", "Entity Collider"));
-            Suffocat3 = Physics2D.Raycast(new Vector2(rigid.position.x, rigid.position.y + 1.51f * 0.9f), new Vector3(0.251f * 0.9f, 0.5f * 0.9f, 0), 0.5f * 0.9f, LayerMask.GetMask("Map", "Entity Collider"));
-
-            if (Jump.collider != null)
-            {
-                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, -1.2f * 0.9f, 0), new Color(1, 0, 0));
-                jump = true;
-            }
-
-            if (Jump2.collider != null)
-            {
-                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, -1.2f * 0.9f, 0), new Color(1, 0, 0));
-                jump = true;
-            }
-
-            if (Jump3.collider != null)
-            {
-                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, -1.2f * 0.9f, 0), new Color(1, 0, 0));
-                jump = true;
-            }
-
-
-
-            if (Jump.collider == null && Jump2.collider == null && Jump3.collider == null)
-                jump = false;
-
-
-
-            if (Jump4.collider != null)
-            {
-                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, 1 * 0.9f, 0), new Color(1, 0, 0));
-                jump = false;
-            }
-
-            if (Water.collider != null)
-                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, -1 * 0.9f, 0), new Color(1, 0, 1));
-
-            if (Water2.collider != null)
-                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, -1 * 0.9f, 0), new Color(1, 0, 1));
-
-            if (Water3.collider != null)
-                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, -1 * 0.9f, 0), new Color(1, 0, 1));
-
-            if (Water4.collider != null)
-                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, 1 * 0.9f, 0), new Color(1, 0, 1));
-
-            if (Water5.collider != null)
-                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, 1 * 0.9f, 0), new Color(1, 0, 1));
-
-            if (Water6.collider != null)
-                Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, 1 * 0.9f, 0), new Color(1, 0, 1));
-
-            //AIR
-            if (Water4.collider != null || Water5.collider != null || Water6.collider != null)
-            {
-                Air -= 1 * (20 * Time.deltaTime);
-
-                AR슬라이더.SetActive(true);
-
-                if (Air <= -20)
-                {
-                    GameManager.gameManager.PlayerDamage(2, false, 1);
-                    if (GameManager.PlayerHP < 0.0001f)
-                        GameManager.gameManager.GameOver("익사 했습니다");
-
-                    Air = 0;
+                    Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, -1.2f * 0.9f, 0), new Color(1, 0, 0));
+                    jump = true;
                 }
 
-            }
-            else
-            {
-                Air += 4 * (20 * Time.deltaTime);
-                AR슬라이더.SetActive(true);
-                if (Air >= 300)
+                if (Jump2.collider != null)
                 {
-                    AR슬라이더.SetActive(false);
-                    AR슬라이더2.value = 300;
-                    Air = 300;
+                    Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, -1.2f * 0.9f, 0), new Color(1, 0, 0));
+                    jump = true;
                 }
-            }
 
-            //불 데미지
-            if (Fire.collider != null || Fire2.collider != null || Fire3.collider != null)
-            {
-                PlayerFire.SetActive(true);
-
-                FireTimer = 10;
-
-                FireTimer2 += Time.deltaTime;
-
-                if (FireTimer2 >= 0.5f)
+                if (Jump3.collider != null)
                 {
-                    GameManager.gameManager.PlayerDamage(1, false, 2);
-                    if (GameManager.PlayerHP < 0.0001f)
-                        GameManager.gameManager.GameOver("화염에 휩싸였습니다");
-
-                    FireTimer2 = 0;
+                    Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, -1.2f * 0.9f, 0), new Color(1, 0, 0));
+                    jump = true;
                 }
-            }
-            else if (FireTimer > 0)
-            {
-                PlayerFire.SetActive(true);
 
-                FireTimer -= Time.deltaTime;
 
-                FireTimer2 += Time.deltaTime;
 
-                if (FireTimer2 >= 1f)
+                if (Jump.collider == null && Jump2.collider == null && Jump3.collider == null)
+                    jump = false;
+
+
+
+                if (Jump4.collider != null)
                 {
-                    GameManager.gameManager.PlayerDamage(1, false, 2);
-                    if (GameManager.PlayerHP < 0.0001f)
-                        GameManager.gameManager.GameOver("불에 타 사망했습니다");
-
-                    FireTimer2 = 0;
+                    Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, 1 * 0.9f, 0), new Color(1, 0, 0));
+                    jump = false;
                 }
-            }
-            else
-            {
-                PlayerFire.SetActive(false);
 
-                FireTimer = 0;
-                FireTimer2 = 1;
-            }
+                if (Water.collider != null)
+                    Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, -1 * 0.9f, 0), new Color(1, 0, 1));
 
-            if (Water.collider != null || Water2.collider != null || Water3.collider != null || Water4.collider != null || Water5.collider != null || Water6.collider != null || Water7.collider != null || Water8.collider != null || Water9.collider != null)
-            {
-                FireTimer = 0;
-                FireTimer2 = 1;
-            }
+                if (Water2.collider != null)
+                    Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, -1 * 0.9f, 0), new Color(1, 0, 1));
 
-            //질식
-            if (Suffocat.collider != null && Suffocat2.collider != null && Suffocat3.collider != null)
-            {
-                SuffocatTimer += Time.deltaTime;
-                if (SuffocatTimer >= 0.5f)
+                if (Water3.collider != null)
+                    Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, -1 * 0.9f, 0), new Color(1, 0, 1));
+
+                if (Water4.collider != null)
+                    Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0, 1 * 0.9f, 0), new Color(1, 0, 1));
+
+                if (Water5.collider != null)
+                    Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(-0.111f * 0.9f, 1 * 0.9f, 0), new Color(1, 0, 1));
+
+                if (Water6.collider != null)
+                    Debug.DrawRay(new Vector2(rigid.position.x, rigid.position.y + 1 * 0.9f), new Vector3(0.111f * 0.9f, 1 * 0.9f, 0), new Color(1, 0, 1));
+
+                //AIR
+                if (Water4.collider != null || Water5.collider != null || Water6.collider != null)
                 {
-                    GameManager.gameManager.PlayerDamage(1, false, 0);
-                    if (GameManager.PlayerHP < 0.0001f)
-                        GameManager.gameManager.GameOver("벽 속에서 질식했습니다");
+                    Air -= 1 * (20 * Time.deltaTime);
+
+                    AR슬라이더.SetActive(true);
+
+                    if (Air <= -20)
+                    {
+                        GameManager.gameManager.PlayerDamage(2, false, 1);
+                        if (GameManager.PlayerHP < 0.0001f)
+                            GameManager.gameManager.GameOver("익사 했습니다");
+
+                        Air = 0;
+                    }
+
+                }
+                else
+                {
+                    Air += 4 * (20 * Time.deltaTime);
+                    AR슬라이더.SetActive(true);
+                    if (Air >= 300)
+                    {
+                        AR슬라이더.SetActive(false);
+                        AR슬라이더2.value = 300;
+                        Air = 300;
+                    }
+                }
+
+                //불 데미지
+                if (Fire.collider != null || Fire2.collider != null || Fire3.collider != null)
+                {
+                    PlayerFire.SetActive(true);
+
+                    FireTimer = 10;
+
+                    FireTimer2 += Time.deltaTime;
+
+                    if (FireTimer2 >= 0.5f)
+                    {
+                        GameManager.gameManager.PlayerDamage(1, false, 2);
+                        if (GameManager.PlayerHP < 0.0001f)
+                            GameManager.gameManager.GameOver("화염에 휩싸였습니다");
+
+                        FireTimer2 = 0;
+                    }
+                }
+                else if (FireTimer > 0)
+                {
+                    PlayerFire.SetActive(true);
+
+                    FireTimer -= Time.deltaTime;
+
+                    FireTimer2 += Time.deltaTime;
+
+                    if (FireTimer2 >= 1f)
+                    {
+                        GameManager.gameManager.PlayerDamage(1, false, 2);
+                        if (GameManager.PlayerHP < 0.0001f)
+                            GameManager.gameManager.GameOver("불에 타 사망했습니다");
+
+                        FireTimer2 = 0;
+                    }
+                }
+                else
+                {
+                    PlayerFire.SetActive(false);
+
+                    FireTimer = 0;
+                    FireTimer2 = 1;
+                }
+
+                if (Water.collider != null || Water2.collider != null || Water3.collider != null || Water4.collider != null || Water5.collider != null || Water6.collider != null || Water7.collider != null || Water8.collider != null || Water9.collider != null)
+                {
+                    FireTimer = 0;
+                    FireTimer2 = 1;
+                }
+
+                //질식
+                if (Suffocat.collider != null && Suffocat2.collider != null && Suffocat3.collider != null)
+                {
+                    SuffocatTimer += Time.deltaTime;
+                    if (SuffocatTimer >= 0.5f)
+                    {
+                        GameManager.gameManager.PlayerDamage(1, false, 0);
+                        if (GameManager.PlayerHP < 0.0001f)
+                            GameManager.gameManager.GameOver("벽 속에서 질식했습니다");
+                        SuffocatTimer = 0;
+                    }
+                }
+                else
                     SuffocatTimer = 0;
-                }
-            }
-            else
-                SuffocatTimer = 0;
 
-            //공격
-            if (Input.GetKeyDown(KeyCode.Mouse0) && GameManager.isAction == false && !GameManager.ButtonPointer && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
-            {
-                Debug.DrawRay(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX * 3, 1), new Color(1, 0, 0));
-                Debug.DrawRay(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX * 3, 0), new Color(1, 0, 0));
-                Debug.DrawRay(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX * 3, -1), new Color(1, 0, 0));
-                RaycastHit2D raycastHit2D = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX, 0), 3, LayerMask.GetMask("Entity", "Entity Collider"));
-                if (raycastHit2D.collider == null) raycastHit2D = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX, 1), 3, LayerMask.GetMask("Entity", "Entity Collider"));
-                if (raycastHit2D.collider == null) raycastHit2D = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX, -1), 3, LayerMask.GetMask("Entity", "Entity Collider"));
-
-                if (raycastHit2D.collider != null)
+                //공격
+                if (Input.GetKeyDown(KeyCode.Mouse0) && GameManager.isAction == false && !GameManager.ButtonPointer && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
                 {
-                    if (!GameManager.MainMenu)
-                        GameManager.PlayerHGExhaustionLevel += 0.1f;
+                    Debug.DrawRay(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX * 3, 1), new Color(1, 0, 0));
+                    Debug.DrawRay(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX * 3, 0), new Color(1, 0, 0));
+                    Debug.DrawRay(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX * 3, -1), new Color(1, 0, 0));
+                    RaycastHit2D raycastHit2D = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX, 0), 3, LayerMask.GetMask("Entity", "Entity Collider"));
+                    if (raycastHit2D.collider == null) raycastHit2D = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX, 1), 3, LayerMask.GetMask("Entity", "Entity Collider"));
+                    if (raycastHit2D.collider == null) raycastHit2D = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 1), new Vector2(flipX, -1), 3, LayerMask.GetMask("Entity", "Entity Collider"));
 
-                    if (rigid.velocity.y < 0)
-                        raycastHit2D.collider.GetComponent<EntitySetting>().Damage(GameManager.PlayerAttack * GameManager.PlayerAV / GameManager.PlayerMaxAV * 1.5f, false, 0, true, true);
-                    else
-                        raycastHit2D.collider.GetComponent<EntitySetting>().Damage(GameManager.PlayerAttack * GameManager.PlayerAV / GameManager.PlayerMaxAV, false, 0, true, false);
+                    if (raycastHit2D.collider != null)
+                    {
+                        if (!GameManager.MainMenu)
+                            GameManager.PlayerHGExhaustionLevel += 0.1f;
+
+                        if (rigid.velocity.y < 0)
+                            raycastHit2D.collider.GetComponent<EntitySetting>().Damage(GameManager.PlayerAttack * GameManager.PlayerAV / GameManager.PlayerMaxAV * 1.5f, false, 0, true, true);
+                        else
+                            raycastHit2D.collider.GetComponent<EntitySetting>().Damage(GameManager.PlayerAttack * GameManager.PlayerAV / GameManager.PlayerMaxAV, false, 0, true, false);
+                    }
+
+                    GameManager.PlayerAV = 0;
+                    Attack = true;
+                    Timer = 0;
                 }
 
-                GameManager.PlayerAV = 0;
-                Attack = true;
-                Timer = 0;
-            }
+                //공격 모션
+                if (Attack)
+                {
+                    Timer += Time.deltaTime;
 
-            //공격 모션
-            if (Attack)
-            {
-                Timer += Time.deltaTime;
+                    /*if (Timer > 0.04)
+                        마플캐릭터.sprite = 마플_3;
 
-                /*if (Timer > 0.04)
-                    마플캐릭터.sprite = 마플_3;
+                    if (GameManager.PlayerMaxAV / 7 * 3 < GameManager.PlayerAV / GameManager.PlayerMaxAV * 100)
+                        마플캐릭터.sprite = 마플_4;
+                    if (GameManager.PlayerMaxAV / 7 * 4 < GameManager.PlayerAV / GameManager.PlayerMaxAV * 100)
+                        마플캐릭터.sprite = 마플_5;
+                    if (GameManager.PlayerMaxAV / 7 * 5 < GameManager.PlayerAV / GameManager.PlayerMaxAV * 100)
+                        마플캐릭터.sprite = 마플_6;
+                    if (GameManager.PlayerMaxAV / 7 * 6 < GameManager.PlayerAV / GameManager.PlayerMaxAV * 100)
+                        마플캐릭터.sprite = 마플_7;
+                    if (GameManager.PlayerMaxAV / 7 * 7 < GameManager.PlayerAV / GameManager.PlayerMaxAV * 100)
+                        마플캐릭터.sprite = 마플_8;*/
+                    if (GameManager.PlayerAV == GameManager.PlayerMaxAV)
+                        Attack = false;
+                }
 
-                if (GameManager.PlayerMaxAV / 7 * 3 < GameManager.PlayerAV / GameManager.PlayerMaxAV * 100)
-                    마플캐릭터.sprite = 마플_4;
-                if (GameManager.PlayerMaxAV / 7 * 4 < GameManager.PlayerAV / GameManager.PlayerMaxAV * 100)
-                    마플캐릭터.sprite = 마플_5;
-                if (GameManager.PlayerMaxAV / 7 * 5 < GameManager.PlayerAV / GameManager.PlayerMaxAV * 100)
-                    마플캐릭터.sprite = 마플_6;
-                if (GameManager.PlayerMaxAV / 7 * 6 < GameManager.PlayerAV / GameManager.PlayerMaxAV * 100)
-                    마플캐릭터.sprite = 마플_7;
-                if (GameManager.PlayerMaxAV / 7 * 7 < GameManager.PlayerAV / GameManager.PlayerMaxAV * 100)
-                    마플캐릭터.sprite = 마플_8;*/
-                if (GameManager.PlayerAV == GameManager.PlayerMaxAV)
-                    Attack = false;
-            }
+                //세계 밖으로 떨어졌을때
+                if (transform.position.y <= -50 && GameManager.PlayerHP > 0.0001f)
+                    GameManager.gameManager.PlayerDamage(0.18f * GameManager.PlayerMaxHP, false, 0);
 
-            //세계 밖으로 떨어졌을때
-            if (transform.position.y <= -50 && GameManager.PlayerHP > 0.0001f)
-                GameManager.gameManager.PlayerDamage(0.18f * GameManager.PlayerMaxHP, false, 0);
+                //낙뎀
+                if (!jump)
+                {
+                    if (rigid.velocity.y >= 0)
+                        FallDamage3 = transform.position.y;
 
-            //낙뎀
-            if (!jump)
-            {
-                if (rigid.velocity.y >= 0)
+                    FallDamage4 = false;
+
+                    if (FallDamage < transform.position.y - FallDamage3)
+                    {
+                        int i = 0;
+                        while (FallDamage < transform.position.y - FallDamage3)
+                        {
+                            FallDamage--;
+                            FallDamage2++;
+                            i++;
+                            if (i >= 1000)
+                                break;
+                        }
+                    }
+                    if (FallDamage2 > transform.position.y - FallDamage3)
+                    {
+                        int i = 0;
+                        while (FallDamage2 > transform.position.y - FallDamage3)
+                        {
+                            FallDamage++;
+                            FallDamage2--;
+                            i++;
+                            if (i >= 1000)
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    FallDamage2 = 0;
                     FallDamage3 = transform.position.y;
-
-                FallDamage4 = false;
-
-                if (FallDamage < transform.position.y - FallDamage3)
-                {
-                    int i = 0;
-                    while (FallDamage < transform.position.y - FallDamage3)
-                    {
-                        FallDamage--;
-                        FallDamage2++;
-                        i++;
-                        if (i >= 1000)
-                            break;
-                    }
                 }
-                if (FallDamage2 > transform.position.y - FallDamage3)
+
+                if (!FallDamage4 && jump && Water.collider == null && Water2.collider == null && Water3.collider == null && Water4.collider == null && Water5.collider == null && Water6.collider == null && Water7.collider == null && Water8.collider == null && Water9.collider == null && Ladder.collider == null && Ladder2.collider == null && Ladder3.collider == null)
                 {
-                    int i = 0;
-                    while (FallDamage2 > transform.position.y - FallDamage3)
-                    {
-                        FallDamage++;
-                        FallDamage2--;
-                        i++;
-                        if (i >= 1000)
-                            break;
-                    }
+                    Debug.Log("Fall " + FallDamage);
+                    if (FallDamage > 3)
+                        GameManager.gameManager.PlayerDamage(FallDamage - 3, false, 0);
+
+                    if (GameManager.PlayerHP < 0.0001f && FallDamage - 3 > 2)
+                        GameManager.gameManager.GameOver("높은 곳에서 떨어졌습니다");
+                    else if (GameManager.PlayerHP < 0.0001f && FallDamage - 3 <= 2)
+                        GameManager.gameManager.GameOver("너무 세게 떨어졌습니다");
+
+                    FallDamage = 0;
+                    FallDamage4 = true;
                 }
-            }
-            else
-            {
-                FallDamage2 = 0;
-                FallDamage3 = transform.position.y;
-            }
+                if (Water.collider != null || Water2.collider != null || Water3.collider != null || Water4.collider != null || Water5.collider != null || Water6.collider != null || Water7.collider != null || Water8.collider != null || Water9.collider != null || Ladder.collider != null || Ladder2.collider != null || Ladder3.collider != null)
+                {
+                    FallDamage = 0;
+                    FallDamage2 = 0;
+                    FallDamage3 = transform.position.y;
+                    FallDamage4 = true;
+                }
 
-            if (!FallDamage4 && jump && Water.collider == null && Water2.collider == null && Water3.collider == null && Water4.collider == null && Water5.collider == null && Water6.collider == null && Water7.collider == null && Water8.collider == null && Water9.collider == null && Ladder.collider == null && Ladder2.collider == null && Ladder3.collider == null)
-            {
-                Debug.Log("Fall " + FallDamage);
-                if (FallDamage > 3)
-                    GameManager.gameManager.PlayerDamage(FallDamage - 3, false, 0);
+                //EVENT
+                Debug.DrawRay(transform.position, new Vector2(0, 2f), new Color(0, 1, 0));
+                soft_lock = Physics2D.Raycast(transform.position, new Vector2(0, 2f), 1f, LayerMask.GetMask("event.soft_lock"));
 
-                if (GameManager.PlayerHP < 0.0001f && FallDamage - 3 > 2)
-                    GameManager.gameManager.GameOver("높은 곳에서 떨어졌습니다");
-                else if (GameManager.PlayerHP < 0.0001f && FallDamage - 3 <= 2)
-                    GameManager.gameManager.GameOver("너무 세게 떨어졌습니다");
-
-                FallDamage = 0;
-                FallDamage4 = true;
-            }
-            if (Water.collider != null || Water2.collider != null || Water3.collider != null || Water4.collider != null || Water5.collider != null || Water6.collider != null || Water7.collider != null || Water8.collider != null || Water9.collider != null || Ladder.collider != null || Ladder2.collider != null || Ladder3.collider != null)
-            {
-                FallDamage = 0;
-                FallDamage2 = 0;
-                FallDamage3 = transform.position.y;
-                FallDamage4 = true;
+                if (soft_lock.collider != null && !event_soft_lock.Play)
+                    event_soft_lock.start = true;
             }
 
-            //EVENT
-            Debug.DrawRay(transform.position, new Vector2(0, 2f), new Color(0, 1, 0));
-            soft_lock = Physics2D.Raycast(transform.position, new Vector2(0, 2f), 1f, LayerMask.GetMask("event.soft_lock"));
-
-            if (soft_lock.collider != null && !event_soft_lock.Play)
-                event_soft_lock.start = true;
-        }
-
-        if (!GameManager.일시정지 || GameManager.isAction || GameManager.PlayerHP <= 0.0001f)
-        {
-            //애니메이션
-            if (MainCamera.Game3D)
+            if (!GameManager.일시정지 || GameManager.isAction || GameManager.PlayerHP <= 0.0001f)
             {
-                if (flipX == -1 && (!GameManager.isAction || GameManager.PlayerMove))
-                    SkinRotation.skinRotation("All", new Vector3(0, 90, 0));
-                else if ((flipX == 1 || flipX == 0) && (!GameManager.isAction || GameManager.PlayerMove))
-                    SkinRotation.skinRotation("All", new Vector3(0, -90, 0));
-            }
-            else
-            {
-                if (flipX == -1 && (!GameManager.isAction || GameManager.PlayerMove))
-                    SkinRotation.skinRotation("All", new Vector3(0, 90, 0), true);
-                else if ((flipX == 1 || flipX == 0) && (!GameManager.isAction || GameManager.PlayerMove))
-                    SkinRotation.skinRotation("All", new Vector3(0, -90, 0), true);
-            }
+                //애니메이션
+                if (MainCamera.Game3D)
+                {
+                    if (flipX == -1 && (!GameManager.isAction || GameManager.PlayerMove))
+                        SkinRotation.skinRotation("All", new Vector3(0, 90, 0));
+                    else if ((flipX == 1 || flipX == 0) && (!GameManager.isAction || GameManager.PlayerMove))
+                        SkinRotation.skinRotation("All", new Vector3(0, -90, 0));
+                }
+                else
+                {
+                    if (flipX == -1 && (!GameManager.isAction || GameManager.PlayerMove))
+                        SkinRotation.skinRotation("All", new Vector3(0, 90, 0), true);
+                    else if ((flipX == 1 || flipX == 0) && (!GameManager.isAction || GameManager.PlayerMove))
+                        SkinRotation.skinRotation("All", new Vector3(0, -90, 0), true);
+                }
 
-            if (GameManager.PlayerMove && GameManager.PlayerHP > 0.0001f)
-            {
-                MoveAniTimer += Time.deltaTime;
+                if (GameManager.PlayerMove && GameManager.PlayerHP > 0.0001f)
+                {
+                    MoveAniTimer += Time.deltaTime;
 
-                if (MoveAniTimer >= 0.3f)
+                    if (MoveAniTimer >= 0.3f)
+                        if (MoveB)
+                        {
+                            MoveAniTimer = 0;
+                            MoveB = false;
+                        }
+                        else
+                        {
+                            MoveAniTimer = 0;
+                            MoveB = true;
+                        }
+
                     if (MoveB)
                     {
-                        MoveAniTimer = 0;
-                        MoveB = false;
+                        SkinRotation.skinRotation("Left Arm", new Vector3(90f, 0, 0), false, 0.065f);
+                        SkinRotation.skinRotation("Right Arm", new Vector3(-90f, 0, 0), false, 0.065f);
+                        SkinRotation.skinRotation("Left Leg", new Vector3(-90f, 0, 0), false, 0.065f);
+                        SkinRotation.skinRotation("Right Leg", new Vector3(90f, 0, 0), false, 0.065f);
                     }
                     else
                     {
-                        MoveAniTimer = 0;
-                        MoveB = true;
+                        SkinRotation.skinRotation("Left Arm", new Vector3(-90f, 0, 0), false, 0.065f);
+                        SkinRotation.skinRotation("Right Arm", new Vector3(90f, 0, 0), false, 0.065f);
+                        SkinRotation.skinRotation("Left Leg", new Vector3(90f, 0, 0), false, 0.065f);
+                        SkinRotation.skinRotation("Right Leg", new Vector3(-90f, 0, 0), false, 0.065f);
                     }
-
-                if (MoveB)
-                {
-                    SkinRotation.skinRotation("Left Arm", new Vector3(90f, 0, 0), false, 0.065f);
-                    SkinRotation.skinRotation("Right Arm", new Vector3(-90f, 0, 0), false, 0.065f);
-                    SkinRotation.skinRotation("Left Leg", new Vector3(-90f, 0, 0), false, 0.065f);
-                    SkinRotation.skinRotation("Right Leg", new Vector3(90f, 0, 0), false, 0.065f);
                 }
                 else
                 {
-                    SkinRotation.skinRotation("Left Arm", new Vector3(-90f, 0, 0), false, 0.065f);
-                    SkinRotation.skinRotation("Right Arm", new Vector3(90f, 0, 0), false, 0.065f);
-                    SkinRotation.skinRotation("Left Leg", new Vector3(90f, 0, 0), false, 0.065f);
-                    SkinRotation.skinRotation("Right Leg", new Vector3(-90f, 0, 0), false, 0.065f);
+                    SkinRotation.skinRotation("Left Arm", new Vector3(0, 0, 0));
+                    SkinRotation.skinRotation("Right Arm", new Vector3(0, 0, 0));
+                    SkinRotation.skinRotation("Left Leg", new Vector3(0, 0, 0));
+                    SkinRotation.skinRotation("Right Leg", new Vector3(0, 0, 0));
                 }
-            }
-            else
-            {
-                SkinRotation.skinRotation("Left Arm", new Vector3(0, 0, 0));
-                SkinRotation.skinRotation("Right Arm", new Vector3(0, 0, 0));
-                SkinRotation.skinRotation("Left Leg", new Vector3(0, 0, 0));
-                SkinRotation.skinRotation("Right Leg", new Vector3(0, 0, 0));
-            }
 
-            if (GameManager.isAction && !GameManager.PlayerMove)
-            {
-                if (MainCamera.Game3D)
-                    SkinRotation.skinLookAt(scanNPC.transform.Find("Minecraft Player Skin").gameObject, "All");
+                if (GameManager.isAction && !GameManager.PlayerMove)
+                {
+                    if (MainCamera.Game3D)
+                        SkinRotation.skinLookAt(scanNPC.transform.Find("Minecraft Player Skin").gameObject, "All");
+                    else
+                        SkinRotation.skinLookAt(scanNPC.transform.Find("Minecraft Player Skin").gameObject, "All", true);
+
+                    if (!MainCamera.Game3D && SkinRotation.PlayerObject.transform.localEulerAngles.y > 180)
+                        SkinRotation.skinRotation("All", Quaternion.Euler(new Vector3(0, -90, 0)), true);
+                    else if (!MainCamera.Game3D)
+                        SkinRotation.skinRotation("All", Quaternion.Euler(new Vector3(0, 90, 0)), true);
+
+                    SkinRotation.skinPos(new Vector3(0, 0, -0.43f));
+                    SkinRotation.skinRotation("All", Quaternion.Euler(new Vector3(0, SkinRotation.PlayerObject.transform.localRotation.eulerAngles.y, 0)), true);
+                }
                 else
-                    SkinRotation.skinLookAt(scanNPC.transform.Find("Minecraft Player Skin").gameObject, "All", true);
-
-                if (!MainCamera.Game3D && SkinRotation.PlayerObject.transform.localEulerAngles.y > 180)
-                    SkinRotation.skinRotation("All", Quaternion.Euler(new Vector3(0, -90, 0)), true);
-                else if (!MainCamera.Game3D)
-                    SkinRotation.skinRotation("All", Quaternion.Euler(new Vector3(0, 90, 0)), true);
-
-                SkinRotation.skinPos(new Vector3(0, 0, -0.43f));
-                SkinRotation.skinRotation("All", Quaternion.Euler(new Vector3(0, SkinRotation.PlayerObject.transform.localRotation.eulerAngles.y, 0)), true);
+                    SkinRotation.skinPos(new Vector3(0, 0, 0));
             }
+
+            //인스펙터 변수
+            _scanNPC = scanNPC;
+            _Rigidbody2D = rigid;
+
+            //만우절 이벤트 Z 회전 고정 풀기
+            if (DateTime.Now.ToString("MM") == "04" && DateTime.Now.ToString("dd") == "01")
+                rigid.freezeRotation = false;
             else
-                SkinRotation.skinPos(new Vector3(0, 0, 0));
+                rigid.freezeRotation = true;
         }
-
-        //인스펙터 변수
-        _scanNPC = scanNPC;
-        _Rigidbody2D = rigid;
-
-        //만우절 이벤트 Z 회전 고정 풀기
-        if (DateTime.Now.ToString("MM") == "04" && DateTime.Now.ToString("dd") == "01")
-            rigid.freezeRotation = false;
-        else
-            rigid.freezeRotation = true;
+        else if (GameManager.DeltaruneBattle)
+        {
+            rigid.bodyType = RigidbodyType2D.Kinematic;
+            rigid.velocity = Vector2.zero;
+        }
     }
 
     void FixedUpdate()
     {
-        if (!GameManager.일시정지 && rigid.bodyType != RigidbodyType2D.Static)
+        if (!GameManager.일시정지 && rigid.bodyType != RigidbodyType2D.Static && !GameManager.DeltaruneBattle && !DeltaruneBattleManager.StartAni && !DeltaruneBattleManager.EndAni)
         {
             //멈추기
             if (Input.GetButtonUp("Horizontal") || ChattingManager.ChattingActive || InvManager.InventoryShow)
@@ -645,7 +653,7 @@ public class Player : MonoBehaviour
                 {
                     if (jump && Water.collider == null && Water2.collider == null && Water3.collider == null && Water4.collider == null && Water5.collider == null && Water6.collider == null && Water7.collider == null && Water8.collider == null && Water9.collider == null)
                     {
-                        rigid.velocity = new Vector2(rigid.velocity.x, GameManager.PlayerJumpPower);
+                        rigid.velocity = new Vector2(rigid.velocity.x, GameManager.PlayerJumpPower * 60 * Time.deltaTime);
                         if (!GameManager.MainMenu)
                             GameManager.PlayerHGExhaustionLevel += 0.05f;
                     }

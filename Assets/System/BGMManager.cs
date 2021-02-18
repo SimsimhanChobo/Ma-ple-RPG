@@ -33,8 +33,16 @@ public class BGMManager : MonoBehaviour
                     GameManager.CurrentBeat = 0;
                     BeatManager.NextBeatRestart();
 
-                    if (GameManager.Map == 0)
-                        SoundManager.PlayBGM("Lachesis Dance", true, 0.6f, 1, false, false);
+                    if (GameManager.Chapter == "Tutorial")
+                    {
+                        if (GameManager.Map == 0)
+                            SoundManager.PlayBGM("Lachesis Dance", true, 0.6f, 1, false, false);
+                    }
+                    else if (GameManager.Chapter == "test")
+                    {
+                        if (GameManager.Map == 0)
+                            SoundManager.PlayBGM("The World Revolving", true, 0.25f, 1, true, false);
+                    }
                     //SoundManager.PlayBGM8Bit("battle", "8-Bit.battle 8-Bit", true, 0.25f, 1, true);
                 }
 

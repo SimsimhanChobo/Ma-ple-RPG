@@ -7,6 +7,6 @@ public class MapleRpgSystemIsLoding : MonoBehaviour
     void Awake()
     {
         if (GameManager.gameManager == null)
-            Loading.LoadScene("마플 RPG System", "마플 RPG");
+            Loading.LoadScene("마플 RPG System", "마플 RPG", true);
     }
 }
