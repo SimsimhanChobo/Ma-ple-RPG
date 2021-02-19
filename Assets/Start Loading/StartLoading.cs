@@ -65,13 +65,14 @@ public class StartLoading : MonoBehaviour
 
             if (op.progress < 0.9f)
             {
-                progressBar.fillAmount = Mathf.Lerp(progressBar.fillAmount, op.progress, 0.05f * (60 * Time.deltaTime));
+                progressBar.fillAmount = op.progress;
             }
             else
             {
-                progressBar.fillAmount = Mathf.Lerp(progressBar.fillAmount, 1, 0.05f * (60 * Time.deltaTime));
+                progressBar.fillAmount = 1;
                 if (progressBar.fillAmount >= 0.995f)
                 {
+                    yield return null;
                     op.allowSceneActivation = true;
                     yield break;
                 }
