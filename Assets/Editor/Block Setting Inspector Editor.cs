@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -62,4 +62,4 @@ public class BlockTextureChangeInspectorEditor : Editor
         if (EditorGUI.EndChangeCheck()) //여기까지 검사해서 필드에 변화가 있으면
             serializedObject.ApplyModifiedProperties(); //원래 변수에 적용시킨다.
     }
-}
+}*/

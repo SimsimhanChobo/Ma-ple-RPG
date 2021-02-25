@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: a37df45f98c9cb540b87667717507317
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - DefaultBlockImage: {fileID: 2800000, guid: 29a6c6c1a868c0c4dbffafcbdea3717b, type: 3}
+  - BlockTexture: {instanceID: 0}
+  executionOrder: 0
+  icon: {fileID: 2800000, guid: 574d03f6cc7894448a94208a66785f73, type: 3}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

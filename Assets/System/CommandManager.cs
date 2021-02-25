@@ -486,7 +486,7 @@ public class CommandManager : MonoBehaviour
                 vector3.y = (int)vector3.y;
             ChattingManager.Message(vector3.x + " " + vector3.y + " " + vector3.z + "에 있는 블록을 바꿨습니다");
         }
-
+        /*
         if (Block != "air")
         {
             Texture2D BlockTexture = Resources.Load<Texture2D>("Minecraft Block Texture/" + Block);
@@ -519,7 +519,7 @@ public class CommandManager : MonoBehaviour
                     vector3.y = (int)vector3.y;
                 ChattingManager.Message(vector3.x + " " + vector3.y + " " + vector3.z + "에 있는 블록을 바꿨습니다");
             }
-        }
+        }*/
     }
 
     public static void Kill()
