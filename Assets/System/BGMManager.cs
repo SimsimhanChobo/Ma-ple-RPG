@@ -62,7 +62,7 @@ public class BGMManager : MonoBehaviour
 
                 if (audioSourceNormal != null && audioSourceBit8 != null)
                 {
-                    if (GameManager.일시정지)
+                    if (GameManager.Pause)
                     {
                         audioSourceNormal.pitch = 0;
                         audioSourceBit8.pitch = 0;

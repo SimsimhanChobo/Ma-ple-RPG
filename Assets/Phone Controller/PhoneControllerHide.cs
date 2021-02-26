@@ -41,7 +41,7 @@ public class PhoneControllerHide : MonoBehaviour
 
     void Update()
     {
-        if (!GameManager.일시정지)
+        if (!GameManager.Pause)
         {
             if (GameManager.MainMenu)
             {

@@ -176,9 +176,21 @@ public class BlockBrightness : MonoBehaviour
             Renderer Renderer = child.GetComponent<Renderer>();
             BlockBrightness blockBrightness = child.GetComponent<BlockBrightness>();
             if (Renderer != null && blockBrightness != null)
-                Renderer.material.color = blockBrightness.Color * new Color(brightness, brightness, brightness);
+            {
+                Renderer.sharedMaterial = new Material(Renderer.sharedMaterial);
+                Renderer.sharedMaterial.color = blockBrightness.Color * new Color(brightness, brightness, brightness);
+                BlockRenderer blockRenderer = child.GetComponent<BlockRenderer>();
+                if (blockRenderer != null)
+                    blockRenderer.color = blockBrightness.Color * new Color(brightness, brightness, brightness);
+            }
             else if (Renderer != null)
-                Renderer.material.color = new Color(brightness, brightness, brightness);
+            {
+                Renderer.sharedMaterial = new Material(Renderer.sharedMaterial);
+                Renderer.sharedMaterial.color = new Color(brightness, brightness, brightness);
+                BlockRenderer blockRenderer = child.GetComponent<BlockRenderer>();
+                if (blockRenderer != null)
+                    blockRenderer.color = new Color(brightness, brightness, brightness);
+            }
         }
     }
 }

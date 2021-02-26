@@ -38,14 +38,14 @@ public class SoundPrefab : MonoBehaviour
         else
             audioSource.pitch = Pitch * GameManager.GameSpeed;
 
-        if (!GameManager.일시정지)
+        if (!GameManager.Pause)
             audioSource.UnPause();
         else if (GameManager.PlayerHP > 0.0001f)
             audioSource.Pause();
         else if (BGM)
             audioSource.Pause();
 
-        if (!audioSource.isPlaying && !GameManager.일시정지 && GameManager.PlayerHP > 0.0001f)
+        if (!audioSource.isPlaying && !GameManager.Pause && GameManager.PlayerHP > 0.0001f)
             Destroy(gameObject);
     }
 

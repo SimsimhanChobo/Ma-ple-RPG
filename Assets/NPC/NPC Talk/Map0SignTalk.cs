@@ -14,19 +14,19 @@ public class Map0SignTalk : MonoBehaviour
         if (Event.collider != null)
         {
             //NPC 이벤트 실행
-            if (Input.GetButtonDown("Event") && !ChattingManager.ChattingActive && !InvManager.InventoryShow && !GameManager.isAction)
+            if (Input.GetButtonDown("Event") && !ChattingManager.ChattingActive && !InvManager.InventoryShow && !GameManager.isAction && !GameManager.talkStop)
             {
                 Player.scanNPC = gameObject;
                 Coroutine = Talk();
                 StartCoroutine(Coroutine);
             }
-            else if (GameManager.ZKey && !GameManager.isAction)
+            else if (GameManager.ZKey && !GameManager.isAction && !GameManager.talkStop)
             {
                 Player.scanNPC = gameObject;
                 StartCoroutine(Coroutine);
                 GameManager.ZKey = false;
             }
-            else if (GameManager.ZKey && !GameManager.isAction)
+            else if (GameManager.ZKey && !GameManager.isAction && !GameManager.talkStop)
             {
                 Player.scanNPC = gameObject;
                 GameManager.ZKey = false;

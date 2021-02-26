@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddea1ffd94009f24ab852df78287deb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Texture: {fileID: 2800000, guid: 6d901d6f256a3844c9cece899eca9653, type: 3}
+  Texture: {fileID: 2800000, guid: c18f822d1ac66e24ab89cd0a1b88da6f, type: 3}
   Line: 32
   Delay: 0.05
 --- !u!1 &2944043855851950921
@@ -287,7 +287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddea1ffd94009f24ab852df78287deb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Texture: {fileID: 2800000, guid: 6d901d6f256a3844c9cece899eca9653, type: 3}
+  Texture: {fileID: 2800000, guid: c18f822d1ac66e24ab89cd0a1b88da6f, type: 3}
   Line: 32
   Delay: 0.05
 --- !u!1 &5360563590148732696
@@ -385,7 +385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddea1ffd94009f24ab852df78287deb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Texture: {fileID: 2800000, guid: 6d901d6f256a3844c9cece899eca9653, type: 3}
+  Texture: {fileID: 2800000, guid: c18f822d1ac66e24ab89cd0a1b88da6f, type: 3}
   Line: 32
   Delay: 0.05
 --- !u!1 &6502680738678273514
@@ -483,7 +483,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddea1ffd94009f24ab852df78287deb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Texture: {fileID: 2800000, guid: 6d901d6f256a3844c9cece899eca9653, type: 3}
+  Texture: {fileID: 2800000, guid: c18f822d1ac66e24ab89cd0a1b88da6f, type: 3}
   Line: 32
   Delay: 0.05
 --- !u!1 &6518800121504977010
@@ -581,7 +581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddea1ffd94009f24ab852df78287deb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Texture: {fileID: 2800000, guid: 6d901d6f256a3844c9cece899eca9653, type: 3}
+  Texture: {fileID: 2800000, guid: c18f822d1ac66e24ab89cd0a1b88da6f, type: 3}
   Line: 32
   Delay: 0.05
 --- !u!1 &7078025108380823346
@@ -679,7 +679,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddea1ffd94009f24ab852df78287deb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Texture: {fileID: 2800000, guid: 6d901d6f256a3844c9cece899eca9653, type: 3}
+  Texture: {fileID: 2800000, guid: c18f822d1ac66e24ab89cd0a1b88da6f, type: 3}
   Line: 32
   Delay: 0.05
 --- !u!1 &7317747669479853979
@@ -777,7 +777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddea1ffd94009f24ab852df78287deb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Texture: {fileID: 2800000, guid: 6d901d6f256a3844c9cece899eca9653, type: 3}
+  Texture: {fileID: 2800000, guid: c18f822d1ac66e24ab89cd0a1b88da6f, type: 3}
   Line: 32
   Delay: 0.05
 --- !u!1 &7748739449274506173
@@ -875,7 +875,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddea1ffd94009f24ab852df78287deb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Texture: {fileID: 2800000, guid: 6d901d6f256a3844c9cece899eca9653, type: 3}
+  Texture: {fileID: 2800000, guid: c18f822d1ac66e24ab89cd0a1b88da6f, type: 3}
   Line: 32
   Delay: 0.05
 --- !u!1001 &6687347615113316674
@@ -889,7 +889,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 6d901d6f256a3844c9cece899eca9653,
+      objectReference: {fileID: 21300000, guid: c18f822d1ac66e24ab89cd0a1b88da6f,
         type: 3}
     - target: {fileID: 6667146614251548144, guid: b0aa7e00069a79c41b697fc4b4b0cb98,
         type: 3}

@@ -35,7 +35,7 @@ public class InvIcon : MonoBehaviour
         //아이템 표시
         if (PlayerInvItemTemp != GameManager.PlayerInvItem)
         {
-            Texture2D texture2D = Resources.Load<Texture2D>("Minecraft Item Texture/" + SelectItem);
+            Texture2D texture2D = ResourceManager.ResourceSearch<Texture2D>(ResourceManager.ItemTexturePath + SelectItem);
 
             if (texture2D != null)
                 Image.sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f), 16);

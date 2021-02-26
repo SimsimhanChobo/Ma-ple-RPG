@@ -17,7 +17,7 @@ public class PlayerLerpMove : MonoBehaviour
 
     void Move()
     {
-        if (!GameManager.일시정지 || GameManager.isAction || GameManager.PlayerHP <= 0.0001f)
+        if (!GameManager.Pause || GameManager.isAction || GameManager.PlayerHP <= 0.0001f)
         {
             Timer += Time.deltaTime;
             if (Timer >= 0)

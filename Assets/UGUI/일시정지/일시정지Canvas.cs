@@ -117,9 +117,9 @@ public class 일시정지Canvas : MonoBehaviour
 
     public void PauseToggle()
     {
-        if (GameManager.일시정지)
+        if (GameManager.Pause)
         {
-            GameManager.일시정지 = false;
+            GameManager.Pause = false;
             gameobjcet.SetActive(false);
             게임메뉴화면.SetActive(true);
             설정화면.SetActive(false);
@@ -129,7 +129,7 @@ public class 일시정지Canvas : MonoBehaviour
         }
         else
         {
-            GameManager.일시정지 = true;
+            GameManager.Pause = true;
             gameobjcet.SetActive(true);
         }
     }

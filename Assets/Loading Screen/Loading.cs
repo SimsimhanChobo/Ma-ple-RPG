@@ -44,7 +44,7 @@ public class Loading : MonoBehaviour
             {
                 WarningMessage.isActionNextLoading();
             }
-            else if (GameManager.일시정지)
+            else if (GameManager.Pause)
             {
                 WarningMessage.일시정지NextLoading();
             }

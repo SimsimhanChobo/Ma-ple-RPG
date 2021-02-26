@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 789e7c3677d67cb4090c9552e9ee4c60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Texture: {fileID: 2800000, guid: 5d04fd978a563894c82bcd4127ba7d19, type: 3}
+  Texture: {fileID: 2800000, guid: 9e6cec28f21340540bf6313a8d5ad7f6, type: 3}
 --- !u!114 &8242251796825439853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,7 +108,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1d7de93d3572a1408da964f68299273, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Brightness: 15
+  Color: {r: 1, g: 1, b: 1, a: 1}
+  Light: 0
 --- !u!1 &2960778845047272541
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,7 +190,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &4228427199239885207
@@ -289,4 +290,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1d7de93d3572a1408da964f68299273, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Brightness: 15
+  Color: {r: 1, g: 1, b: 1, a: 1}
+  Light: 0

@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
     public static float GameSpeed = 1;
     public static bool InvAV0 = false;
     public static float GUISize = 1;
-    public static bool 일시정지 = false;
+    public static bool Pause = false;
 
     public static float MainVolume = 70;
 
@@ -156,6 +156,7 @@ public class GameManager : MonoBehaviour
     public GameObject talkPanel;
     public static bool isAction;
     public GameObject 대화창화살표;
+    public static bool talkStop = false;
 
     public static int EventSelection = 0;
 
@@ -343,7 +344,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (!일시정지 && !isAction)
+        if (!Pause && !isAction)
         {
             //맵
             if (MapMove)
@@ -679,9 +680,9 @@ public class GameManager : MonoBehaviour
             GameSpeed = 0;
 
         //일시정지
-        if (일시정지 && PlayerHP > 0.0001f)
+        if (Pause && PlayerHP > 0.0001f)
             Time.timeScale = 0;
-        else if (!일시정지 && PlayerHP > 0.0001f)
+        else if (!Pause && PlayerHP > 0.0001f)
             Time.timeScale = GameSpeed;
 
         if (Input.GetKey(KeyCode.V) && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
@@ -744,7 +745,7 @@ public class GameManager : MonoBehaviour
         CurrentBeat = (Timer - StartDelay) / (60 / BPM);
 
         //데이터 리셋 취소
-        if (!일시정지)
+        if (!Pause)
             dataReset_i = 0;
 
         //인스펙터에서 static 변수를 변경
@@ -766,7 +767,7 @@ public class GameManager : MonoBehaviour
         if (!Boss && BossHPBar.value <= 0.01f)
             BossHPBar.gameObject.SetActive(false);
         else if (!Boss)
-            BossHPBar.value = Mathf.Lerp(BossHPBar.value, 0, 0.1f * (60 * Time.unscaledDeltaTime * GameManager.GameSpeed));
+            BossHPBar.value = Mathf.Lerp(BossHPBar.value, 0, 0.1f * (60 * Time.unscaledDeltaTime * GameSpeed));
         else
             BossHPBar.gameObject.SetActive(true);
 
@@ -814,7 +815,7 @@ public class GameManager : MonoBehaviour
         _PlayerZ = PlayerZ;
         _StartDelay = StartDelay;
         _Timer = Timer;
-        _일시정지 = 일시정지;
+        _일시정지 = Pause;
 
         _SoundRestart = SoundRestart;
 
@@ -1104,7 +1105,7 @@ public class GameManager : MonoBehaviour
 
         gameoverText = gameOverText;
         GameOverText.text = "MinedApple(이)가 " + gameOverText;
-        일시정지 = true;
+        Pause = true;
         PlayerDamage(0, true, 0);
         player.GameOver();
         PlayerHP = 0.0001f;
@@ -1114,7 +1115,7 @@ public class GameManager : MonoBehaviour
     //플레이어 데미지
     public void PlayerDamage(float damage, bool set, int type)
     {
-        if (!일시정지 && !isAction && ((PlayerHP > 0.0001f && !DeltaruneBattle) || DeltaruneBattle))
+        if (!Pause && !isAction && ((PlayerHP > 0.0001f && !DeltaruneBattle) || DeltaruneBattle))
         {
             if (PlayerHP < 0 && !DeltaruneBattle)
             {

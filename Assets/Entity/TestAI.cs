@@ -15,7 +15,7 @@ public class TestAI : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!GameManager.일시정지)
+        if (!GameManager.Pause)
         {
             transform.LookAt(Player.player.transform);
             transform.localEulerAngles = new Vector2(0, transform.localEulerAngles.y);

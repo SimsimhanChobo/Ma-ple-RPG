@@ -13,7 +13,7 @@ public class BeatManager : MonoBehaviour
 
     void Update()
     {
-        if (!GameManager.일시정지)
+        if (!GameManager.Pause)
         {
             if (!event_soft_lock.Play)
             {

@@ -49,6 +49,8 @@ public class Player : MonoBehaviour
 
     float SuffocatTimer = 0;
 
+    public static bool PlayerNotMove = false;
+
     //점프 레이캐스트
     RaycastHit2D Jump;
     RaycastHit2D Jump2;
@@ -117,10 +119,10 @@ public class Player : MonoBehaviour
             GameManager.PlayerY = Mathf.Round(transform.position.y * 100) * 0.01f;
             GameManager.PlayerZ = Mathf.Round(transform.position.z * 100) * 0.01f;
 
-            if (!GameManager.일시정지)
+            if (!GameManager.Pause)
             {
                 //뱡향 전환
-                if (!ChattingManager.ChattingActive && !InvManager.InventoryShow)
+                if (!ChattingManager.ChattingActive && !InvManager.InventoryShow && !PlayerNotMove)
                 {
                     if (Input.GetButton("Horizontal"))
                         flipX = (int)Input.GetAxisRaw("Horizontal");
@@ -457,7 +459,7 @@ public class Player : MonoBehaviour
                     event_soft_lock.start = true;
             }
 
-            if (!GameManager.일시정지 || GameManager.isAction || GameManager.PlayerHP <= 0.0001f)
+            if (!GameManager.Pause || GameManager.isAction || GameManager.PlayerHP <= 0.0001f)
             {
                 //애니메이션
                 if (MainCamera.Game3D)
@@ -552,7 +554,7 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!GameManager.일시정지 && rigid.bodyType != RigidbodyType2D.Static && !GameManager.DeltaruneBattle && !DeltaruneBattleManager.StartAni && !DeltaruneBattleManager.EndAni)
+        if (!GameManager.Pause && rigid.bodyType != RigidbodyType2D.Static && !GameManager.DeltaruneBattle && !DeltaruneBattleManager.StartAni && !DeltaruneBattleManager.EndAni && !PlayerNotMove)
         {
             //멈추기
             if (Input.GetButtonUp("Horizontal") || ChattingManager.ChattingActive || InvManager.InventoryShow)
@@ -653,7 +655,7 @@ public class Player : MonoBehaviour
                 {
                     if (jump && Water.collider == null && Water2.collider == null && Water3.collider == null && Water4.collider == null && Water5.collider == null && Water6.collider == null && Water7.collider == null && Water8.collider == null && Water9.collider == null)
                     {
-                        rigid.velocity = new Vector2(rigid.velocity.x, GameManager.PlayerJumpPower * 60 * Time.deltaTime);
+                        rigid.velocity = new Vector2(rigid.velocity.x, GameManager.PlayerJumpPower);
                         if (!GameManager.MainMenu)
                             GameManager.PlayerHGExhaustionLevel += 0.05f;
                     }
@@ -808,7 +810,7 @@ public class Player : MonoBehaviour
 
         GameManager.PlayerHP = GameManager.PlayerMaxHP;
         GameManager.PlayerHG = GameManager.PlayerMaxHG;
-        GameManager.일시정지 = false;
+        GameManager.Pause = false;
         PlayerSkin.transform.localRotation = Quaternion.Euler(0, 0, 0);
         GameOverBackground.color = new Color(1, 0, 0, 0);
         particlesystem.SetActive(false);

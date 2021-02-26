@@ -2,29 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MapleRPG
+[RequireComponent(typeof(MeshRenderer)), ExecuteInEditMode]
+public class BlockRenderer : MonoBehaviour
 {
-    [RequireComponent(typeof(MeshRenderer)), ExecuteInEditMode]
-    public class BlockRenderer : MonoBehaviour
+    BlockMeshFilter blockMeshFilter;
+    MeshRenderer meshRenderer;
+
+    [HideInInspector]
+    public Material BlockMaterial;
+
+    public Color color = Color.white;
+
+    void Awake()
     {
-        BlockMeshFilter blockMeshFilter;
-        MeshRenderer meshRenderer;
-        
-        [HideInInspector]
-        public Material BlockMaterial;
+        blockMeshFilter = GetComponent<BlockMeshFilter>();
+        meshRenderer = GetComponent<MeshRenderer>();
+    }
 
-        public Color color = Color.white;
-        
-        void Awake()
+    void Start()
+    {
+        meshRenderer.material = new Material(BlockMaterial);
+
+        if (blockMeshFilter != null)
         {
-            blockMeshFilter = GetComponent<BlockMeshFilter>();
-            meshRenderer = GetComponent<MeshRenderer>();
+            meshRenderer.sharedMaterial.mainTexture = blockMeshFilter.BlockTexture;
+            meshRenderer.sharedMaterial.color = color;
         }
+        else
+            blockMeshFilter = GetComponent<BlockMeshFilter>();
+    }
 
-        void Start()
+    void LateUpdate()
+    {
+        if (!Application.isPlaying)
         {
-            meshRenderer.material = new Material(BlockMaterial);
-
             if (blockMeshFilter != null)
             {
                 meshRenderer.sharedMaterial.mainTexture = blockMeshFilter.BlockTexture;
@@ -32,20 +43,6 @@ namespace MapleRPG
             }
             else
                 blockMeshFilter = GetComponent<BlockMeshFilter>();
-        }
-
-        void LateUpdate()
-        {
-            if (!Application.isPlaying)
-            {
-                if (blockMeshFilter != null)
-                {
-                    meshRenderer.sharedMaterial.mainTexture = blockMeshFilter.BlockTexture;
-                    meshRenderer.sharedMaterial.color = color;
-                }
-                else
-                    blockMeshFilter = GetComponent<BlockMeshFilter>();
-            }
         }
     }
 }

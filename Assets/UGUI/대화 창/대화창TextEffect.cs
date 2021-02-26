@@ -11,6 +11,7 @@ public class 대화창TextEffect : MonoBehaviour
     public static Text Text;
     int index = 0;
     public static bool isAnim = false;
+    public static bool talkStop = false;
     public GameManager manager;
 
     void Start()
@@ -33,6 +34,8 @@ public class 대화창TextEffect : MonoBehaviour
             targetMsg = msg;
             CancelInvoke();
             EffectStart();
+
+            대화창화살표.SetActive(false);
         }
     }
 

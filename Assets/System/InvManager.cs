@@ -10,7 +10,7 @@ public class InvManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && !GameManager.isAction && !GameManager.일시정지 & GameManager.PlayerHP > 0.0001f && !ChattingManager.ChattingActive)
+        if (Input.GetKeyDown(KeyCode.E) && !GameManager.isAction && !GameManager.Pause & GameManager.PlayerHP > 0.0001f && !ChattingManager.ChattingActive)
         {
             if (InventoryShow)
                 InventoryShow = false;

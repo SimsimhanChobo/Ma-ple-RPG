@@ -84,7 +84,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1d7de93d3572a1408da964f68299273, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Brightness: 15
+  Color: {r: 1, g: 1, b: 1, a: 1}
+  Light: 0
 --- !u!1001 &5065288920878679315
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -92,11 +93,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5064109058877743688}
     m_Modifications:
-    - target: {fileID: 139600806446077202, guid: dac2d28e792b56c4eb8fb7f3ba0c7401,
-        type: 3}
-      propertyPath: Top
-      value: 
-      objectReference: {fileID: 2800000, guid: 29d0f60325056b44e957e019fcb647ab, type: 3}
     - target: {fileID: 2042795062907563237, guid: dac2d28e792b56c4eb8fb7f3ba0c7401,
         type: 3}
       propertyPath: m_RootOrder

@@ -16,19 +16,19 @@ public class Map0운터의숙소문운터Talk : MonoBehaviour
         if (Event.collider != null)
         {
             //NPC 이벤트 실행
-            if (Input.GetButtonDown("Event") && !ChattingManager.ChattingActive && !InvManager.InventoryShow && !GameManager.isAction)
+            if (Input.GetButtonDown("Event") && !ChattingManager.ChattingActive && !InvManager.InventoryShow && !GameManager.isAction && !GameManager.talkStop)
             {
                 Player.scanNPC = gameObject;
                 Coroutine = Talk();
                 StartCoroutine(Coroutine);
             }
-            else if (GameManager.ZKey && !GameManager.isAction)
+            else if (GameManager.ZKey && !GameManager.isAction && !GameManager.talkStop)
             {
                 Player.scanNPC = gameObject;
                 StartCoroutine(Coroutine);
                 GameManager.ZKey = false;
             }
-            else if (GameManager.ZKey && !GameManager.isAction)
+            else if (GameManager.ZKey && !GameManager.isAction && !GameManager.talkStop)
             {
                 Player.scanNPC = gameObject;
                 GameManager.ZKey = false;
@@ -63,7 +63,7 @@ public class Map0운터의숙소문운터Talk : MonoBehaviour
                 GameManager.gameManager.Talk("잘자!");
                 yield return new WaitUntil(() => (Input.GetKeyDown(KeyCode.Z) || GameManager.ZKey || Input.GetKey(KeyCode.C) || GameManager.CKey) && !대화창TextEffect.isAnim);
 
-                GameManager.일시정지 = true;
+                GameManager.Pause = true;
                 for (float i = 0; i <= 1; i += 0.01f * (60 * Time.unscaledDeltaTime * GameManager.GameSpeed))
                 {
                     yield return null;
@@ -78,7 +78,7 @@ public class Map0운터의숙소문운터Talk : MonoBehaviour
                 GameManager.PlayerHP = GameManager.PlayerMaxHP;
                 GameManager.PlayerHG += GameManager.PlayerMaxHG / 100 * 30;
                 GameManager.PlayerGold -= 100;
-                GameManager.일시정지 = false;
+                GameManager.Pause = false;
                 GameManager.gameManager.Talk("다음에 필요하면 또 와!");
                 yield return new WaitUntil(() => (Input.GetKeyDown(KeyCode.Z) || GameManager.ZKey || Input.GetKey(KeyCode.C) || GameManager.CKey) && !대화창TextEffect.isAnim);
             }
@@ -123,7 +123,7 @@ public class Map0운터의숙소문운터Talk : MonoBehaviour
                 GameManager.gameManager.Talk("잘자!");
                 yield return new WaitUntil(() => (Input.GetKeyDown(KeyCode.Z) || GameManager.ZKey || Input.GetKey(KeyCode.C) || GameManager.CKey) && !대화창TextEffect.isAnim);
 
-                GameManager.일시정지 = true;
+                GameManager.Pause = true;
                 for (float i = 0; i <= 1; i += 0.01f * (60 * Time.unscaledDeltaTime * GameManager.GameSpeed))
                 {
                     yield return null;
@@ -137,7 +137,7 @@ public class Map0운터의숙소문운터Talk : MonoBehaviour
                 }
                 GameManager.PlayerHP = GameManager.PlayerMaxHP;
                 GameManager.PlayerHG += GameManager.PlayerMaxHG / 100 * 30;
-                GameManager.일시정지 = false;
+                GameManager.Pause = false;
                 GameManager.gameManager.Talk("다음에 필요하면 또 와!");
                 yield return new WaitUntil(() => (Input.GetKeyDown(KeyCode.Z) || GameManager.ZKey || Input.GetKey(KeyCode.C) || GameManager.CKey) && !대화창TextEffect.isAnim);
             }

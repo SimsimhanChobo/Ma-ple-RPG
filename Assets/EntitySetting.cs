@@ -91,7 +91,7 @@ public class EntitySetting : MonoBehaviour
 
     void Update()
     {
-        if (!GameManager.일시정지 || (Boss && GameManager.PlayerHP <= 0.0001f))
+        if (!GameManager.Pause || (Boss && GameManager.PlayerHP <= 0.0001f))
         {
             if (HPSlider != null)
             {
@@ -116,7 +116,7 @@ public class EntitySetting : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!GameManager.일시정지)
+        if (!GameManager.Pause)
         {
             boxCollider2D.size = new Vector2(0.975f * RealColliderSizeX, 0.975f * RealColliderSizeY);
 

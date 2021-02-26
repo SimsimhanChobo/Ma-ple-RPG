@@ -18,7 +18,7 @@ public class WarningMessage : MonoBehaviour
 
     void Update()
     {
-        if (!GameManager.일시정지)
+        if (!GameManager.Pause)
         {
             if (Input.GetKeyDown(KeyCode.M) && !ChattingManager.ChattingActive && !InvManager.InventoryShow)
             {

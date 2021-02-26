@@ -33,6 +33,8 @@ public class BlockMeshFilter : MonoBehaviour
     public bool TopHidden = false;
     public bool BottomHidden = false;
 
+    public bool CustomPath;
+
     Vector3 tempBlockPos;
     Vector3 tempBlockSize = Vector3.one;
     Vector2 tempUVPos;
@@ -43,6 +45,7 @@ public class BlockMeshFilter : MonoBehaviour
     bool tempBackHidden;
     bool tempTopHidden;
     bool tempBottomHidden;
+    bool tempCustomPath;
 
     public static readonly Vector3[] voxelVerts = new Vector3[8]
     {
@@ -82,7 +85,12 @@ public class BlockMeshFilter : MonoBehaviour
         boxCollider = GetComponent<BoxCollider>();
         meshFilter.mesh = BlockMeshCreate(out BlockTexture);
 
-        Texture2D texture = ResourceManager.ResourceSearch<Texture2D>(ResourceManager.BlockTexturePath + BlockTextureName);
+        Texture2D texture;
+        if (!CustomPath)
+            texture = ResourceManager.ResourceSearch<Texture2D>(ResourceManager.BlockTexturePath + BlockTextureName);
+        else
+            texture = ResourceManager.ResourceSearch<Texture2D>(BlockTextureName);
+
         if (texture != null)
         {
             List<Texture2D> Texture = new List<Texture2D> { texture, texture, texture, texture, texture, texture };
@@ -102,9 +110,14 @@ public class BlockMeshFilter : MonoBehaviour
 
     void Update()
     {
-        if (!Application.isPlaying && (tempBlockPos != BlockPos || tempBlockSize != BlockSize || tempUVPos != UVPos || tempLeftHidden != LeftHidden || tempFrontHidden != FrontHidden || tempRightHidden != RightHidden || tempBackHidden != BackHidden || tempTopHidden != TopHidden || tempBottomHidden != BottomHidden || tempBlockTextureName != BlockTextureName))
+        if (!Application.isPlaying && (tempBlockPos != BlockPos || tempBlockSize != BlockSize || tempUVPos != UVPos || tempLeftHidden != LeftHidden || tempFrontHidden != FrontHidden || tempRightHidden != RightHidden || tempBackHidden != BackHidden || tempTopHidden != TopHidden || tempBottomHidden != BottomHidden || tempBlockTextureName != BlockTextureName || tempCustomPath != CustomPath))
         {
-            Texture2D texture = ResourceManager.ResourceSearch<Texture2D>(ResourceManager.BlockTexturePath + BlockTextureName);
+            Texture2D texture;
+            if (!CustomPath)
+                texture = ResourceManager.ResourceSearch<Texture2D>(ResourceManager.BlockTexturePath + BlockTextureName);
+            else
+                texture = ResourceManager.ResourceSearch<Texture2D>(BlockTextureName);
+
             if (texture != null)
             {
                 List<Texture2D> Texture = new List<Texture2D> { texture, texture, texture, texture, texture, texture };
@@ -131,6 +144,7 @@ public class BlockMeshFilter : MonoBehaviour
             tempTopHidden = TopHidden;
             tempBottomHidden = BottomHidden;
             tempBlockTextureName = BlockTextureName;
+            tempCustomPath = CustomPath;
         }
     }
 
