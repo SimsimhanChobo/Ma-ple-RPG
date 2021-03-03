@@ -110,6 +110,7 @@ public class Map0ParkMoTalk : MonoBehaviour
 
         RectTransform rectTransform = MagicText.gameObject.GetComponent<RectTransform>();
         RectTransform rectTransform2 = Background.GetComponent<RectTransform>();
+        RectTransform rectTransform3 = Background2.GetComponent<RectTransform>();
         MagicText.text = "마포 「파이널 마스터 스파크」";
         MagicText.color = new Color(1, 1, 1, 0);
         MagicText.transform.localScale = new Vector3(2, 2, 2);
@@ -120,13 +121,18 @@ public class Map0ParkMoTalk : MonoBehaviour
 
         float Timer = 0;
         float Timer2 = 0;
+        float Timer3 = 0;
         bool b = false;
+        bool bb = false;
         Outline outline = Ray.GetComponents<Outline>()[0];
         Outline outline2 = Ray.GetComponents<Outline>()[1];
 
         GameManager.gameManager.TalkEnd();
         GameManager.talkStop = true;
         Player.PlayerNotMove = true;
+
+        rectTransform3.anchoredPosition = new Vector3(0, 50);
+        Background2.color = new Color(1, 1, 1, 0);
         while (true)
         {
             yield return null;
@@ -200,6 +206,20 @@ public class Map0ParkMoTalk : MonoBehaviour
 
             outline.effectDistance = new Vector2(0, Ray.sizeDelta.y * 0.15f);
             outline2.effectDistance = new Vector2(0, Ray.sizeDelta.y * 0.15f);
+
+            Background2.transform.localPosition -= new Vector3(0, 2, 0);
+            if (!bb)
+                Background2.color += new Color(0, 0, 0, 0.01f * 60 * Time.deltaTime);
+            if (!bb && Background2.color.a >= 0.8f)
+            {
+                Timer3 += Time.deltaTime;
+                Background2.color = new Color(1, 1, 1, 0.8f);
+                
+                if (Timer3 >= 1)
+                    bb = true;
+            }
+            if (bb)
+                Background2.color -= new Color(0, 0, 0, 0.01f * 60 * Time.deltaTime);
         }
         MinecraftSkyboxColorChange.CustomColor = false;
         GameManager.Boss = false;

@@ -105,7 +105,9 @@ public class Player : MonoBehaviour
     {
         GameManager.loadData();
 
-        transform.position = new Vector2(GameManager.PlayerX, GameManager.PlayerY + 0.1f);
+        rigid.bodyType = RigidbodyType2D.Static;
+        transform.position = new Vector2(GameManager.PlayerX, GameManager.PlayerY + 3f);
+        FallDamage3 = GameManager.PlayerY;
     }
 
     void Update()

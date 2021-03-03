@@ -11,7 +11,7 @@ public class PlayerLerpMove : MonoBehaviour
 
     void Awake() => SkinRotation.PlayerObject = PlayerMinecraftSkin;
 
-    void Start() => transform.localPosition = new Vector3(GameManager.PlayerX, GameManager.PlayerY, GameManager.PlayerZ);
+    void Start() => transform.localPosition = new Vector3(GameManager.PlayerX, GameManager.PlayerY - 1, GameManager.PlayerZ);
 
     void FixedUpdate() => Move();
 
