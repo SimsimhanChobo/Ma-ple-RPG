@@ -217,6 +217,7 @@ public class DeltaruneBattleManager : MonoBehaviour
         }
         else if (!GameManager.DeltaruneBattle && GameManager.DeltaruneBattle != tempDeltaruneBattle)
         {
+            MinecraftSkyboxColorChange.CustomColor = false;
             MainCamera.Camera.orthographic = tempGame3D;
             SoundManager.StopAll(SoundType.BGM, false);
             EndAni = true;

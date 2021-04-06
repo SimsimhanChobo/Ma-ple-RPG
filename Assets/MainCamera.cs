@@ -22,6 +22,8 @@ public class MainCamera : MonoBehaviour
 
     public static Vector3 MainCameraPos;
 
+    public static bool MainCameraPosCustom = false;
+
     void Awake() => Camera = GetComponent<Camera>();
 
     void Start()
@@ -31,7 +33,11 @@ public class MainCamera : MonoBehaviour
         벽Camera.transform.localPosition = target;
     }
 
-    void FixedUpdate() => Move();
+    void FixedUpdate()
+    {
+        if (!MainCameraPosCustom)
+            Move();
+    }
 
     public void Game3DToggle()
     {

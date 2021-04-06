@@ -149,6 +149,10 @@ public class DeltaruneBattleUIManager : MonoBehaviour
 
         if (GameManager.DeltaruneBattle && !DeltaruneBattleManager.StartAni)
         {
+            MinecraftSkyboxColorChange.CustomColor = true;
+            MinecraftSkyboxColorChange.CustomColorTop = Color.black;
+            MinecraftSkyboxColorChange.CustomColorBottom = Color.black;
+
             TalkBG.anchoredPosition = Vector2.Lerp(TalkBG.anchoredPosition, Vector2.zero, 0.125f * 60 * Time.deltaTime);
             PlayerBG.anchoredPosition = Vector2.Lerp(PlayerBG.anchoredPosition, new Vector2(0, 230), 0.125f * 60 * Time.deltaTime);
 
